@@ -1,5 +1,105 @@
 \chapter{Spherical SFM}
+\section{Overview}
+We now describe the pipeline we designed to create a dense point cloud from 
+a set of equirectangular images.
 
-This chapter describes the pipeline we designed.
+The pipeline is composed of two main parts: an initial camera poses estimation
+step followed by a densification phase. The former aims to reconstruct the 
+camera trajectory, which means to estimate the camera position for each frame 
+considered. The latter one relies on the previous result to create a dense 
+3D point cloud that represents a simple reconstruction of the environment.
+The Figure (...) is a simple visualization of this two macro parts of the 
+pipeline.
 
-Prova per git
+The camera poses estimation phase is similar to other classical visual 
+odometry pipeline; the real differences lie in the variables format and in 
+the details concerning the procedures used. For each new frame 
+(in the equirectangular format), we locate the
+SURF keypoints; we consider those keypoints whose inclination angle belongs 
+to the range [-60; +60] because the poles are affected by great distortions, 
+thus robust matches outside this interval are rare.
+Then we look for matches in the last two frames and a filter performs some 
+statystical analysis on the correspondances found and decides whether the frame 
+is suitable for a robust pose estimation or not (in which case the frame is 
+discarded).
+
+If the frame is kept, its matches with the previous one are converted
+and used for the essential matrix estimation. Once E has been obtained, 
+it can be decomposed in the [R|t] form where R is a rotation matrix and t is a 
+translation vector up to an unknown scale factor.
+
+The relative scale can be estimated thanks to the world points which have been 
+triangulated thorough the matches and frame considered in previous pipeline 
+iteration.
+
+The pose for each camera can then be described as the composition of the 
+motions between each view pair. We perform a bundle adjustment for the last 5 
+poses in order to reduce the effect of drift.
+
+Once every image has been processed by the visual odometry pipeline, a final 
+bundle adjustment is run. It optimizes every camera pose estimated in order to 
+further reduce drift error.
+
+In the following sections we describe every detail of the steps in our pipeline.
+
+\section{Key Points and Features extraction}
+In this step, we extract SURF key points and their descriptor out of 
+equirectangular images. SURF 
+interest points are rotation and scale invariant just like SIFT. But unlike 
+the latter, SURF detection is faster and there is no patent for it. 
+This makes SURF implementation available in most computer vision frameworks and 
+libraries.
+
+\section{Key points filtering}
+The equirectangular format for spherical images introduces significant 
+distortions in the areas around the poles. Interesting points in those areas 
+are unlikely to match reliably with other points in a consecutive view, 
+so they are just discarded.
+
+Besides, in our experiments setup, the north and south poles usually point 
+upward and downward respectively while most of the matches useful for pose 
+estimation comes from the sides of the camera, so the removal of interesting 
+points near the poles does not really affect the final result.
+
+\section{Feature matching}
+The matching strategy we carried out for equirectangular images is the same one 
+adopted with standard images: two key points matches if the distance between 
+their descriptors is less than a given threshold. Ambiguous matches 
+are discarded if the ratio between the distances to the two closest matches is 
+above a maximum.
+
+We enforce matching robustness by forcing unique matching, that is: a feature 
+in an image can possibly match to one feature only in the other image.
+This is obtained with a first former forward matching followed by a backward 
+pass that, in case of multiple matches, selects the best one only.
+
+\section{Matches filter}
+In this step of the pipeline the matches are analyzed in order to decide 
+whether a frame is kept because it is useful for motion estimation or 
+it has to be discarded.
+
+We assume the environment considered for our studies is static: no people, 
+cars or any kind of moving object is present in our scene. In this case the 
+apparent movement of corresponding objects in different views is caused by 
+the camera motion only. This hypothesis simplifies the pipeline and, 
+in particular, provides some hints to the design of this filter.
+
+This filter compute the disparity between every correspondence found in the 
+two views. It compares the median of the 20\% of the matches with the highest 
+disparity value with a threshold. If such a median is above 
+the threshold, the frame is kept for further processing in the pipeline, 
+otherwise it is discarded.
+
+The reason why we consider the correspondances with greatest disparity is 
+because, when the camera rotation is limited, the points that moves very little 
+in consecutive views are usually far from the camera and they are less
+useful than closer points to estimate camera motion. 
+
+\section{3D-to-2D Key points conversion}
+This step converts the key point format of equirectangular images to a new one 
+suitable for the essential matrix estimation routine.
+
+\begin{align*}
+\theta &= \frac{u}{W 2 \pi} - \pi \\
+\phi &= \frac{\pi}{2} - \frac{v}{H \pi}
+\end{align*}
