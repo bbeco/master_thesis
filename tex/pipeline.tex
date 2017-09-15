@@ -98,8 +98,15 @@ useful than closer points to estimate camera motion.
 \section{3D-to-2D Key points conversion}
 This step converts the key point format of equirectangular images to a new one 
 suitable for the essential matrix estimation routine.
+First the latitude and longitude coordinates of each feature point are 
+extracted from the 2D mapping according to the following formula.
 
 \begin{align*}
 \theta &= \frac{u}{W 2 \pi} - \pi \\
 \phi &= \frac{\pi}{2} - \frac{v}{H \pi}
 \end{align*}
+
+Once we have the spherical coordinates, we can use them to obtain a set of 3D 
+key points with cartesian coordinates. In order to estimate the essential 
+matrix we use the essential matrix equation introduced by Longuet-Higgins in 
+\cite{longuet1981computer}
