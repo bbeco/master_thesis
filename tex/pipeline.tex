@@ -18,7 +18,7 @@ odometry pipeline; the real differences lie in the variables format and in
 the details concerning the procedures used. For each new frame 
 (in the equirectangular format), we locate the
 SURF keypoints; we consider those keypoints whose inclination angle belongs 
-to the range [-60; +60] because the poles are affected by great distortions, 
+to the range [-60\degree; +60\degree] because the poles are affected by great distortions, 
 thus robust matches outside this interval are rare.
 Then we look for matches in the last two frames and a filter performs some 
 statystical analysis on the correspondances found and decides whether the frame 
@@ -27,7 +27,7 @@ discarded).
 
 If the frame is kept, its matches with the previous one are converted
 and used for the essential matrix estimation. Once E has been obtained, 
-it can be decomposed in the [R|t] form where R is a rotation matrix and t is a 
+it can be decomposed in the \([R|t]\) form where R is a rotation matrix and t is a 
 translation vector up to an unknown scale factor.
 
 The relative scale can be estimated thanks to the world points which have been 
@@ -151,5 +151,30 @@ Matlab's essential matrix estimation routine.
 
 \section{Essential matrix estimation and decomposition}
 As we described in the previous section, the essential matrix is estimated 
-by the function \tt{estimateEssentialMatrix} of the Computer Vision Toolbox.
-We 
+by the function {\tt estimateEssentialMatrix} of the Computer Vision Toolbox.
+We use both frontal and backward image points for this estimation because
+the increased number of correspondances between image pair produces 
+a more accurate result.
+
+Once \textit{E} has been estimated, we need to decompose it in the 
+\( [R|\mathbf{t} ] \) form. This is again performed by a Computer Vision 
+Toolbox's function, {\tt relativeCameraPose}.
+The input for this function are: the essential matrix computed before, the 
+camera parameter structure and two sets of matching image points of the two 
+images.
+The reason why this function needs the matches is because there are 4 possible 
+SVD decomposition for the essential matrix. Each one of this form represents a 
+different physical configuration for the cameras and world points.
+In order to decide which decomposition is correct, the {\tt relativeCameraPose}
+reproject the matches in their corresponding world points according to each 
+decomposition and select the one that reprojects most of the correspondances in 
+front of both cameras.
+
+Since our cameras are full spherical and the image points belong to the 
+backwards hemisphere too, we need to select only those matches whose points 
+belong to the frontal hemisphere in both cameras.
+
+The reduced number of matching points for the input of the 
+{\tt relativeCameraPose} function does not compromise the accuracy of the pose 
+estimated, since those matches are used only to choose the 
+correct SVD.
