@@ -100,13 +100,49 @@ This step converts the key point format of equirectangular images to a new one
 suitable for the essential matrix estimation routine.
 First the latitude and longitude coordinates of each feature point are 
 extracted from the 2D mapping according to the following formula.
-
-\begin{align*}
+\begin{align}
+\label{eq:llConversion}
 \theta &= \frac{u}{W 2 \pi} - \pi \\
 \phi &= \frac{\pi}{2} - \frac{v}{H \pi}
-\end{align*}
+\end{align}
+Where \textit{W} and \textit{H} are the image width and height respectively.
 
 Once we have the spherical coordinates, we can use them to obtain a set of 3D 
 key points with cartesian coordinates. In order to estimate the essential 
-matrix we use the essential matrix equation introduced by Longuet-Higgins in 
-\cite{longuet1981computer}
+matrix for each pairs of views, we use the equation introduced by 
+Longuet-Higgins in \cite{longuet1981computer}:
+
+\begin{equation}
+\label{eq:essentialMatrix}
+\mathbf{p}'^\top E\mathbf{p} = 0
+\end{equation}
+
+Where 
+\begin{math}\mathbf{p} = K^{-1} \mathbf{m},
+\mathbf{p}' = K^{-1} \mathbf{m}'\end{math} are the normalized coordinates of 
+two matching points, \begin{math}\mathbf{m}\end{math} and
+\begin{math}\mathbf{m'}\end{math}, in the two images of the pair.
+The point coordinates we obtain from \ref{eq:llConversion} and the consecutive 
+transformation to cartesian do not need any normalization since they are not 
+affected by any intrinsic parameter
+(\begin{math}K = I\end{math}).
+
+In order to exploit the routines to estimate the essential matrix available 
+in the Matlab's Computer Vision Toolbox, we have to do an additional simple 
+step.
+Indeed this toolbox's routines deals with 2D images and, thus, they expect 
+2D vectors when the input arguments are image points, however our camera
+provides 3D image points.
+
+We noticed that we can multiply the points \textbf{\textit{p}}
+and \textbf{\textit{p}}' by two 
+scalars \begin{math}{\lambda}\end{math} and 
+\begin{math}{\lambda}'\end{math} and the equation is still valid.
+
+\begin{equation*}
+\lambda'\mathbf{p}'^\top E\lambda\mathbf{p} = 0
+\end{equation*}
+
+So, we divide the 3D points obtained from the spherical images by their 
+3rd component, discard it, and use the resulted 2D points as input for the 
+Matlab's essential matrix estimation routine.
