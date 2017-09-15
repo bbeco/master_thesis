@@ -1,4 +1,6 @@
 \chapter{Spherical SFM}
+\todo[inline]{aggiungere una sessione in cui si descrive il sistema di riferimento e 
+altre convenzioni}
 \section{Overview}
 We now describe the pipeline we designed to create a dense point cloud from 
 a set of equirectangular images.
@@ -146,3 +148,8 @@ scalars \begin{math}{\lambda}\end{math} and
 So, we divide the 3D points obtained from the spherical images by their 
 3rd component, discard it, and use the resulted 2D points as input for the 
 Matlab's essential matrix estimation routine.
+
+\section{Essential matrix estimation and decomposition}
+As we described in the previous section, the essential matrix is estimated 
+by the function \tt{estimateEssentialMatrix} of the Computer Vision Toolbox.
+We 
