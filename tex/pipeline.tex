@@ -18,8 +18,8 @@ odometry pipeline; the real differences lie in the variables format and in
 the details concerning the procedures used. For each new frame 
 (in the equirectangular format), we locate the
 SURF keypoints; we consider those keypoints whose inclination angle belongs 
-to the range [-60\degree; +60\degree] because the poles are affected by great distortions, 
-thus robust matches outside this interval are rare.
+to the range [-60\degree; +60\degree] because the poles are affected by great 
+distortions, thus robust matches outside this interval are rare.
 Then we look for matches in the last two frames and a filter performs some 
 statystical analysis on the correspondances found and decides whether the frame 
 is suitable for a robust pose estimation or not (in which case the frame is 
@@ -27,8 +27,8 @@ discarded).
 
 If the frame is kept, its matches with the previous one are converted
 and used for the essential matrix estimation. Once E has been obtained, 
-it can be decomposed in the \([R|t]\) form where R is a rotation matrix and t is a 
-translation vector up to an unknown scale factor.
+it can be decomposed in the \([R|t]\) form where R is a rotation matrix 
+and t is a translation vector up to an unknown scale factor.
 
 The relative scale can be estimated thanks to the world points which have been 
 triangulated thorough the matches and frame considered in previous pipeline 
@@ -178,3 +178,15 @@ The reduced number of matching points for the input of the
 {\tt relativeCameraPose} function does not compromise the accuracy of the pose 
 estimated, since those matches are used only to choose the 
 correct SVD.
+
+\section{Relative scale estimation}
+Every relative motion between two views can only be estimated up to an unknown 
+scale factor. Indeed the scale affects the translation only but still it has to 
+be computed in order to create a coherent set of camera poses.
+
+We obtain the relative scale with the formula from 
+\cite{scaramuzzaVisualOdometryI}:
+\begin{equation}
+r = \frac{\| X_{k-1, i} - X_{k - 1, j} \|}
+	{\| X_{k, i} - X_{k, j} \|}
+\end{equation}
