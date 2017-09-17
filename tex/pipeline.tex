@@ -191,8 +191,7 @@ be computed in order to create a coherent set of camera poses.
 We obtain the relative scale with the formula from 
 \cite{scaramuzzaVisualOdometryI}:
 \begin{equation}
-r = \frac{\| X_{k-1, i} - X_{k - 1, j} \|}
-	{\| X_{k, i} - X_{k, j} \|}
+	r = \frac{\| X_{k-1, i} - X_{k - 1, j} \|}{\| X_{k, i} - X_{k, j} \|}
 \end{equation}
 Where \( X_{k, i} \) is the \textit{i-th} triangulated world point associated 
 with the \textit{(k-1)-th} view. With this formula we obtain a different scale 
@@ -228,3 +227,8 @@ camera's intrinsic parameters, world points, and camera positions.
 We keep the first two poses of the window fixed so that the translation scale 
 estimated in the previous step is kept and some parameters' range for the 
 optimization problem is reduced.
+
+\section{Global Bundle Adjustment}
+When all the views has been processed, we perform a final bundle adjustment 
+step, in order to further reduce drift. Again, the first two poses are fixed in 
+order to keep the relative scale.
