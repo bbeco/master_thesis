@@ -10,8 +10,10 @@ step followed by a densification phase. The former aims to reconstruct the
 camera trajectory, which means to estimate the camera position for each frame 
 considered. The latter one relies on the previous result to create a dense 
 3D point cloud that represents a simple reconstruction of the environment.
-The Figure (...) is a simple visualization of this two macro parts of the 
+The Figure (...)
+is a simple visualization of this two macro parts of the 
 pipeline.
+\missingfigure{aggiungere uno schema per descrivere la pipeline}
 
 The camera poses estimation phase is similar to other classical visual 
 odometry pipeline; the real differences lie in the variables format and in 
@@ -190,3 +192,37 @@ We obtain the relative scale with the formula from
 r = \frac{\| X_{k-1, i} - X_{k - 1, j} \|}
 	{\| X_{k, i} - X_{k, j} \|}
 \end{equation}
+Where \( X_{k, i} \) is the \textit{i-th} triangulated world point associated 
+with the \textit{(k-1)-th} view. With this formula we obtain a different scale 
+for each pair of points \textit{i, j}; in order to compute a single robust value
+we take the median of the estimated scale.
+
+\section{Motion composition}
+Once we estimated the relative motion between two views, the new location and 
+orientation are composed with the previous ones so that all camera poses are
+described in a unique reference system. By using the same notations in 
+\cite{scaramuzzaVisualOdometryI}, we call \( C_i \) the \textit{i-th} 
+estimated camera pose, while \( R_k \) and \( t_k \) the rotation and 
+translation between the time instant \textit{k} and \textit{k-1}. Then we have:
+\begin{align}
+	C_k &= C_{k-1}
+	\begin{bmatrix}
+		R_k & t_k \\
+		0 & 1
+	\end{bmatrix}
+\end{align}
+With \( C_0 \) that is arbitrarly set with a rototaion equal to the identity
+matrix and a zero translation vector.
+
+\section{Windowed Bundle Adjustment}
+Since the motion estimation is inevitably affected by errors,  
+the composition amplifies it every time we add a new
+view. In order to reduce the drift and to get closer to a better starting point 
+for the final bundle adjustment, we optimize a small set of camera poses in 
+a sliding window. We call this step \textit{Windowed Bundle Adjustment}.
+
+The bundle adjustment tries to reduce the reprojection error by changing the
+camera's intrinsic parameters, world points, and camera positions. 
+We keep the first two poses of the window fixed so that the translation scale 
+estimated in the previous step is kept and some parameters' range for the 
+optimization problem is reduced.
