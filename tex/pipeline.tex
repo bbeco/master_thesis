@@ -2,8 +2,7 @@
 \todo[inline]{aggiungere una sessione in cui si descrive il sistema di riferimento e 
 altre convenzioni}
 \section{Overview}
-We now describe the pipeline we designed to create a dense point cloud from 
-a set of equirectangular images.
+In this chapter, we describe the pipeline that we designed to create a dense point cloud from a set of equirectangular images.
 
 The pipeline is composed of two main parts: an initial camera poses estimation
 step followed by a densification phase. The former aims to reconstruct the 
@@ -46,7 +45,7 @@ further reduce drift error.
 
 In the following sections we describe every detail of the steps in our pipeline.
 
-\section{Key Points and Features extraction}
+\section{Key Points and Features Extraction}
 In this step, we extract SURF key points and their descriptor out of 
 equirectangular images. SURF 
 interest points are rotation and scale invariant just like SIFT. But unlike 
@@ -54,7 +53,7 @@ the latter, SURF detection is faster and there is no patent for it.
 This makes SURF implementation available in most computer vision frameworks and 
 libraries.
 
-\section{Key points filtering}
+\section{Key Points Filtering}
 The equirectangular format for spherical images introduces significant 
 distortions in the areas around the poles. Interesting points in those areas 
 are unlikely to match reliably with other points in a consecutive view, 
@@ -65,7 +64,7 @@ upward and downward respectively while most of the matches useful for pose
 estimation comes from the sides of the camera, so the removal of interesting 
 points near the poles does not really affect the final result.
 
-\section{Feature matching}
+\section{Features Matching}
 The matching strategy we carried out for equirectangular images is the same one 
 adopted with standard images: two key points matches if the distance between 
 their descriptors is less than a given threshold. Ambiguous matches 
@@ -77,7 +76,7 @@ in an image can possibly match to one feature only in the other image.
 This is obtained with a first former forward matching followed by a backward 
 pass that, in case of multiple matches, selects the best one only.
 
-\section{Matches filter}
+\section{Matches Filter}
 In this step of the pipeline the matches are analyzed in order to decide 
 whether a frame is kept because it is useful for motion estimation or 
 it has to be discarded.
@@ -99,29 +98,32 @@ because, when the camera rotation is limited, the points that moves very little
 in consecutive views are usually far from the camera and they are less
 useful than closer points to estimate camera motion. 
 
-\section{3D-to-2D Key points conversion}
+\section{3D-to-2D Key Points Conversion}
 This step converts the key point format of equirectangular images to a new one 
 suitable for the essential matrix estimation routine.
 First the latitude and longitude coordinates of each feature point are 
-extracted from the 2D mapping according to the following formula.
+extracted from the 2D mapping according to the following formula:
+%
 \begin{align}
 \label{eq:llConversion}
 \theta &= \frac{u}{W 2 \pi} - \pi \\
-\phi &= \frac{\pi}{2} - \frac{v}{H \pi}
+\phi &= \frac{\pi}{2} - \frac{v}{H \pi}\text{,}
 \end{align}
-Where \textit{W} and \textit{H} are the image width and height respectively.
+%
+\noindent where \textit{W} and \textit{H} are, respectively, 
+the image's width and height.
 
-Once we have the spherical coordinates, we can use them to obtain a set of 3D 
+Once we computed the spherical coordinates, we can use them to obtain a set of 3D 
 key points with cartesian coordinates. In order to estimate the essential 
 matrix for each pairs of views, we use the equation introduced by 
 Longuet-Higgins in \cite{longuet1981computer}:
 
 \begin{equation}
 \label{eq:essentialMatrix}
-\mathbf{p}'^\top E\mathbf{p} = 0
+\mathbf{p}'^\top E\mathbf{p} = 0 \text{,}
 \end{equation}
 
-Where 
+\noindent where 
 \begin{math}\mathbf{p} = K^{-1} \mathbf{m},
 \mathbf{p}' = K^{-1} \mathbf{m}'\end{math} are the normalized coordinates of 
 two matching points, \begin{math}\mathbf{m}\end{math} and
@@ -132,7 +134,7 @@ affected by any intrinsic parameter
 (\begin{math}K = I\end{math}).
 
 In order to exploit the routines to estimate the essential matrix available 
-in the Matlab's Computer Vision Toolbox, we have to do an additional simple 
+in the Matlab's Computer Vision Toolbox, we need to perform an additional simple 
 step.
 Indeed this toolbox's routines deals with 2D images and, thus, they expect 
 2D vectors when the input arguments are image points, however our camera
@@ -147,7 +149,7 @@ scalars \begin{math}{\lambda}\end{math} and
 \lambda'\mathbf{p}'^\top E\lambda\mathbf{p} = 0
 \end{equation*}
 
-So, we divide the 3D points obtained from the spherical images by their 
+Therefore, we divide the 3D points obtained from the spherical images by their 
 3rd component, discard it, and use the resulted 2D points as input for the 
 Matlab's essential matrix estimation routine.
 
