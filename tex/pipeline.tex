@@ -1,4 +1,4 @@
-\chapter{Spherical SFM}
+\chapter{Spherical SfM}
 \todo[inline]{aggiungere una sessione in cui si descrive il sistema di riferimento e 
 altre convenzioni}
 \section{Overview}
@@ -183,7 +183,7 @@ The reduced number of matching points for the input of the
 estimated, since those matches are used only to choose the 
 correct SVD.
 
-\section{Relative scale estimation}
+\section{Relative Scale Estimation}
 Every relative motion between two views can only be estimated up to an unknown 
 scale factor. Indeed the scale affects the translation only but still it has to 
 be computed in order to create a coherent set of camera poses.
@@ -199,7 +199,7 @@ with the \textit{(k-1)-th} view. With this formula we obtain a different scale
 for each pair of points \textit{i, j}; in order to compute a single robust value
 we take the median of the estimated scale.
 
-\section{Motion composition}
+\section{Motion Composition}
 Once we estimated the relative motion between two views, the new location and 
 orientation are composed with the previous ones so that all camera poses are
 described in a unique reference system. By using the same notations in 
