@@ -1,0 +1,30 @@
+\chapter{State of the Art}
+\section{Perspective SfM}
+A great resource about the state of the art for Visual Odometry and Structure 
+from Motion techniques is the couple of articles by Scaramuzza 
+\cite{scaramuzzaVisualOdometryI} and \cite{scaramuzzaVisualOdometryII}.
+
+The work done in these topics is extensive but all the approaches the 
+researches followed so far include similar pipelines.
+Indeed the idea is rather simple: compute the relative motion for each image
+pair, then compose this motion to obtain the absolute camera position and 
+orientation. Finally run an optimization procedure to reduce drift.
+
+The differences are in the type of input data, motion estimation, optimization 
+procedure and additional constraint considered.
+
+For generic SfM researches, the input data are a set of traditional pictures of 
+the same environment from different point of view. The pictures can be taken by 
+different people in different moment and the camera parameters can be unknown.
+
+When the aim of SfM is Visual Odometry, the input data is generally a sequence 
+of images from a video stream. Many studies targeted different hardware setup 
+but the specific image capturing device is usually either a single perspective 
+camera or a stereo imaging rig. The computer vision literature refers to the
+former case with the term \textit{monocular VO} while it uses \textit{stereo VO}
+to describe the latter.
+Even though perspective cameras have been the first choiche in many studies, 
+the researchers used other devices among the ones described in 
+\ref{sec:cameraclassification}.
+
+
