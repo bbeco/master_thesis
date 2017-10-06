@@ -35,11 +35,29 @@ requires time.
 
 Catadioprict cameras are obtained with a perspective camera plus a mirror. 
 The camera take a picture of the mirror which reflects the image of the 
-surroundings. The mirror used to create a catadioptric system is shaped like a 
+surroundings. The mirror of a catadioptric system may have several profiles, 
+although a common one is the hyperbolic shape that creates a single center of 
+projection for every ray coming to the mirror. 
 
 
 A traditional camera can also be adapted to work as a panoramic one by adding
 fisheye lenses capable of refracting lights from wide angle towards the 
 image sensor. This setup are called dioptric cameras.
 
-Even though the devices described before 
+Apart of perspective cameras coupled with stitching software, none of the 
+previous approach can take full spherical panoramic photos, while full spherical 
+videos can not be shot with perspective cameras either.
+The fourth approach, the hybrid one, exploits several fisheye lenses and 
+software stitching to capture full spherical panoramic images in a single shot, 
+thus enabling full spherical video capturing as well.
+The camera (that is composed of several image sensors) take multiple 
+overlapping pictures simultaneously, then the stitching software composes the
+data in a single picture.
+
+In all our experiments we used the Ricoh Theta S camera 
+(see Fig. \ref{fig:ricoh_theta}) which is a hybrid full spherical camera composed 
+of two fisheye lenses with a FOV greater than 180\degree.
+\missingfigure{Inserire immagine ricoh theta s}
+\label{fig:ricoh_theta}
+
+\
