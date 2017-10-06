@@ -1,13 +1,29 @@
 \chapter{Introduction}
-The growing interest of general public in those technology that were 
+The growing interest of general public in those technologies that were 
 research-only exclusives once, makes them cheaper and spread further and
 animates research again.
 
-The omnidirectional and full spherical cameras are some perfect examples for 
-this trend.
-These devices has been used in robotics since their first appearance and they 
+The omnidirectional and full spherical cameras are perfect examples 
+for this trend.
+These devices have been used in robotics since their first appearance and they 
 can be exploited in today consumer technologies like Augmented and Virtual 
 Reality devices and autonomous driving vehicles.
+
+In this work we designed a \textit{Structure from Motion} (SfM) pipeline for 
+full spherical cameras.
+
+SfM is a well known topic in computer vision, its aim is to recover the 
+environment 3D structure from a sequence of images taken from different point 
+of views. \todo{inserire citazione primi paper SfM}.
+
+The largest amount of work about SfM (and computer vision in general) 
+has targeted \todo{migliorare} perspective cameras, since these type of devices 
+have always been more common.
+With the increased diffusion of panoramic cameras, the interest to use them in 
+various computer vision topics increased too.
+
+Because of the increased \textit{Field of View} (FoV), panoramic cameras can 
+capture a larger amount of enviroment data compared to traditional devices.
 
 \todo[inline]{Aggiungere sezione con differenze SfM vs VO vs SLAM}
 
@@ -57,12 +73,21 @@ overlapping pictures simultaneously, then the stitching software composes the
 data in a single picture.
 
 In all our experiments we used the Ricoh Theta S camera 
-(see Fig. \ref{fig:ricoh_theta}) which is a hybrid full spherical camera composed 
-of two fisheye lenses with a FOV greater than 180\degree.
+(see Fig. \ref{fig:ricoh_theta}) which is a hybrid full spherical camera 
+composed of two fisheye lenses with a FOV greater than 180\degree.
 \missingfigure{Inserire immagine ricoh theta s}
 \label{fig:ricoh_theta}
 
 \subsection{Image Format}
-
+If we consider the simplest camera model, 
+a perspective image is the result of the intersection between the image plane 
+and all the light rays that go from the environment to the center of 
+projection inside the camera (see Fig\ref{fig:perscam_model}).
+\missingfigure{aggiungere modello camera prospettica}
+\label{perscam_model}
+On the other hand, the full spherical camera model implies the image plane 
+to be the result of the intersection between a sphere and the rays from the 
+environment to the center of projection (which is equivalent to the sphere's 
+center).
 \todo[inline]{aggiungere descrizione coordinate omogenee}
 
