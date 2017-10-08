@@ -73,6 +73,19 @@ environment reconstruction.
 The term SLAM was introduced by Durrant-White et al. in 
 \cite{durrant1996localization}.
 
+\section{Densification: from Sparse to Dense Points Cloud}
+A sparse points cloud is a byproduct of most VO pipeline; 
+some key points are tracked in every picture and are then used by the motion 
+estimation algorithm. These key point are triangulated and the 
+corresponding world points are available during egomotion estimation.
+The set of triangulated key points forms a sparse point cloud around the 
+camera's path that provides a first approximation of the environment 
+reconstruction.
+Densification algorithms increase the number of image points matched in two 
+consecutive frames thus allowing us to triangulate these points too. 
+The result is a dense cloud of points around the camera's path which provides 
+additional information about the surroundings' geometry.
+
 \section{Omnidirectional and Full Spherical Cameras}
 \label{sec:cameraclassification}
 Omnidirectional cameras are characterized by wide field of view, 
