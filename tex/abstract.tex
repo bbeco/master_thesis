@@ -1,20 +1,23 @@
 \begin{abstract}
-Full spherical images are gaining interest in fields like robotics and 
-Augmented and Virtual Reality (AR/VR)
-\todo{aggiungere Autonoumus Driving}; 
-consumer devices like Head-Mounted 
-Display demand for cheaper alternatives for 3D content creation and this caused
-full spherical cameras to spread further.
+Full spherical images are gaining interest in fields like robotics, 
+autonomous driving and Augmented and Virtual Reality (AR/VR).
 
-The researches that revolves around spherical images are way less popular than 
+The researches that address spherical images are way less popular than 
 the ones that consider traditional perspective cameras, but this new kind of 
-devices allow for an improvement in the quantity of information  that can 
+devices allow for an improvement in the quantity of information that can 
 be captured in a single shot.
 
 In this work we developed a Structure From Motion pipeline for 
 full spherical cameras composed of two main
 parts: camera poses estimation and dense point cloud reconstruction.
+This pipeline uses the frames of 360\degree videos in the 
+equirectangular format.
+
+Our contribution includes a frame filter that selects the frames to be used 
+for motion estimation and that is based on visual information only, 
+the whole SfM pipeline implementation in MATLAB and an adaptive window matching 
+procedure for point cloud densification.
 
 We tested the performance of our work both with a synthetic 3D scene and with 
-a real sequence captured with the Ricoh Theta S.
+a real sequence captured a Ricoh Theta S camera.
 \end{abstract}
