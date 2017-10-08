@@ -1,4 +1,5 @@
 \chapter{State of the Art}
+\label{ch:state_of_the_art}
 We start this chapter with the description of a traditional VO pipeline for 
 perspective cameras. We explain the fundamental steps for robust motion 
 estimation and the challenges issued by VO with full spherical cameras.
@@ -61,5 +62,17 @@ C_n = C_{n-1} T_n
 
 \subsection{Camera Model}
 
-
+\section{Full Spherical Cameras}
+\subsection{Image Format}
+If we consider the simplest camera model, 
+a perspective image is the result of the intersection between the image plane 
+and all the light rays that go from the environment to the center of 
+projection inside the camera (see Fig\ref{fig:perscam_model}).
+\missingfigure{aggiungere modello camera prospettica}
+\label{fig:perscam_model}
+On the other hand, the full spherical camera model implies the image plane 
+to be the result of the intersection between a sphere and the rays from the 
+environment to the center of projection (which is equivalent to the sphere's 
+center).
+\todo[inline]{aggiungere descrizione coordinate omogenee}
 
