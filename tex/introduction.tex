@@ -19,9 +19,9 @@ sensor size, pixel density, and lens distortion model. When dealing with full sp
 \section{SfM, VO, and SLAM}
 SfM is a long studied topic in computer vision. Starting from an input of photographs taken by one or multiple cameras, SfM's main goal is to compute the cameras' poses and to reconstruct the 3D enviroment captured by those cameras.
 %
-Some of the first works are the paper by Longuet-Higgins\cite{longuet1981computer}, whose equations are fundamental in epipolar geometry, and the work by Tomasi et al.\cite{tomasi1992shape}, who used an orthographic photographs to estimate the shape of a 3D object.
+Some of the first works are the paper by Longuet-Higgins\cite{longuet1981computer}, whose equations are fundamental in epipolar geometry, and the work by Tomasi et al.\cite{tomasi1992shape}, who used orthographic photographs to estimate the shape of a 3D object.
 %
-SfM is a general term, and it also includes \textit{visual odometry} (VO). This is the problem of recovering the motion of an agent equipped with a camera rig in a 3D environment. Typically, VO deals with an ordered set of images such as video sequences, and it uses them to compute the egomotion in real-time. Nister et al.\cite{nister2004visual} introduced the \textit{visual odometry} for the first time.
+SfM is a general term, and it also includes \textit{visual odometry} (VO). This is the problem of recovering the motion of an agent equipped with a camera rig in a 3D environment. Typically, VO deals with an ordered set of images such as video sequences, and it uses them to compute the egomotion in real-time. Nister et al.\cite{nister2004visual} introduced the term \textit{visual odometry} for the first time.
 
 Another field of robotic/computer vision research that is very close to VO is \textit{simultaneous localization and mapping} (SLAM). SLAM targets the problem of creating a map of the environment where a camera equipped agent navigates and simulatenously estimating its path. Scaramuzza\cite{scaramuzzaVisualOdometryI} pointed out that while VO is more focused on local motion estimation, SLAM's goal is to obtain a global consistent estimation of the agent movements.
 %
