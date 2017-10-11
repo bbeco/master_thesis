@@ -1,26 +1,79 @@
 \chapter{State of the Art}
 \label{ch:state_of_the_art}
-We start this chapter with the description of a traditional VO pipeline for 
-perspective cameras. We explain the fundamental steps for robust motion 
-estimation and the challenges issued by VO with full spherical cameras.
+In this chapter we give a formal definition of the VO problem, we describe a 
+general perspective SfM pipeline, then 
+we explain the fundamental challenges issued by the employment of full 
+spherical cameras for VO.
+
+\section{VO Problem}
+\label{sec:vo_problem}
+As we described in the previous chapter, the VO's goal is to recover the 
+camera trajectory while it is moving in the environment. We now
+introduce the notations we are going to use for the rest of this work; 
+these are the same ones used by Scaramuzza in \cite{scaramuzzaVisualOdometryI}.
+Let first assume time is sampled in a sequence of time instants \(k\); 
+\(I_{0:n} \) is the set of input frames, with \(I_{k}\) the picture taken by 
+the camera at time
+\(k\). We define \(C_{0:n}\) as the set of camera 
+positions such that \(C_k\) is the position at the \(k\)-th instant.
+If we call \(T_k\) the rigid body transformation of the camera between the two
+consecutive time instant $k-1$ and $k$, then we have the following relation:
+\begin{equation}
+	\label{eq:motion_composition}
+C_n = C_{n-1} T_n
+\end{equation}
+\noindent with \(T_k\) defined as
+\begin{equation*}
+	T_k =
+	\begin{bmatrix}
+	R_k & t_k \\
+	0 & 1
+	\end{bmatrix} \text{.}
+\end{equation*}
+\noindent $R_k$ is a 3-by-3 rotation matrix while $t_k$ is a column vector, 
+they represent the rotation and translation the camera performed from instant 
+$k-1$ to $k$.
+Therefore the goal of VO is to estimate both $R_k$ and $t_k$ for each instant 
+$k$ and then compute the camera position $C_k$ accordingly to 
+equation~\ref{eq:motion_composition}.
+The initial position $C_0$ can be set arbitrarily.
+
+Equation~\ref{eq:motion_composition} is the core of VO: thanks to it we are able
+to compute the camera local movement, therefore we can estimate its location in 
+every moment. But the equation above contains also the biggest practical 
+challenge of VO, that is the error accumulation phenomenon known as 
+\textit{drift}.
+Every new position $C_k$ introduces an error factor that affects the next 
+computations; the results is a global error that grows as the number of 
+estimations increases.
+All the efforts of the VO research community since early works like 
+\cite{harris19883d} and \cite{moravec1980obstacle}, has focused on error
+minimization techniques to reduce drift.
+These tackle the precise estimation problem either by employing more accurate
+local motion estimation and by introducing an optimization step to refine 
+camera locations.
+The set of techniques by which the drift is reduced once the camera poses have 
+have been computed go under the general term \textit{bundle adjustment}.
 
 \section{Perspective SfM}
-A great resource about the state of the art for Visual Odometry and Structure 
-from Motion techniques is the couple of articles by Scaramuzza,  
-\cite{scaramuzzaVisualOdometryI} and \cite{scaramuzzaVisualOdometryII}.
-
-The work done in these topics is extensive but all the approaches the 
-researches followed so far include similar pipelines.
-Indeed the idea is rather simple: compute the relative motion for each image
+The SfM literature is extensive but most of the approaches the 
+researches followed so far present pipelines similar to the one in 
+Fig~\ref{fig:block_diagram}.
+The main steps of the : compute the relative motion for each image
 pair, then compose these motions to obtain the absolute camera position and 
-orientation. Finally run an optimization procedure to reduce drift.
+orientation. Finally, run an optimization procedure to reduce drift.
 The differences are in the type of input data, motion estimation algorithm,
- optimization procedure and additional constraints considered.
-
+optimization procedure and additional constraints considered.
 For generic SfM researches, the input data is a set of traditional pictures of 
 the same environment from different point of view. The pictures can be taken by 
-different cameras with unknown parameters and in different moments.
-
+different cameras with unknown parameters and in different time instants.
+\begin{figure}
+	\label{fig:block_diagram}
+    \centering
+    \def\svgwidth{0.5\columnwidth}
+    \input{img/block_diagram.pdf_tex}
+    \caption{Perspective SfM pipeline block diagram.}
+\end{figure}
 \textit{Visual Odometry} is based on SfM techniques, 
 in this case, the input data is usually a sequence 
 of images from a video stream. Many studies targeted different hardware setup 
@@ -33,34 +86,62 @@ Even though perspective cameras have been the first choice in many studies,
 the researchers used other devices, like the ones described in 
 \ref{sec:cameraclassification}.
 
-We use the terms \textit{perspective} or \textit{traditional SfM} for the 
-SfM pipelines for perspective cameras.
+We use the terms \textit{perspective} or \textit{traditional SfM} to describe 
+SfM pipelines designed for perspective cameras.
 
-\subsection{VO Problem}
-We have already described the objective of VO in the previous section; we
-introduce now the notations we use from now on. These notations are the same 
-ones used by Scaramuzza in \cite{scaramuzzaVisualOdometryI}.
+A great resource about the state of the art for Visual Odometry and Structure 
+from Motion techniques is the couple of articles by Scaramuzza,  
+\cite{scaramuzzaVisualOdometryI} and \cite{scaramuzzaVisualOdometryII}.
 
-Let first assume \(k\) indicates the time instant; 
-\(I_{0:n} \) is the set of frames 
-captured with our camera while it is moving in the environment (let \(I_{k}\) 
-be the image taken at instant \(k\)). We call \(C_{0:n}\) the set of camera 
-position such that \(C_k\) is the position at the instant \(k\).
-If we call \(T_k\) the rigid body transformation of the camera between two
-consecutive time instant, we have the following relation:
-\begin{equation*}
-C_n = C_{n-1} T_n
-\end{equation*}
-\noindent with \(T_k\) that is defined as
-\begin{equation*}
-	T_k =
-	\begin{bmatrix}
-	R_k & t_k \\
-	0 & 1
-	\end{bmatrix}
-\end{equation*}
+\subsection{Motion Estimation}
+We use the term local motion to indicate the camera movement between two 
+consecutive images while, on the other hand, we define global motion as
+the overall camera's path.
+The local motion estimation step is fundamental in a SfM pipeline, its goal is 
+to find the rigid body transformation composed of $R_k$ and $t_k$ as we 
+described in Section~\ref{sec:vo_problem}.
+All the local motion estimation methods described in the literature so far are 
+based on the correspondences found in two consecutive images but, depending on the
+specific camera rig (stereo imaging systems or monocular), the type of 
+correspondences and their matching procedure, we may have several choices for
+the actual way to estimate local motion.
+There are two main families of point matching algorithms: \textit{feature-based}
+and \textit{appearance-based} (also known as \textit{global-methods}).
+While the former ones utilize repeatable features 
+matching between the images, the latter rely on pixel's intensity information; 
+they are simpler but also slower. Most of the 
+most recent VO pipelines use feature-based methods because of
+their speed and robustness.
+A VO implementation that employs intensity based techniques is 
+\cite{nister2004visual}, while ...\todo{aggiungere qualche citazione che non usi approcci misti}
 
-\subsection{Camera Model}
+Each of the feature points found by the motion estimation phase can be 
+either a 3D world-point feature or a 2D image-point one,
+therefore, there are three possible combinations that provides just as many 
+different matching and motion-estimation procedures:
+\begin{itemize}
+	\item 2D-to-2D: both feature sets are composed of image points.
+The matching metric can be a simple euclidean distance between feature 
+descriptors and the motion estimation can be solved by estimating the 
+\textit{essential matrix} (see section~\ref{subsec:essential_matrix} for 
+details);
+	\item 3D-to-3D: both feature sets contain world-points features and motion
+estimation is performed by solving an alignment problem;
+	\item 3D-to-2D: the previous image's feature set is composed of world points while
+the current one's feature set contains their projections. In this case, the motion 
+is estimated by solving a \textit{PnP} problem.
+\end{itemize}
+Since the second and third approaches deal with 3D points, they are usually 
+best suited for stereo rig (especially the 3D-to-3D case).
+Yet we can still use the 3D-to-2D approach in the monocular VO case by simply 
+triangulating corresponding 2D image features in consecutive frames.
+In fact, in order to obtain the first 3D feature set,
+ we can compute the relative motion between the first two images with 
+the 2D-to-2D techniques and then obtain the rest of the camera's path,
+as we said, by solving the \textit{PnP} problem.
+
+\subsubsection{Essential Matrix}
+\label{subsec:essential_matrix}
 
 \section{Full Spherical Cameras}
 \subsection{Image Format}

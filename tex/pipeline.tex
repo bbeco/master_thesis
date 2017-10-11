@@ -9,13 +9,18 @@ step followed by a densification phase. The former aims to reconstruct the
 camera trajectory, which means to estimate the camera position for each frame 
 considered. The latter one relies on the previous result to create a dense 
 3D point cloud that represents a simple reconstruction of the environment.
-The Figure (...)
+Fig~\ref{fig:pipeline_overview}
 is a simple visualization of this two macro parts of the 
 pipeline.
 \begin{figure}
+	\label{fig:pipeline_overview}
     \centering
     \def\svgwidth{\columnwidth}
     \input{img/pipeline_overview.pdf_tex}
+    \caption{The sfm pipeline: the pose estimation phase returns the camera 
+    poses and the sparse points cloud; then, the densification step uses 
+    the original images and the previously computed poses to produce a dense 
+    points cloud.}
 \end{figure}
 
 The camera poses estimation phase is similar to other classical visual 
