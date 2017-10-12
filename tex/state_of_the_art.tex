@@ -69,7 +69,7 @@ the same environment from different point of view. The pictures can be taken by
 different cameras with unknown parameters and in different time instants.
 \begin{figure}
 	\label{fig:block_diagram}
-    \centering
+   \centering
     \def\svgwidth{0.5\columnwidth}
     \input{img/block_diagram.pdf_tex}
     \caption{Perspective SfM pipeline block diagram.}
@@ -142,6 +142,10 @@ as we said, by solving the \textit{PnP} problem.
 
 \subsubsection{Essential Matrix}
 \label{subsec:essential_matrix}
+The essential matrix $E$ is defined by the equation
+\begin{equation}
+\lambda'\mathbf{p}'^\top E\lambda\mathbf{p} = 0
+\end{equation}
 
 \section{Full Spherical Cameras}
 \subsection{Image Format}
