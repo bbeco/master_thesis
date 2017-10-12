@@ -136,7 +136,7 @@ best suited for stereo rig (especially the 3D-to-3D case).
 Yet we can still use the 3D-to-2D approach in the monocular VO case by simply 
 triangulating corresponding 2D image features in consecutive frames.
 In fact, in order to obtain the first 3D feature set,
- we can compute the relative motion between the first two images with 
+we can compute the relative motion between the first two images with 
 the 2D-to-2D techniques and then obtain the rest of the camera's path,
 as we said, by solving the \textit{PnP} problem.
 
@@ -146,6 +146,8 @@ The essential matrix $E$ is defined by the equation
 \begin{equation}
 \lambda'\mathbf{p}'^\top E\lambda\mathbf{p} = 0
 \end{equation}
+\noindent where $\mathbf{p}$ and $\mathbf{p}'$ are two corresponding feature 
+in the image $I_{k-1}$ and $I_{k}$ respectively. 
 
 \section{Full Spherical Cameras}
 \subsection{Image Format}
@@ -159,5 +161,4 @@ On the other hand, the full spherical camera model implies the image plane
 to be the result of the intersection between a sphere and the rays from the 
 environment to the center of projection (which is equivalent to the sphere's 
 center).
-\todo[inline]{aggiungere descrizione coordinate omogenee}
 
