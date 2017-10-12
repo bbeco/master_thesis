@@ -144,10 +144,40 @@ as we said, by solving the \textit{PnP} problem.
 \label{subsec:essential_matrix}
 The essential matrix $E$ is defined by the equation
 \begin{equation}
-\lambda'\mathbf{p}'^\top E\lambda\mathbf{p} = 0
+\label{eq:epipolar_equation}
+\mathbf{p}'^\top E \mathbf{p} = 0
 \end{equation}
-\noindent where $\mathbf{p}$ and $\mathbf{p}'$ are two corresponding feature 
-in the image $I_{k-1}$ and $I_{k}$ respectively. 
+\noindent where $\mathbf{p}$ and $\mathbf{p}'$ are the normalized corresponding 
+feature coordinates in the image $I_{k-1}$ and $I_{k}$ respectively.
+The normalized coordinates are defined as:
+\begin{equation}
+	\mathbf{p} = K^{-1} \mathbf{m}
+\end{equation}
+\noindent where $K$ is the intrinsic parameter matrix and $\mathbf{m}$ is an
+image point.
+The essential matrix contains the geometric information that describe the 
+relative location of a camera respect to another up to an unknown scale factor 
+for the translation vector. In particular, we have
+\begin{equation*}
+	E_k = \lambda \hat{t}_kR_k
+\end{equation*}
+\noindent with $\lambda$ that is the unknown scale factor and $\hat{t}_k$ is 
+the skew symmetric form for the cross product of vector $t_k$.
+In order to extract the local motion given the two set of corresponding features
+in two consecutive images, we have to estimate the essential matrix and then 
+extract the rigid body transformation out of it.
+For the $E$ estimation part we can employ the Longuet-Higgins' 8-points 
+algorithm: the equation~\ref{eq:epipolar_equation} provides a constraint we
+can exploit for computation, in fact, for each correspondence, we can rewrite 
+the equation as
+\begin{equation*}
+	\begin{bmatrix}
+		p_1p'_1 & p'_1p_2 & p'_1 & p_1p'_2 & p_2p'_2 & p'_2 & p_1 & p_2 & 1
+	\end{bmatrix}
+	E = 0	\text{.}
+\end{equation*}
+To find the nine unknowns we need 8 feature matches that provide as many 
+independent equations.
 
 \section{Full Spherical Cameras}
 \subsection{Image Format}
