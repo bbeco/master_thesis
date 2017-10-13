@@ -225,6 +225,41 @@ outliers).
 
 It is worth noticing that the exact \textit{absolute scale} for the whole 
 camera motion and environment reconstruction is still left unknown.
+\todo{aggiungere citazioni}
+
+\section{Bundle Adjustment}
+We have already introduced the error accumulation problem that affects SfM in 
+section~\ref{sec:vo_problem}; because of the unavoidable errors we introduce 
+for each camera pose estimation, an SfM pipeline incorporates a 
+refinement process for both camera poses and triangulated points.
+This step is called \textit{bundle adjustment} (BA) and its goal is to 
+minimize the \textit{reprojection error}.
+Point reprojection is the function that projects a world point to image space; 
+in particular, the reprojection ${\myvec{\bar{m}}_i}^j$ of the scene point 
+$\myvec{M}^j$ according to camera $i$ is defined as
+\begin{equation*}
+	{\myvec{\bar{m}}_i}^j = K_i[R_i | \myvec{t}_i]\myvec{M}^j	\text{.}
+\end{equation*}
+\noindent Bundle adjustment can then be expressed as the following minimization 
+problem
+\begin{equation*}
+	\min_{R_i, \myvec{t}_i, \myvec{M}^j} 
+	\sum_{i = 1}^N\sum_{j = 1}^n 
+	d(K_i[R_i | \myvec{t}_i]\myvec{M}^j, \myvec{m}_i^j) \text{,}
+\end{equation*}
+\noindent with $\myvec{m}_i^j$ that is the image point of the $i$-th camera
+corresponding to $\myvec{M}^j$.
+This non linear least squares minimization is usually solved with the 
+Levenberg–Marquardt method 
+\cite{triggs1999bundle,Hartley2004,levenberg1944method}.
+The term \textit{bundle} refers to the fact that both the camera position and
+the triangulated points are jointly refined. Most BA implementations keep the 
+camera poses fixed, solve for the triangulated points and then optimize for the
+poses in an alternate fashion until the desired precision is reached.
+
+BA is a delicate step that can affect an SfM pipeline in many ways
+\cite{lourakis2009sba,triggs1999bundle,Hartley2004} as a poorly planned use of 
+it can reduce computation speed and fail to obtain the desired accuracy.
 
 \section{Full Spherical Cameras}
 \subsection{Image Format}
