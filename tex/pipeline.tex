@@ -1,4 +1,5 @@
 \chapter{Spherical SfM}
+\lhead{\chaptername~\thechapter. \emph{Spherical SfM}}
 \todo[inline]{aggiungere una sezione in cui si descrive il sistema di riferimento e 
 altre convenzioni}
 \section{Overview}
@@ -12,16 +13,16 @@ considered. The latter one relies on the previous result to create a dense
 Fig~\ref{fig:pipeline_overview}
 is a simple visualization of this two macro parts of the 
 pipeline.
-%\begin{figure}
-%	\label{fig:pipeline_overview}
-%    \centering
-%    \def\svgwidth{\columnwidth}
-%    \input{img/pipeline_overview.pdf_tex}
-%    \caption{The sfm pipeline: the pose estimation phase returns the camera 
-%    poses and the sparse points cloud; then, the densification step uses 
-%    the original images and the previously computed poses to produce a dense 
-%    points cloud.}
-%\end{figure}
+\begin{figure}
+	\label{fig:pipeline_overview}
+    \centering
+    \def\svgwidth{\columnwidth}
+    \input{img/pipeline_overview.pdf_tex}
+    \caption{The sfm pipeline: the pose estimation phase returns the camera 
+    poses and the sparse points cloud; then, the densification step uses 
+    the original images and the previously computed poses to produce a dense 
+    points cloud.}
+\end{figure}
 
 The camera poses estimation phase is similar to other classical visual 
 odometry pipeline; the real differences lie in the variables format and in 

@@ -1,4 +1,5 @@
 \chapter{State of the Art}
+\lhead{\chaptername~\thechapter. \emph{State of the Art}}
 \label{ch:state_of_the_art}
 In this chapter we give a formal definition of the VO problem, we describe a 
 general perspective SfM pipeline, then 
@@ -26,11 +27,11 @@ C_n = C_{n-1} T_n
 \begin{equation*}
 	T_k =
 	\begin{bmatrix}
-	R_k & t_k \\
+	R_k & \myvec{t}_k \\
 	0 & 1
 	\end{bmatrix} \text{.}
 \end{equation*}
-\noindent $R_k$ is a 3-by-3 rotation matrix while $t_k$ is a column vector, 
+\noindent $R_k$ is a 3-by-3 rotation matrix while $\myvec{t}_k$ is a column vector, 
 they represent the rotation and translation the camera performed from instant 
 $k-1$ to $k$.
 Therefore the goal of VO is to estimate both $R_k$ and $t_k$ for each instant 
@@ -156,18 +157,19 @@ The normalized coordinates are defined as:
 \noindent where $K$ is the intrinsic parameter matrix and $\mathbf{m}$ is an
 image point.
 The essential matrix contains the geometric information that describe the 
-relative location of a camera respect to another up to an unknown scale factor 
+relative location of a camera respect to another one up to an unknown scale factor 
 for the translation vector. In particular, we have
 \begin{equation*}
 	E_k = \lambda \hat{t}_kR_k
 \end{equation*}
 \noindent with $\lambda$ that is the unknown scale factor and $\hat{t}_k$ is 
-the skew symmetric form for the cross product of vector $t_k$.
+the skew-symmetric form for the cross product of vector $t_k$.
 In order to extract the local motion given the two set of corresponding features
 in two consecutive images, we have to estimate the essential matrix and then 
 extract the rigid body transformation out of it.
 For the $E$ estimation part we can employ the Longuet-Higgins' 8-points 
-algorithm: the equation~\ref{eq:epipolar_equation} provides a constraint we
+algorithm \cite{longuet1981computer}: the equation~\ref{eq:epipolar_equation} 
+provides a constraint we
 can exploit for computation, in fact, for each correspondence, we can rewrite 
 the equation as
 \begin{equation*}
@@ -176,8 +178,53 @@ the equation as
 	\end{bmatrix}
 	E = 0	\text{.}
 \end{equation*}
-To find the nine unknowns we need 8 feature matches that provide as many 
+To find the nine unknowns we need 8 noncoplanar feature matches that provide as many 
 independent equations.
+In practice we use more than 8 points, therefore we obtain a overdetermined 
+system we solve in the least square sense.
+
+Once $E$ has been estimated, there are 4 possible combinations for the relative 
+position of the two cameras and each world points. We are interested in the one
+that presents both cameras facing toward the triangulated world point,
+i.e. this point has to be in front of both cameras. We can easily chose the 
+correct configuration among the four by testing each of them.
+
+\subsubsection{Relative Scale}
+As we have already pointed out in the previous section, every monocular SfM 
+pipeline that works with 2D-to-2D feature correspondences can estimate the 
+local motion up to an unknown scale factor. In fact, there is no way to extract 
+the translation magnitude from two sets of features (it is still possible 
+to recover the reconstruction scale if we are given some world measure of the
+environment).
+Therefore, if we can not derive the local translation length with some other
+non visual techniques (like wheel odometry, GPS, accelerometer, etc.), 
+all we can do is to leave the unknown scale for the motion estimation and 
+environment reconstruction.
+
+On the other hand, if we have to compose the motion of more than two poses, 
+like VO does, we need to set the first local translation magnitude 
+arbitrarily and express all the other movements relative to this first one.
+This means that we need to compute the \textit{relative scale}
+for every translation other than the first one.
+
+A possible approach for relative scale estimation is described in 
+\cite{scaramuzzaVisualOdometryI}. If we want to estimate the relative scale for 
+the motion $t_k$, between instants $k-1$ and $k$, we need to compute the 
+two sets of triangulated world points $X_{k-1}$ and $X_{k}$ by using 
+the two image pairs $I_{k-2}$ and $I_{k-1}$ , and  $I_{k-1}$ and  $I_{k}$ first; then,
+given $i$ and $j$, two world points that belongs to both sets $X_{k-1}$ and 
+$X_{k}$, we can compute the relative scale accordingly to these points with
+\begin{equation}
+	\label{eq:relative_scale}
+	r = \frac{\| X_{k-1, i} - X_{k - 1, j} \|}{\| X_{k, i} - X_{k, j} \|}
+	\text{.}
+\end{equation}
+\noindent For each world points pair, we obtain a different values of $r$;
+we can then select the average of $r$ (or better, its median in case of 
+outliers).
+
+It is worth noticing that the exact \textit{absolute scale} for the whole 
+camera motion and environment reconstruction is still left unknown.
 
 \section{Full Spherical Cameras}
 \subsection{Image Format}
