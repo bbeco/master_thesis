@@ -31,8 +31,7 @@ environment reconstruction. Durrant-White et al.\cite{durrant1996localization} f
 %
  
 \section{Densification: from Sparse to Dense Point Cloud}
-\textbf{NOTA: perche' questo discorso e' solo per VO e non SfM SLAM?}
-A sparse point cloud is the product of most VO pipelines; some key points are tracked in each photograph and are then used by the motion estimation algorithm. These key points are triangulated and their corresponding world points are available during egomotion estimation.
+A sparse point cloud is the product of most SfM pipelines; some key points are tracked in each photograph and are then used by the motion estimation algorithm. These key points are triangulated and their corresponding world points are available during egomotion estimation.
 %
 A set of triangulated key points is a sparse point cloud around the camera's path. This set provides a first approximation of the environment reconstruction.
 Densification algorithms increase the number of matched points in two consecutive frames, this allows us to triangulate these points too. The result is a dense cloud of points around the camera's path that provides additional information about the surroundings' geometry.
@@ -49,15 +48,21 @@ There are several ways to obtain panoramic images, they include:
 	\item hybrid approaches.
 \end{itemize}
 
-\textbf{NOTA: citare software come Hugin: http://hugin.sourceforge.net/}
-\textbf{NOTA: citare spheron VR: https://www.spheron.com/home.html}
-
 Perspective cameras can take panoramic pictures with the aid of software stitching. As the first step, we take several photographs with many cameras or by simply moving the same camera in order to cover most of a scene. Then, a stitching software merges all images into a single one. To use a traditional camera and a stitching software is the cheapest way to obtain panoramic images because it does not need any kind of specialized hardware. However, this process is cumbersome (i.e., a lot of manual work for the user), and most importantly video sequences cannot be recorded. Note that some smart-phones provide built-in camera 360\degree acquisition modes, but the final quality may be not satisfactory due to alignment artifacts.
+An example for this approach is the Hugin Panorama Photo Stitcher 
+\cite{hugin_photostitcher}, an open source software for merging several 
+perspective images in a single panoramic picture.
+The SpheroCam\texttrademark by SPHERON-VR AG\texttrademark \cite{spheronvr}
+is an alternative to 
+the latter approach to panoramic images; it uses a specialized hardware composed
+of a wide angle lenses equipped camera mounted on a rotating support. It can 
+capture high quality full spherical and it addresses the professional fields of 
+geographical analisys, forensic investigation, cultural heritage, etc.
+
 
 Catadioptric cameras are obtained with a perspective camera and a mirror mounted in front of it. The camera take a picture of the mirror that reflects the surrounding. The mirror of a catadioptric system may have several shapes. The most common one is the hyperbolic profile that creates a single center of 
 projection for every ray coming to the mirror.
 
-\textbf{NOTA: fa l'esempio della goPro}
 A traditional camera can also be adapted to work as a panoramic one by adding a fisheye lens capable of refracting lights from wide angle towards the image sensor. These setups are called dioptric cameras.
 
 Apart of perspective cameras coupled with stitching software, none of the previous approaches can take full spherical panoramic photographs. Moreover, full spherical videos cannot be shot with perspective cameras either.
