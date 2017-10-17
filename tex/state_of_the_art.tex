@@ -34,7 +34,37 @@ environment reconstruction. Durrant-White et al.\cite{durrant1996localization} f
 A sparse point cloud is the product of most SfM pipelines; some key points are tracked in each photograph and are then used by the motion estimation algorithm. These key points are triangulated and their corresponding world points are available during egomotion estimation.
 %
 A set of triangulated key points is a sparse point cloud around the camera's path. This set provides a first approximation of the environment reconstruction.
-Densification algorithms increase the number of matched points in two consecutive frames, this allows us to triangulate these points too. The result is a dense cloud of points around the camera's path that provides additional information about the surroundings' geometry.
+Densification algorithms increase the number of matched points in two consecutive frames, this allows us to triangulate these points too. The result is a dense cloud of points around the camera's path that provides additional information about the surroundings' geometry or that can 
+be the input data for surface reconstruction algorithms 
+\cite{seitz2006comparison}.
+
+In order to create a dense point cloud we need to produce the 
+\textit{disparity map} from an image pair. This is a map of the distance in 
+pixels from a point in a reference image and its corresponding point in the 
+second image. The map is usually computed based on some kind of similarity 
+metric such as \textit{sum of absolute distances} (SAD), 
+\textit{sum of squared distances} (SSD), 
+\textit{normalized cross correlation} (NCC), etc. These provides a way to 
+compute the corresponding point in the second image, thus enabling the 
+computation of the disparity for every point in the reference image.
+Figure~\ref{fig:disparity_example} shows an example of disparity map.
+\begin{figure}[h]
+	\centering
+	\begin{subfigure}{0.3\textwidth}
+		\centering
+		\includegraphics[width=0.7\textwidth]{img/theta1}
+	\end{subfigure}
+	\begin{subfigure}{0.3\textwidth}
+		\centering
+		\includegraphics[width=0.7\textwidth]{img/theta2}
+	\end{subfigure}
+	\begin{subfigure}{0.3\textwidth}
+		\centering
+		\includegraphics[width=0.7\textwidth]{img/theta3}
+	\end{subfigure}
+	\caption{\label{fig:disparity_example}The Ricoh Theta S 360\degree camera.}
+\end{figure}
+\todo[inline]{aggiungere disparity map example}
 
 \section{Omnidirectional and Full Spherical Cameras}
 \label{sec:cameraclassification}
@@ -128,7 +158,7 @@ have been computed go under the general term \textit{bundle adjustment}.
 \section{Perspective SfM}
 The SfM literature is extensive but most of the approaches the 
 researches followed so far present pipelines similar to the one in 
-Fig~\ref{fig:block_diagram}.
+Fig.~\ref{fig:block_diagram}.
 The main steps of the : compute the relative motion for each image
 pair, then compose these motions to obtain the absolute camera position and 
 orientation. Finally, run an optimization procedure to reduce drift.
@@ -138,11 +168,11 @@ For generic SfM researches, the input data is a set of traditional pictures of
 the same environment from different point of view. The pictures can be taken by 
 different cameras with unknown parameters and in different time instants.
 \begin{figure}
+	\centering
+	\def\svgwidth{0.5\columnwidth}
+	\input{img/block_diagram.pdf_tex}
+	\caption{Perspective SfM pipeline block diagram.}
 	\label{fig:block_diagram}
-   \centering
-    \def\svgwidth{0.5\columnwidth}
-    \input{img/block_diagram.pdf_tex}
-    \caption{Perspective SfM pipeline block diagram.}
 \end{figure}
 \textit{Visual Odometry} is based on SfM techniques, 
 in this case, the input data is usually a sequence 
@@ -164,6 +194,7 @@ from Motion techniques is the couple of articles by Scaramuzza,
 \cite{scaramuzzaVisualOdometryI} and \cite{scaramuzzaVisualOdometryII}.
 
 \subsection{Motion Estimation}
+\label{subsec:motion_estimation}
 We use the term local motion to indicate the camera movement between two 
 consecutive images while, on the other hand, we define global motion as
 the overall camera's path.
@@ -183,7 +214,8 @@ they are simpler but also slower. Most of the
 most recent VO pipelines use feature-based methods because of
 their speed and robustness.
 A VO implementation that employs intensity based techniques is 
-\cite{nister2004visual}, while ...\todo{aggiungere qualche citazione che non usi approcci misti}
+\cite{nister2004visual}, while \cite{makadia2007correspondence} is an example 
+of featureless motion estimation method.
 
 Each of the feature points found by the motion estimation phase can be 
 either a 3D world-point feature or a 2D image-point one,
@@ -312,6 +344,7 @@ $\myvec{M}^j$ according to camera $i$ is defined as
 \noindent Bundle adjustment can then be expressed as the following minimization 
 problem
 \begin{equation*}
+	\label{eq:bundle_adj}
 	\min_{R_i, \myvec{t}_i, \myvec{M}^j} 
 	\sum_{i = 1}^N\sum_{j = 1}^n 
 	d(K_i[R_i | \myvec{t}_i]\myvec{M}^j, \myvec{m}_i^j) \text{,}
@@ -329,6 +362,71 @@ poses in an alternate fashion until the desired precision is reached.
 BA is a delicate step that can affect an SfM pipeline in many ways
 \cite{lourakis2009sba,triggs1999bundle,Hartley2004} as a poorly planned use of 
 it can reduce computation speed and fail to obtain the desired accuracy.
+
+\section{Robust Estimation}
+In the previous sections, we described the core steps of an SfM pipeline.
+Even though these are all the components needed for a working SfM software, 
+there are some improvements widely used by similar pipelines nowadays
+that can further increase the reconstruction and pose estimation 
+precision and robustness, and, in general, make these pipelines more effective.
+In the following sections we review some of the most common improvements 
+employed in SfM software.
+
+\subsection{Feature Detectors}
+As we discussed in section~\ref{subsec:motion_estimation}, in order to estimate
+the essential matrix, we need to find corresponding points in image pairs; 
+these points are \textit{feature points} (or \textit{interesting points}).
+Feature points are patterns in images that are likely to be unique; 
+a feature point is usually described by a vector called 
+\textit{feature descriptor}.
+There are many different types of feature and descriptors like 
+\textit{Moravec detector} \cite{moravec1980obstacle}, \textit{Harris
+corner detector} \cite{harris1988combined}, 
+\textit{SIFT} \cite{lowe1999object}, etc.
+Some of this features are affected by rotations and scale; since SfM is based on
+many pictures taken from different views, SIFT features have always been 
+preferred over other less robust features because of their rotational and scale
+invariance. One of the main drawback is that 
+SIFT is patented and can note be used freely as other detectors.
+SURF \cite{funayama2012robust} is another kind of features that, 
+just like SIFT, is rotational and scale invariant but whose implementation is 
+available within the main computer vision framework because of lesser 
+restrictions.
+For a more detailed discussion about the differences among point detectors, 
+see \cite{schmidt2010evaluation,govender2009evaluation}.
+
+\subsection{Outliers Rejection}
+Since the motion estimation step is the core of SfM pipelines, its performance
+affects the overall software; in particular, motion estimation is influenced 
+by the presence of outliers in features matching.
+A matching outlier is a pair of feature points that are erroneously considered 
+corresponding points. If the motion estimation phase considered these points for
+its computation, the result would be unreliable and it could compromise the 
+whole camera's path estimation because of the incremental nature of the SfM 
+pipeline.
+In order to reduce this phenomenon, we can switch to a more robust feature 
+detector and add the famous RANSAC algorithm to remove outliers before the 
+motion estimation step.
+RANSAC \cite{fischler1981random} is a model fitting algorithm for dataset 
+that includes outliers.
+It is an iterative process that selects a subset of 
+input data at every iteration and computes the model based on this subset only;
+it then divides the complete dataset into a consensus set and outliers, if
+the number of outliers, computed thanks to a problem specific loss function, is
+less than a given threshold, the estimated model is considered valid.
+
+RANSAC is now a standard step in SfM. It selects the correspondences inliers at
+random, computes the essential matrix accordingly to the selected matches and
+evaluates the outliers based on the reprojection error defined as:
+\begin{equation*}
+	Err =  
+	\sum_{i = 1}^N\sum_{j = 1}^n 
+	d(K_iE\myvec{M}^j, \myvec{m}_i^j) \text{.}
+\end{equation*}
+This error formulation is similar to equation~\ref{eq:bundle_adj} but now the
+essential matrix is not decomposed in $[R_i|\myvec{t}_i]$.
+The use of RANSAC before motion estimation provides a more reliable result if
+the number of outliers is not prevalent.
 
 \section{Full Spherical Cameras}
 \subsection{Image Format}
