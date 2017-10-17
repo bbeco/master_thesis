@@ -372,6 +372,25 @@ precision and robustness, and, in general, make these pipelines more effective.
 In the following sections we review some of the most common improvements 
 employed in SfM software.
 
+\begin{figure}
+	\centering
+	\includegraphics[width=\textwidth]{img/good_stereo}
+	\caption{A subset of the matches found in this image pair.}
+	\label{fig:good_stereo}
+\end{figure}
+\begin{figure}
+	\centering
+	\includegraphics[width=\textwidth]{img/motion_blur}
+	\caption{Motion blur reduce both the number and quality of matches.}
+	\label{fig:motion_blur}
+\end{figure}
+\begin{figure}
+	\centering
+	\includegraphics[width=\textwidth]{img/textureless_stereo}
+	\caption{Textureless images provides too less feature points.}
+	\label{fig:textureless}
+\end{figure}
+
 \subsection{Feature Detectors}
 As we discussed in section~\ref{subsec:motion_estimation}, in order to estimate
 the essential matrix, we need to find corresponding points in image pairs; 
