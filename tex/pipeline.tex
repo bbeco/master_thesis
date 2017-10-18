@@ -3,12 +3,12 @@
 \todo[inline]{aggiungere una sezione in cui si descrive il sistema di riferimento e 
 altre convenzioni}
 \section{Overview}
-In this chapter, we describe the pipeline that we designed to create a dense point cloud from a set of equirectangular images.
+In this chapter, we describe the pipeline that we designed to create a dense 
+point cloud from a set of equirectangular images.
 
 The pipeline is composed of two main parts: an initial camera poses estimation
 step followed by a densification phase. The former aims to reconstruct the 
-camera trajectory, which means to estimate the camera position for each frame 
-considered. The latter one relies on the previous result to create a dense 
+camera trajectory, while the latter relies on the previous result to create a dense 
 3D point cloud that represents a simple reconstruction of the environment.
 Fig.~\ref{fig:pipeline_overview}
 is a simple visualization of this two macro parts of the 
@@ -28,15 +28,22 @@ The camera poses estimation phase is similar to other classical visual
 odometry pipeline; the real differences lie in the variables format and in 
 the details concerning the procedures used. For each new frame 
 (in the equirectangular format), we locate the
-SURF keypoints; we consider those keypoints whose inclination angle belongs 
-to the range [-60\degree; +60\degree] because the poles are affected by great 
-distortions, thus robust matches outside this interval are rare.
-Then we look for matches in the last two frames and a filter performs some 
-statystical analysis on the correspondances found and decides whether the frame 
-is suitable for a robust pose estimation or not (in which case the frame is 
-discarded).
-
-If the frame is kept, its matches with the previous one are converted
+SURF keypoints; we consider only those keypoints whose inclination angle is in  
+the range [-60\degree; +60\degree]. This is because the areas around the poles 
+are affected by great distortions, thus robust matches outside this interval are
+rare.
+Then we detect the feature points and match them with the feature set 
+obtained in the previous image.
+%
+In order to decide whether the new frame has to be used for motion estimation, 
+we implemented a filter that analyzes how much changes occurred in 
+corresponding feature points. Thus it provides a raw approximation of the 
+motion that occurred between two consecutive views, thus it can decide whether 
+the frame is suitable for motion estimation or it has to be discarded because 
+it is too similar to the previous view.
+%
+If the frame is kept, we detect every correspondence with the previous image.
+In order to compute the essential matrix, we need to convert the 
 and used for the essential matrix estimation. Once E has been obtained, 
 it can be decomposed in the \([R|t]\) form where R is a rotation matrix 
 and t is a translation vector up to an unknown scale factor.
