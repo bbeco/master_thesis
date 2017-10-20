@@ -3,41 +3,42 @@
 \todo[inline]{aggiungere una sezione in cui si descrive il sistema di riferimento e 
 altre convenzioni}
 \section{Overview}
+%
 In this chapter, we describe the pipeline that we designed to create a dense point cloud from a set of equirectangular images.
 
-The pipeline is composed of two main parts: an initial camera poses estimation
-step followed by a densification phase. The former aims to reconstruct the 
-camera trajectory, which means to estimate the camera position for each frame 
-considered. The latter one relies on the previous result to create a dense 
-3D point cloud that represents a simple reconstruction of the environment.
-Fig.~\ref{fig:pipeline_overview}
-is a simple visualization of this two macro parts of the 
+The pipeline has two main parts: an initial camera poses estimation
+step, and a densification phase. The former aims to reconstruct the 
+camera trajectory, which means to estimate the camera position for each frame.
+The latter step relies on the previous result to create a dense 
+3D point cloud that represents a reconstruction of the environment.
+Fig.~\ref{fig:pipeline_overview} is a plain visualization of these two main parts of the 
 pipeline.
+
 \begin{figure}
     \centering
     \def\svgwidth{\columnwidth}
     \input{img/pipeline_overview.pdf_tex}
-    \caption{The sfm pipeline: the pose estimation phase returns the camera 
-    poses and the sparse points cloud; then, the densification step uses 
-    the original images and the previously computed poses to produce a dense 
-    points cloud.}
+    \caption{The SfM pipeline: the pose estimation phase returns the cameras' 
+    poses and the sparse points cloud. Then, the densification step uses 
+    the input images and the previously camera's poses to create a dense 
+    point cloud.}
 	\label{fig:pipeline_overview}
 \end{figure}
 
-The camera poses estimation phase is similar to other classical visual 
-odometry pipeline; the real differences lie in the variables format and in 
-the details concerning the procedures used. For each new frame 
-(in the equirectangular format), we locate the
-SURF keypoints; we consider those keypoints whose inclination angle belongs 
-to the range [-60\degree; +60\degree] because the poles are affected by great 
+The cameras' poses estimation phase is similar to the classical visual 
+odometry pipeline. The main differences lies in the variables' format and in 
+the details concerning the procedures used. 
+\textbf{NOTE DI FRANCESCO: due righe su cosa e' un SURF keypoint o un keypoint in generale e erference al paper}
+For each new frame  (in the equirectangular format), we locate the
+SURF keypoints; we consider those keypoints whose inclination angle is in the range $[-60\degree; +60\degree]$. This is because the poles are affected by great 
 distortions, thus robust matches outside this interval are rare.
-Then we look for matches in the last two frames and a filter performs some 
-statystical analysis on the correspondances found and decides whether the frame 
-is suitable for a robust pose estimation or not (in which case the frame is 
+Then, we look for matches in the last two frames and a filter performs some 
+statistical analysis on the correspondences found and decides whether the frame 
+is suitable for a robust pose estimation or not (in this case the frame is 
 discarded).
 
 If the frame is kept, its matches with the previous one are converted
-and used for the essential matrix estimation. Once E has been obtained, 
+and used for the essential matrix, $E$, estimation. Once $E$ is computed, 
 it can be decomposed in the \([R|t]\) form where R is a rotation matrix 
 and t is a translation vector up to an unknown scale factor.
 

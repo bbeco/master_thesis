@@ -11,6 +11,27 @@ recovering the structure of 3D environments from a sequence of images taken from
 
 SfM research (and computer vision in general) has targeted perspective cameras because these type of devices have always been more common. However, the increase of interest around these cameras has started a shift of interest towards employing them for research.
 
+\begin{figure}[htb]
+	\centering
+    %
+	\begin{subfigure}{0.4\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{img/fisheye_example}
+		\caption{Fisheye.}
+        \label{fig:fisheye_example}
+	\end{subfigure}
+    %
+	\begin{subfigure}{0.4\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{img/omnidirectional_example}
+		\caption{Ominidirectional (catadioptric).}
+        \label{fig:omnidirectional_example}
+	\end{subfigure}
+    %
+	\caption{Some examples of fisheye pictures.}
+    \label{fig:wide_fov_pics}
+\end{figure}
+
 \section{Omnidirection Cameras}
 Large field of view (FOV) photography employs fisheye lenses that are capable to cover 
 wider scene compared to traditional cameras' hardware.
@@ -37,71 +58,55 @@ several image sensors and integrated stitching software to automatically produce
 panoramic pictures. This is the case for the Ricoh Theta S\texttrademark 
 \cite{theta_website} we used in this work (Figure~\ref{fig:ricoh_theta}).
 
-Together with consumer hardware, some off the shelf
-solutions for the professional market have started to appear; they include the Insta360
+\begin{figure}[htb]
+	\centering
+	\begin{subfigure}{0.3\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{img/theta1}
+	\end{subfigure}
+    %
+	\begin{subfigure}{0.3\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{img/theta2}
+	\end{subfigure}
+    %
+	\begin{subfigure}{0.3\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{img/theta3}
+	\end{subfigure}
+    %
+	\caption{The Ricoh Theta S\registered 360\degree camera.}
+    \label{fig:ricoh_theta}
+\end{figure}
+
+Together with consumer hardware, some off-the-shelf
+solutions for the professional market have started to appear. They include the Insta360
 Pro\registered that can capture full spherical videos or pictures
 at 8K resolution.
-The GoPro Omni\registered is an alternative to the previous, it is a simple 
-rig that contains 6 traditional GoPro\registered devices and that comes with 
-specialized software to enables the 360\degree videos 
-creation.
-
-The interest in full spherical media creation is driven by the introduction 
-of  new immersive media fruition devices, like 
-\textit{head-mounted display} (HMD) or mobile visors.
-\begin{figure}
-	\centering
-	\begin{subfigure}{0.3\textwidth}
-		\centering
-		\includegraphics[width=0.7\textwidth]{img/theta1}
-	\end{subfigure}
-	\begin{subfigure}{0.3\textwidth}
-		\centering
-		\includegraphics[width=0.7\textwidth]{img/theta2}
-	\end{subfigure}
-	\begin{subfigure}{0.3\textwidth}
-		\centering
-		\includegraphics[width=0.7\textwidth]{img/theta3}
-	\end{subfigure}
-	\caption{\label{fig:ricoh_theta}The Ricoh Theta S 360\degree camera.}
-\end{figure}
-
-\begin{figure}
-	\centering
-	\begin{subfigure}{0.4\textwidth}
-		\centering
-		\includegraphics[width=0.7\textwidth]{img/fisheye_example}
-		\caption{Fisheye.}\label{fig:fisheye_example}
-	\end{subfigure}
-	\begin{subfigure}{0.4\textwidth}
-		\centering
-		\includegraphics[width=0.7\textwidth]{img/omnidirectional_example}
-		\caption{Ominidirectional (catadioptric).}\label{fig:omnidirectional_example}
-	\end{subfigure}
-	\caption{Some example of fisheye (\subref{fig:fisheye_example}) and omnidirectional (\subref{fig:omnidirectional_example}) pictures.}\label{fig:wide_fov_pics}
-\end{figure}
+Another example is the GoPro Omni\registered. This camera is a simple 
+rig that contains 6 traditional GoPro\registered devices that comes with 
+specialized software to enables the 360\degree videos creation. Note that the interest in full spherical media creation is driven by the introduction of new immersive media fruition devices such as \textit{head-mounted display} (HMD); e.g. the Oculus Rift, the HTC Vive, the Sony PlayStation VR, etc.
 
 \section{SfM Applications}
-SfM is a well known topic in the computer vision community; it was born after 
-the landmark paper by Longuet-Higgins \cite{longuet1981computer}, and
+SfM is a well known topic in the computer vision community; it started after 
+the landmark papers by Longuet-Higgins \cite{longuet1981computer} and
 Nister et al. \cite{moravec1980obstacle}.
 The problem can be described as the reverse of image formation
 \cite{Wei2013}, as it targets the reconstruction of the environment 
 and camera poses given a set of two or more images.
 Some of the first application for this technology included robotic research, 
 like navigation systems intended for rover explorations 
-\cite{moravec1980obstacle,durrant1996localization}. In fact, NASA have supported
+\cite{moravec1980obstacle,durrant1996localization}. In fact, NASA has supported
 many researches because of the need for navigation systems not affected by wheels
 slippage on uneven terrains.
 SfM is used in geographical data acquisition too
-\cite{fonstad2013topographic,westoby2012structure,james2012straightforward}
-as alternative to other methods that employ specialized hardware and 
-come to higher price.
-There are also applications for cultural heritage conservation since 
+\cite{fonstad2013topographic, westoby2012structure, james2012straightforward}
+as alternative to other methods that employ specialized hardware and are generally more expensive.
+Furthermore, there are applications for cultural heritage conservation because 
 environment reconstructions can help in case of restoration of historical finds
 \cite{kraus2007photogrammetry}.
-The game industry is yet another field that can benefit from 
+Finally, the game industry is yet another field that can benefit from 
 SfM: real environments can be reconstructed with SfM first and then 
-improved by artist. Some game engine, like the popular Unreal Engine\registered,
+improved by artists. Some game engine, as the popular Unreal Engine\registered,
 includes photogrammetry software that exploits SfM techniques. \todo{non ho trovato un riferimento}
 \todo[inline]{chiedere per un esempio di foto fisheye}
