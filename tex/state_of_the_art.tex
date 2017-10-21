@@ -463,11 +463,11 @@ this field.
 \label{subsec:spherical_camera_model}
 In Figure~\ref{fig:camera_model} we can see the full spherical camera model.
 The axes' origin is also the center of projection. The image is formed on 
-the sphere centered in the center of projection and with unitary radius.
+the unitary sphere whose center coincide with the center of projection.
 $\myvec{m}$ is the projection on the sphere for the world point 
 $\myvec{M}$, thus $\myvec{m}$ is a unitary vector that lies on the ray that goes
 from the center of projection to the point $\myvec{M}$.
-An image point like $\myvec{m}$ can be defined by the spherical coordinate 
+The image point $\myvec{m}$ is defined by the spherical coordinate 
 system composed of the two angles $\lambda$ and $\phi$, that represent the 
 longitude and latitude respectively. 
 We can use the following formula to convert the spherical coordinates to 
@@ -478,10 +478,14 @@ euclidean:
 		\cos\phi\sin\lambda \\
 		-\sin\phi \\
 		\cos\phi\cos\lambda
-	\end{pmatrix}	\text{,}
+	\end{pmatrix}	\text{.}
 \end{equation*}
-\noindent where $\alpha$ is a scalar.
-
+Since this model is essentially different from the 
+perspective camera's \cite{szeliski2010computer}, the traditional procedures 
+for pose estimation of the computer vision frameworks can not be used.
+We will show in section~\ref{sec:keypoints_conversion} how we can still exploit
+equation~\ref{eq:epipolar_equation} to estimate the essential matrix and use it
+to compute the camera motion.
 \begin{figure}[h]
     \centering
     \def\svgwidth{0.5\columnwidth}
@@ -492,7 +496,35 @@ euclidean:
 
 \subsection{Equirectangular Image Format}
 \label{subsec:image_format}
-\begin{figure}
+The equirectangular image format (Figure~\ref{fig:equirectangular}) is a 2D
+representation for omnidirectional 
+images. It stores each 3D image points in a bidimensional matrix of pixels
+by mapping the two angular dimensions (latitude and longitude) to the two
+linear dimensions of the image (height and width); latitude increases from 
+top to bottom while longitude increases from left to right.
+In particular, the equirectangular mapping for a full spherical images is the
+following:
+\begin{align}
+\label{eq:llConversion}
+\lambda &= \frac{u}{W 2 \pi} - \pi \\
+\phi &= \frac{\pi}{2} - \frac{v}{H \pi}\text{,}
+\end{align}
+\noindent where \textit{W} and \textit{H} are, respectively, 
+the image's width and height while $u$ and $v$ are the pixel coordinate 
+in the equirectangular image, like in figure~\ref{fig:equirectangular}.
+In case of full spherical images, we have that
+$ \lambda \in [-\pi; \pi] $ and $\phi \in [-\frac{pi}{2}; \frac{pi}{2}] $.
+
+The equirectangular format introduces significant distortions, especially 
+around the poles; this compromises the robustness of the feature matching 
+procedure which can then return incorrect estimations for the essential 
+matrix.
+Similarly to the feature matching issue, distortions causes particular problems
+with the block-matching algorithms for disparity map computation.
+In section ...\todo{sezione ancora da scrivere} we describe the modified 
+block-matching procedure we designed to reduce the effect of distortions 
+when computing disparity maps.
+\begin{figure}[h]
 	\centering
 	\includegraphics[width=0.8\textwidth]{img/equirectangular}
 	\caption{The equirectangular image format maps the 3D image points in 
