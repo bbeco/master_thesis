@@ -50,21 +50,17 @@ computation of the disparity for every point in the reference image.
 Figure~\ref{fig:disparity_example} shows an example of disparity map.
 \begin{figure}[h]
 	\centering
-	\begin{subfigure}{0.3\textwidth}
+	\begin{subfigure}{0.4\textwidth}
 		\centering
-		\includegraphics[width=0.7\textwidth]{img/theta1}
+		\includegraphics[width=0.7\textwidth]{img/aloe_view1}
 	\end{subfigure}
-	\begin{subfigure}{0.3\textwidth}
+	\begin{subfigure}{0.4\textwidth}
 		\centering
-		\includegraphics[width=0.7\textwidth]{img/theta2}
+		\includegraphics[width=0.7\textwidth]{img/aloe_disparity}
 	\end{subfigure}
-	\begin{subfigure}{0.3\textwidth}
-		\centering
-		\includegraphics[width=0.7\textwidth]{img/theta3}
-	\end{subfigure}
-	\caption{\label{fig:disparity_example}The Ricoh Theta S 360\degree camera.}
+	\caption{\label{fig:disparity_example}An example of disparity map from the
+	Middlebury dataset \cite{hirschmuller2007evaluation}}
 \end{figure}
-\todo[inline]{aggiungere disparity map example}
 
 \section{Omnidirectional and Full Spherical Cameras}
 \label{sec:cameraclassification}
@@ -483,7 +479,7 @@ euclidean:
 Since this model is essentially different from the 
 perspective camera's \cite{szeliski2010computer}, the traditional procedures 
 for pose estimation of the computer vision frameworks can not be used.
-We will show in section~\ref{sec:keypoints_conversion} how we can still exploit
+We show in section~\ref{sec:keypoints_conversion} how we can still exploit
 equation~\ref{eq:epipolar_equation} to estimate the essential matrix and use it
 to compute the camera motion.
 \begin{figure}[h]
