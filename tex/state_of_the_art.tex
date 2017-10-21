@@ -382,12 +382,12 @@ employed in SfM software.
 	\begin{subfigure}{\textwidth}
 		\centering
 		\includegraphics[width=\textwidth]{img/motion_blur}
-		\caption{Motion blur reduce both the number and quality of matches.}\label{fig:motion_blur}
+		\caption{Motion blur reduces both the number and quality of matches.}\label{fig:motion_blur}
 	\end{subfigure}
 	\begin{subfigure}{\textwidth}
 		\centering
 		\includegraphics[width=\textwidth]{img/textureless_stereo}
-		\caption{Textureless images provides too less feature points.}\label{fig:textureless}
+		\caption{Textureless images provide too less feature points.}\label{fig:textureless}
 	\end{subfigure}
 	\caption{Some examples of problems that may occur during correspondence search.}\label{fig:matching_problems}
 \end{figure}
@@ -450,15 +450,120 @@ the number of outliers is not prevalent.
 
 \todo[inline]{da qui in poi e' solo una bozza}
 \section{Full Spherical Cameras}
-\subsection{Image Format}
-If we consider the simplest camera model, 
-a perspective image is the result of the intersection between the image plane 
-and all the light rays that go from the environment to the center of 
-projection inside the camera (see Fig\ref{fig:perscam_model}).
-\missingfigure{aggiungere modello camera prospettica}
-\label{fig:perscam_model}
-On the other hand, the full spherical camera model implies the image plane 
-to be the result of the intersection between a sphere and the rays from the 
-environment to the center of projection (which is equivalent to the sphere's 
-center).
+In the following sections we describe the full spherical photography's camera
+model (section~\ref{subsec:spherical_camera_model}), the equirectangular image
+format used to map spherical images on 2D matrix of pixels 
+and the problems for SfM algorithms caused by this format 
+(section~\ref{subsec:image_format}).
+In section~\ref{subsec:related_work} we give an overview of the efforts of 
+previous studies on this topics and describe the contribution of our work to 
+this field.
 
+\subsection{Spherical camera model}
+\label{subsec:spherical_camera_model}
+In Figure~\ref{fig:camera_model} we can see the full spherical camera model.
+The axes' origin is also the center of projection. The image is formed on 
+the sphere centered in the center of projection and with unitary radius.
+$\myvec{m}$ is the projection on the sphere for the world point 
+$\myvec{M}$, thus $\myvec{m}$ is a unitary vector that lies on the ray that goes
+from the center of projection to the point $\myvec{M}$.
+An image point like $\myvec{m}$ can be defined by the spherical coordinate 
+system composed of the two angles $\lambda$ and $\phi$, that represent the 
+longitude and latitude respectively. 
+We can use the following formula to convert the spherical coordinates to 
+euclidean:
+\begin{equation*}
+	\myvec{m} =
+	\begin{pmatrix}
+		\cos\phi\sin\lambda \\
+		-\sin\phi \\
+		\cos\phi\cos\lambda
+	\end{pmatrix}	\text{,}
+\end{equation*}
+\noindent where $\alpha$ is a scalar.
+
+\begin{figure}[h]
+    \centering
+    \def\svgwidth{0.5\columnwidth}
+    \input{img/coordinate_system.pdf_tex}
+    \caption{Full spherical camera model.}
+	\label{fig:camera_model}
+\end{figure}
+
+\subsection{Equirectangular Image Format}
+\label{subsec:image_format}
+\begin{figure}
+	\centering
+	\includegraphics[width=0.8\textwidth]{img/equirectangular}
+	\caption{The equirectangular image format maps the 3D image points in 
+	spherical coordinates to the 2D image point $(u, v)$.}
+	\label{fig:equirectangular}
+\end{figure}
+
+\subsection{Related Work}
+\label{subsec:related_work}
+As we pointed out in the previous sections, there has been little research 
+about the use of full spherical cameras in SfM and most of the work
+has targeted perspective cameras.
+Most of the work about panoramic cameras has employed catadioptric or dioptric 
+devices with single image sensor (no stitching), therefore, as we said in 
+section~\ref{sec:cameraclassification}, none of this types of camera is capable
+to produce full spherical images.
+
+In \cite{li2008binocular,li2006real}, Li developed a rectification procedure for wide
+FOV cameras that enables the computation of disparity maps with standard 
+block-matching algorithms; the rig he used for testing was composed of 
+fisheye cameras that could not provide full spherical views.
+Ma et al. in \cite{ma20153d} used equirectangular images produced with a 
+RICO THETA S\registered to create disparity maps. They manually selected some 
+correspondences in order to compute the essential matrix correctly and then 
+used the epipolar geometry to remove correspondences outliers after an 
+automatic feature matching step. Because of the user intervention in 
+the pipeline, they could not test their results on long sequences, moreover the
+computed disparity were noisy.
+On the contrary, Arican et al. \cite{arican2007dense} developed a new algorithm
+based on graph-cut to compute disparities for omnidirectional images directly.
+They obtained high quality disparity maps with thanks to their new method.
+Im et al. \cite{im2016all} focused on the creation of a framework to produce
+depth maps 
+with full spherical consumer devices. They focused on short video sequences 
+with small motion of the camera as input data.
+Aly et al. \cite{aly2012street} extracted the interest points' directions from the
+equirectangular 
+images with \todo{aggiungere riferimento a formule} and then used the 
+epipolar equation (\ref{eq:epipolar_equation}) to estimate the essential matrix.
+Their work focused only on pose estimation from an unordered set of images
+and they assumed the camera movements were constrained to a plane.
+In \cite{kangni2007orientation}, Kangni et al. converted the full spherical image format to 6 
+separate perspective projection on the faces of a cube around the viewer; 
+then they used the epipolar equation to obtain the essential matrix;
+they focused on motion estimation without dense reconstruction.
+%\todo[inline]{citare Arican e Densificazione di Pagani}
+Pagani et al. \cite{pagani2011structure} designed an SfM pipeline for full
+spherical cameras that exploits spherical coordinates directly (without 
+reprojecting the 3D directions on a planar image). They focused their studies on
+the effect of the different error metrics for pose estimation and provided a 
+sparse reconstruction and pose estimation algorithm.
+
+In this work we propose a complete SfM pipeline with dense point cloud 
+reconstruction for 360\degree video sequences with the following 
+characteristics:
+\begin{itemize}
+	\item no view selection is needed, i.e. it works with every frame of the 
+	input video sequence by automatically discarding the unnecessary images;
+	\item the pose estimation is based on the 2D-to-2D approach
+	(see section~\ref{subsec:motion_estimation}) and it uses both frontal and
+	backward hemisphere's correspondences;
+	\item it employs a novel block-based disparity estimation algorithm that 
+	reduces the matching problems caused by the
+	typical distortions of equirectangular images;
+	\item it provides a dense point cloud as an estimation of the environment.
+\end{itemize}
+Our contributions includes:
+\begin{itemize}
+	\item the development of the frame selector that chooses the images to be
+	used for motion estimation among all the video's frames;
+	\item the adaptive block-matching algorithm for disparity maps with 
+	equirectangular images;
+	\item the entire implementation of our SfM pipeline in MATLAB.
+\end{itemize}.
