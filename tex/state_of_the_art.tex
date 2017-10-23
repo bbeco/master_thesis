@@ -116,7 +116,7 @@ If we call \(T_k\) the rigid body transformation of the camera between the two
 consecutive time instant $k-1$ and $k$, then we have the following relation:
 \begin{equation}
 	\label{eq:motion_composition}
-C_n = C_{n-1} T_n
+	C_n = C_{n-1} T_n
 \end{equation}
 \noindent with \(T_k\) defined as
 \begin{equation*}
@@ -468,14 +468,15 @@ system composed of the two angles $\lambda$ and $\phi$, that represent the
 longitude and latitude respectively. 
 We can use the following formula to convert the spherical coordinates to 
 euclidean:
-\begin{equation*}
+\begin{equation}
+	\label{eq:ll2Cartesian_second}
 	\myvec{m} =
 	\begin{pmatrix}
 		\cos\phi\sin\lambda \\
 		-\sin\phi \\
 		\cos\phi\cos\lambda
 	\end{pmatrix}	\text{.}
-\end{equation*}
+\end{equation}
 Since this model is essentially different from the 
 perspective camera's \cite{szeliski2010computer}, the traditional procedures 
 for pose estimation of the computer vision frameworks can not be used.
@@ -500,11 +501,13 @@ linear dimensions of the image (height and width); latitude increases from
 top to bottom while longitude increases from left to right.
 In particular, the equirectangular mapping for a full spherical images is the
 following:
-\begin{align}
-\label{eq:llConversion}
-\lambda &= \frac{u}{W 2 \pi} - \pi \\
-\phi &= \frac{\pi}{2} - \frac{v}{H \pi}\text{,}
-\end{align}
+\begin{subequations}
+	\label{eq:ll2Cartesian_first}
+	\begin{align}
+	\lambda &= \frac{u}{W 2 \pi} - \pi \\
+	\phi &= \frac{\pi}{2} - \frac{v}{H \pi}\text{,}
+	\end{align}
+\end{subequations}
 \noindent where \textit{W} and \textit{H} are, respectively, 
 the image's width and height while $u$ and $v$ are the pixel coordinate 
 in the equirectangular image, like in figure~\ref{fig:equirectangular}.
@@ -558,7 +561,7 @@ with full spherical consumer devices. They focused on short video sequences
 with small motion of the camera as input data.
 Aly et al. \cite{aly2012street} extracted the interest points' directions from the
 equirectangular 
-images with \todo{aggiungere riferimento a formule} and then used the 
+images with Equation~\ref{eq:ll2Cartesian_second} and then used the 
 epipolar equation (\ref{eq:epipolar_equation}) to estimate the essential matrix.
 Their work focused only on pose estimation from an unordered set of images
 and they assumed the camera movements were constrained to a plane.
