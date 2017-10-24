@@ -55,8 +55,8 @@
     \put(0.82126264,0.90861896){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{Z}}}%
     \put(0,0){\includegraphics[width=\unitlength,page=2]{img/coordinate_system.pdf}}%
     \put(0.57913037,0.83309799){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{m}}}%
-    \put(0.49751542,0.53491789){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{$\lambda$}}}%
-    \put(0.52077707,0.64537728){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{$\phi$}}}%
+    \put(0.35414691,0.58564832){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{$\lambda$}}}%
+    \put(0.56268479,0.70713596){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{$\phi$}}}%
     \put(0,0){\includegraphics[width=\unitlength,page=3]{img/coordinate_system.pdf}}%
     \put(0.7619974,0.98187859){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{M}}}%
   \end{picture}%

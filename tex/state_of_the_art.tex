@@ -8,11 +8,6 @@ spherical cameras for VO.
 %
 %
 % Start of sections from intro
-\section{Benefits of Full Spherical Cameras}
-Because of the increased \textit{field of view} (FoV), panoramic cameras can capture a larger amount of data compared to traditional devices. For example, the two fisheye lenses in the Ricoh Theta allow users to utilize also rear correspondences between images and this may improve the quality of motion estimation.
-
-Another advantage of full spherical cameras is that they do not require a calibration phase for intrinsic parameters estimation. Camera calibration is an essential requirement for most computer vision applications, which estimates several parameters such as focal length, image 
-sensor size, pixel density, and lens distortion model. When dealing with full spherical cameras, we can assume the image is taken from a unitary sphere. Therefore, we can set the focal length to 1. Further details about the camera model and the parameters can be found in Chapter~\ref{ch:state_of_the_art}.
 
 \section{SfM, VO, and SLAM}
 SfM is a long studied topic in computer vision. Starting from an input of photographs taken by one or multiple cameras, SfM's main goal is to compute the cameras' poses and to reconstruct the 3D enviroment captured by those cameras.
@@ -172,11 +167,12 @@ different cameras with unknown parameters and in different time instants.
 \end{figure}
 \textit{Visual Odometry} is based on SfM techniques, 
 in this case, the input data is usually a sequence 
-of images from a video stream. Many studies targeted different hardware setup 
-but the specific image capturing device is usually either a single perspective 
-camera or a stereo imaging rig. The computer vision literature refers to the
-former case with the term \textit{monocular VO} while it uses \textit{stereo VO}
-to describe the latter.
+of images from a video stream. The image capturing devices can vary:
+Moravec used a sliding camera that could capture stereo images \cite{moravec1980obstacle} while Matthies et al. equipped their robot with
+an actual stereo rig \cite{matthies1987error};
+in \cite{nister2004visual} Nister et al used a single perspective camera.
+The computer vision literature refers to the
+single camera studies case with the term \textit{monocular VO} while it uses \textit{stereo VO} to describe the work done with stereo equipment.
 
 Even though perspective cameras have been the first choice in many studies, 
 the researchers used other devices, like the ones described in 
@@ -395,7 +391,7 @@ these points are \textit{feature points} (or \textit{interesting points}).
 Feature points are patterns in images that are likely to be unique; 
 a feature point is usually described by a vector called 
 \textit{feature descriptor}.
-There are many different types of feature and descriptors like 
+There are many different types of features and descriptors like 
 \textit{Moravec detector} \cite{moravec1980obstacle}, \textit{Harris
 corner detector} \cite{harris1988combined}, 
 \textit{SIFT} \cite{lowe1999object}, etc.
@@ -404,10 +400,11 @@ many pictures taken from different views, SIFT features have always been
 preferred over other less robust features because of their rotational and scale
 invariance. One of the main drawback is that 
 SIFT is patented and can note be used freely as other detectors.
-SURF \cite{funayama2012robust} is another kind of features that, 
-just like SIFT, is rotational and scale invariant but whose implementation is 
-available within the main computer vision framework because of lesser 
-restrictions.
+SURF \cite{bay2006surf} is another kind of features that, 
+just like SIFT, is rotational and scale invariant; SURF is patented too and 
+can not be used for commercial applications but there is an available 
+implementation in the MATLAB's Computer Vision Toolbox and it can be 
+used for research.
 For a more detailed discussion about the differences among point detectors, 
 see \cite{schmidt2010evaluation,govender2009evaluation}.
 
@@ -444,7 +441,6 @@ essential matrix is not decomposed in $[R_i|\myvec{t}_i]$.
 The use of RANSAC before motion estimation provides a more reliable result if
 the number of outliers is not prevalent.
 
-\todo[inline]{da qui in poi e' solo una bozza}
 \section{Full Spherical Cameras}
 In the following sections we describe the full spherical photography's camera
 model (section~\ref{subsec:spherical_camera_model}), the equirectangular image
@@ -485,7 +481,7 @@ equation~\ref{eq:epipolar_equation} to estimate the essential matrix and use it
 to compute the camera motion.
 \begin{figure}[h]
     \centering
-    \def\svgwidth{0.5\columnwidth}
+    \def\svgwidth{0.7\columnwidth}
     \input{img/coordinate_system.pdf_tex}
     \caption{Full spherical camera model.}
 	\label{fig:camera_model}
@@ -520,7 +516,7 @@ procedure which can then return incorrect estimations for the essential
 matrix.
 Similarly to the feature matching issue, distortions causes particular problems
 with the block-matching algorithms for disparity map computation.
-In section ...\todo{sezione ancora da scrivere} we describe the modified 
+In Section~\ref{sec:pipeline_densification} we describe the modified 
 block-matching procedure we designed to reduce the effect of distortions 
 when computing disparity maps.
 \begin{figure}[h]

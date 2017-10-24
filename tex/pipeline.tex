@@ -1,9 +1,6 @@
 \chapter{Spherical SfM}
 \lhead{\chaptername~\thechapter. \emph{Spherical SfM}}
-%
-\todo[inline]{aggiungere una sezione in cui si descrive il sistema di riferimento e 
-altre convenzioni}
-%
+
 In this chapter, we describe the pipeline that we designed to create a dense 
 point cloud from a set of equirectangular images.
 In Section~\ref{sec:pipeline_pose_estimation} we describe the first phase of our
@@ -29,7 +26,9 @@ pipeline.
 The camera poses estimation phase is similar to other classical visual 
 odometry pipeline \cite{scaramuzzaVisualOdometryI,moravec1980obstacle};
 the real differences lie in the variables format and in 
-the details concerning the procedures used. For each new equirectangular frame, we detect the
+the details concerning the procedures used. In Figure~\ref{fig:sfm_block} we can 
+see a representation of this phase with all its substeps.
+For each new equirectangular frame, we detect the
 SURF keypoints; we consider only those keypoints whose latitude coordinate is in
 the range [-60\degree; +60\degree]. This is because the areas around the poles 
 are affected by great distortions, thus robust matches outside this interval are
@@ -59,16 +58,42 @@ poses in order to reduce the effect of drift.
 Once every image has been processed by our pipeline, a final 
 bundle adjustment is performed: it optimizes every camera pose estimated in order to 
 further reduce drift error.
-In the following sections we describe every detail of the steps in our pipeline.
+
+The coordinate system used in our pipeline is the one shown in 
+Figure~\ref{fig:camera_model}, with the x-axis pointing right, the y-axis 
+pointing down and the z-axis pointing forward.
+We consider the spherical image divided in two hemispheres: front and back.
+We call the image points 
+whose 3rd component is positive, frontal points while we use the term rear 
+points otherwise.
+When we need to express spherical coordinates we use the same angles shown in 
+Figure~\ref{fig:camera_model}:
+the angle between the z-axis and the projection of $m$ on the xz-plane in 
+the clock-wise direction is the longitude angle ($\lambda$) while the one 
+between the negative y-axes and the same projection of $m$ is the latitude 
+angle ($\phi$).
+
+\begin{figure}
+	\centering
+	\includegraphics[width=0.5\linewidth]{img/sfm_block}
+	\caption{A representation of the steps performed in the pose estimation 
+	phase of our SfM pipeline.}
+	\label{fig:sfm_block}
+\end{figure}
 
 \subsection{Key Points and Features Extraction}
-In this step, we extract SURF key points and their descriptor 
-\cite{funayama2012robust} from equirectangular images. SURF 
-interest points are rotation and scale invariant just like SIFT
-\cite{lowe1999object}. But unlike 
-the latter, SURF detection is faster and there is no patent for it. 
-This makes SURF implementation available in most computer vision frameworks and 
-libraries.
+In Section~\ref{sec:pipeline_pose_estimation} we introduced the need for 
+features detection in order to find correspondences among the image pairs.
+In our pipeline we use SURF features and descriptors 
+\cite{bay2006surf}. SURF is a blob detector partly inspired by SIFT
+\cite{lowe1999object};
+It performs convolution on integral images with box filters in order to 
+compute the Hessian matrix in scale space.
+The descriptors exploits key point's neighborhood response to the Haar wavelet.
+SURF, like SIFT, is patented but it can be used freely in non commercial
+applications and for academic researches.
+An implementation of the SURF detector is available in the MATLAB's Computer 
+Vision Toolbox, and we employ it in our pipeline.
 
 \subsection{Key Points Filtering}
 The equirectangular format for spherical images introduces significant 
