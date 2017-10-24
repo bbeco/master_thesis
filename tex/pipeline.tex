@@ -1,6 +1,5 @@
 \chapter{Spherical SfM}
 \lhead{\chaptername~\thechapter. \emph{Spherical SfM}}
-
 In this chapter, we describe the pipeline that we designed to create a dense 
 point cloud from a set of equirectangular images.
 In Section~\ref{sec:pipeline_pose_estimation} we describe the first phase of our
@@ -10,48 +9,40 @@ our densification algorithm for equirectangular images.
 Fig.~\ref{fig:pipeline_overview}
 represents a simple visualization of this two macro parts of the 
 pipeline.
+
 \begin{figure}
     \centering
     \def\svgwidth{\columnwidth}
     \input{img/pipeline_overview.pdf_tex}
-    \caption{The sfm pipeline: the pose estimation phase returns the camera 
-    poses and the sparse point cloud; the densification step uses 
-    the original images and the previously computed poses to produce a dense 
+    \caption{The SfM pipeline: the pose estimation phase returns the cameras' 
+    poses and the sparse points cloud. Then, the densification step uses 
+    the input images and the previously camera's poses to create a dense
     point cloud.}
 	\label{fig:pipeline_overview}
 \end{figure}
 
 \section{Pose Estimation}
 \label{sec:pipeline_pose_estimation}
-The camera poses estimation phase is similar to other classical visual 
-odometry pipeline \cite{scaramuzzaVisualOdometryI,moravec1980obstacle};
-the real differences lie in the variables format and in 
-the details concerning the procedures used. In Figure~\ref{fig:sfm_block} we can 
-see a representation of this phase with all its substeps.
-For each new equirectangular frame, we detect the
-SURF keypoints; we consider only those keypoints whose latitude coordinate is in
-the range [-60\degree; +60\degree]. This is because the areas around the poles 
-are affected by great distortions, thus robust matches outside this interval are
-rare.
-Then we detect the feature points and match them with the feature set 
-obtained in the previous image.
-%
-In order to decide whether the new frame has to be used for motion estimation, 
-we implemented a filter that analyzes how much changes occurred in 
-corresponding feature points. It provides a raw approximation of the 
-motion that occurred between two consecutive views, thus it can decide whether 
-the frame is suitable for motion estimation or it has to be discarded because 
-the relative translation of the camera is too small.
-%
-If the frame is kept, we detect every correspondence with the previous image.
-In order to compute the essential matrix, we need to convert the original 
-feature points' coordinates to euclidean and then divide them by their 3rd 
-component. Then we compute $E$ with the standard MATLAB's routines.
-Once E has been obtained, it can be decomposed in the \([R|t]\)
-form where $R$ is a rotation matrix and $t$ is a translation vector up to 
-an unknown scale factor.
-We can use the estimated world points to compute the relative scale for each
-camera translation.
+The cameras' poses estimation phase is similar to the classical visual 
+odometry pipeline. The main differences lies in the variables' format and in 
+the details concerning the procedures used.
+For each new frame  (in the equirectangular format), we locate the
+SURF keypoints \cite{bay2006surf}; we consider those keypoints whose inclination angle is in the range $[-60\degree; +60\degree]$. This is because the poles are affected by great 
+distortions, thus robust matches outside this interval are rare.
+Then, we look for matches in the last two frames and a filter performs some 
+statistical analysis on the correspondences found and decides whether the frame 
+is suitable for a robust pose estimation or not (in this case the frame is 
+discarded).
+
+If the frame is kept, its matches with the previous one are converted
+and used for the essential matrix, $E$, estimation. Once $E$ is computed, 
+it can be decomposed in the \([R|t]\) form where R is a rotation matrix 
+and t is a translation vector up to an unknown scale factor.
+
+The relative scale can be estimated thanks to the world points which have been 
+triangulated thorough the matches and frame considered in previous pipeline 
+iteration.
+
 The pose for each camera can then be described as the composition of the 
 motions between each view pair. We perform a bundle adjustment for the last 5 
 poses in order to reduce the effect of drift.
