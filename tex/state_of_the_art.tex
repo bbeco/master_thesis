@@ -2,8 +2,9 @@
 \lhead{\chaptername~\thechapter. \emph{State of the Art}}
 \label{ch:state_of_the_art}
 %
-In this chapter, we define formally the VO problem, we describe a  general perspective SfM pipeline, 
+In this chapter, we define formally the VO problem, we describe a generic perspective SfM pipeline, 
 and then we introduce the main challenges and issues when employing full spherical cameras for VO.
+During this description we refer, time by time, to the related state of the art algorithms/methods.
 
 %
 % Start of sections from intro
@@ -21,15 +22,23 @@ In order to reduce error, SLAM keeps track of the visited path and can decide wh
 environment reconstruction. Durrant-White et al.\cite{durrant1996localization} firstly introduced the term SLAM.
  
 \section{Densification: from Sparse to Dense Point Cloud}
-A sparse point cloud is the product of most SfM pipelines; some key points are tracked in each photograph and are then used by the motion estimation algorithm. These key points are triangulated and their corresponding world points are available during egomotion estimation.
+A sparse point cloud is the product of most SfM pipelines; some keypoints are tracked in each photograph and are then used by the motion estimation algorithm. These keypoints are triangulated and their corresponding world points are available during egomotion estimation.
 %
-A set of triangulated key points is a sparse point cloud around the camera's path. This set provides a first approximation of the environment reconstruction.
-Typically, a densification algorithm increases the number of matched points in two consecutive frames, this allows a reconstruction pipeline to triangulate these points too. The result is a dense cloud of points around the camera's path that provides additional information about the surroundings' geometry or that can be the input data for surface reconstruction algorithms\cite{seitz2006comparison}.
+A set of triangulated keypoints is a sparse point cloud around the camera's path. This set provides a first approximation of the environment reconstruction.
+Typically, starting from this information, it is possible to obtain a complete reconstruction of the 3D environment by applying
+a so-called \emph{Multi View Stereo} algorithm. The goal of Multi View Stereo\cite{seitz2006comparison} is to reconstruct a complete
+3D object model from a collection of images taken from known camera poses.
+Many of these algorithms obtain a dense point cloud starting from the sparse reconstruction, and then 
+estimate the final surface according to this dense point set.
 
-In order to create a dense point cloud, we need to produce the 
-\textit{disparity map} from a pair of images. This is a map of the distance in 
-pixels from a point in a reference image and its corresponding point in the 
-other image. The map is usually computed based on some kind of similarity 
+Our approach consists in densify the point cloud by computing, for each pair of consecutive images, 
+a depth map. These depth maps are merged to obtain a dense set of reconstructed points. At this point the 
+surface can be reconstructed by applying a surface fitting algorithm such as the standard Poisson reconstruction??CITARE??. 
+A depth map consists in associating a value of depth for each pixels of the images pair.
+The depth map estimation involves the calculation of a \textit{disparity map} from the images pair. 
+This is a map of the distance in pixels from a point in a reference image and its corresponding point in the 
+other image. Higher is the disparity of a given pixel, higher is the parallax and hence the depth of that pixel. 
+The map is usually computed based on some kind of similarity 
 metric such as \textit{sum of absolute distances} (SAD), 
 \textit{sum of squared distances} (SSD), 
 \textit{normalized cross correlation} (NCC), etc. These provides a way to 
@@ -63,7 +72,7 @@ There are several ways to obtain panoramic images, they include:
 	\item hybrid approaches.
 \end{itemize}
 
-Perspective cameras can take panoramic pictures with the aid of software stitching. As the first step, we take several photographs with many cameras or by simply moving the same camera in order to cover most of a scene. Then, a stitching software merges all images into a single one. To use a traditional camera and a stitching software is the cheapest way to obtain panoramic images because it does not need any kind of specialized hardware. However, this process is cumbersome (i.e., a lot of manual work for the user), and most importantly video sequences cannot be recorded. Note that some smart-phones provide built-in camera 360\degree acquisition modes, but the final quality may be not satisfactory due to alignment artifacts.
+Perspective cameras can take panoramic pictures with the aid of software stitching. As the first step, we take several photographs with many cameras or by simply moving the same camera in order to cover most of a scene. Then, a stitching software merges all images into a single one. To use a traditional camera and a stitching software is the cheapest way to obtain panoramic images because it does not need any kind of specialized hardware. However, this process is cumbersome (a lot of manual work is required). Note that some smart-phones provide built-in camera 360\degree acquisition modes, but the final quality may be not satisfactory due to alignment artifacts.
 An example for this approach is the Hugin Panorama Photo Stitcher 
 \cite{hugin_photostitcher}, an open source software for merging several 
 perspective images in a single panoramic picture.
@@ -88,9 +97,8 @@ In all our experiments we used the Ricoh Theta S\registered camera that is a hyb
 \section{VO Problem}
 \label{sec:vo_problem}
 As we described in the previous chapter, the VO's goal is to recover the 
-camera trajectory while it is moving in the environment. We now
-introduce the notations that we are going to use for the rest of this work;
-these are the same ones used by Scaramuzza and Fraundorfer\cite{scaramuzzaVisualOdometryI}.
+camera trajectory while it is moving in the environment. Following Scaramuzza and Fraundorfer\cite{scaramuzzaVisualOdometryI},
+we introduce the notations that we are going to use for the rest of this work.
 %
 Let first assume time is sampled in a sequence of time instants \(k\); 
 \(I_{0:(n - 1)} \) is the set of $n$ input frames, where \(I_{k}\) is a picture taken by 
@@ -208,11 +216,11 @@ details);
 estimation is performed by solving an alignment problem;
 	\item 3D-to-2D: the previous image's feature set is composed of world points while
 the current one's feature set contains their projections. In this case, the motion 
-is estimated by solving a \textit{PnP} problem.
+is estimated by solving a problem called Perspective-n-Points (\textit{PnP}).
 \end{itemize}
 Since the second and third approaches deal with 3D points, they are usually 
 best suited for stereo rig (especially the 3D-to-3D case).
-Yet we can still use the 3D-to-2D approach in the monocular VO case by simply 
+Obviously, we can still use the 3D-to-2D approach in the monocular VO case by simply 
 triangulating corresponding 2D image features in consecutive frames.
 In fact, in order to obtain the first 3D feature set,
 we can compute the relative motion between the first two images with 
@@ -421,14 +429,14 @@ its computation, the result would be unreliable and it could compromise the
 whole camera's path estimation because of the incremental nature of the SfM 
 pipeline.
 In order to reduce this phenomenon, we can switch to a more robust feature points
-detector and add the RANSAC algorithm to remove outliers before the motion estimation step.
+detector and use a RANSAC approach to remove outliers before the motion estimation step.
 RANSAC\cite{fischler1981random} is a model fitting algorithm for dataset that includes outliers.
 This algorithm is iterative. At each iteration, it selects a subset of input data and computes the model based on this subset only. Then, RANSAC divides the complete dataset into a consensus set and outliers. If the number of outliers, computed thanks to a problem specific loss function, is
 less than a given threshold, the estimated model is considered valid.
 
-RANSAC is now a standard step in SfM. This selects the correspondences inliers at
-random, computes $E$ accordingly to the selected matches and
-evaluates the outliers based on the reprojection error defined as
+RANSAC is now a standard step in SfM. In this case, a certain number of correspondences is selected randomly, $E$ is computed 
+according to the selected matches and the quality of the estimation is evaluated 
+according to the reprojection error defined as
 %
 \begin{equation*}
 	Err =  
@@ -437,7 +445,8 @@ evaluates the outliers based on the reprojection error defined as
 \end{equation*}
 %
 This error formulation is similar to equation~\ref{eq:bundle_adj}, 
-but now $E$ is not decomposed in $[R_i|\myvec{t}_i]$. The use of RANSAC before motion estimation provides a more reliable result if the number of outliers is not prevalent.
+but now $E$ is not decomposed in $[R_i|\myvec{t}_i]$. The use of RANSAC before motion estimation provides a more reliable 
+estimation even if the number of outliers is high (40-50\%).
 
 \section{Full Spherical Cameras}
 In the following sections we describe the full spherical photography's camera
@@ -525,10 +534,10 @@ when computing disparity maps.
 	\label{fig:equirectangular}
 \end{figure}
 
-\subsection{Related Work}
+\subsection{Previous Work on Spherical SfM}
 \label{subsec:related_work}
-As we pointed out in the previous sections, there has been little research 
-about the use of full spherical cameras in SfM and most of the work
+As we pointed out in the previous sections, there has been few research 
+effort to use full spherical cameras in SfM and most of the work
 has targeted perspective cameras.
 Most of the work about panoramic cameras has employed catadioptric or dioptric 
 devices with single image sensor (no stitching), therefore, as we said in 

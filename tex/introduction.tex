@@ -1,13 +1,13 @@
 \chapter{Introduction}
 \lhead{\chaptername~\thechapter. \emph{Introduction}}
 The growing interest of the general public in spherical cameras technologies, which were 
-research-only exclusives once, has made them less expensive and more available. For example, omindirectional cameras by GoPro have been extremely popular amongst sports men who publish them on social networks.
+research-only exclusives once, has made them less expensive and more available. For example, omindirectional cameras by GoPro have been extremely popular amongst sports men who publish their activities on social networks.
 
 These devices have been employed in robotics since their first appearance to help navigate the robot in a real-world environment, and nowadays for autonomous driving. Furthermore, they can be exploited to deliver a virtual or augmented experience for augmented and virtual reality (AR/VR).
 
 In this work, we designed a \textit{structure from motion} (SfM) pipeline for 
 full spherical cameras. SfM is a well known topic in computer vision; it addresses the problem of 
-recovering the structure of 3D environments from a sequence of images taken from different views.
+recovering the structure of 3D environments from a sequence of images taken from different viewpoints.
 
 SfM research (and computer vision in general) has targeted perspective cameras because these type of devices have always been more common. However, the increase of interest around these cameras has started a shift of interest towards employing them for research.
 
@@ -85,13 +85,14 @@ Pro\registered that can capture full spherical videos or pictures
 at 8K resolution.
 Another example is the GoPro Omni\registered. This camera is a simple 
 rig that contains 6 traditional GoPro\registered devices that comes with 
-specialized software to enables the 360\degree videos creation. Note that the interest in full spherical media creation is driven by the introduction of new immersive media fruition devices such as \textit{head-mounted display} (HMD); e.g. the Oculus Rift, the HTC Vive, the Sony PlayStation VR, etc.
+specialized software to enables the 360\degree videos creation. Note that the interest in full spherical media creation is driven by the introduction of new immersive \textit{head-mounted display} (HMD) such as the Oculus Rift, the HTC Vive, the Sony PlayStation VR, etc.
 
 \section{Benefits of Full Spherical Cameras}
-Because of the increased \textit{field of view} (FoV), panoramic cameras can capture a larger amount of data compared to traditional devices. For example, the two fisheye lenses in the Ricoh Theta allow users to utilize also rear correspondences between images and this may improve the quality of motion estimation.
+Because of the increased \textit{field of view} (FoV), panoramic cameras can capture a larger amount of data compared to traditional devices. For example, the two fisheye lenses in the Ricoh Theta permit to use both the front and back image information and this may improve the quality of motion estimation.
 
 Another advantage of full spherical cameras is that they do not require a calibration phase for intrinsic parameters estimation. Camera calibration is an essential requirement for most computer vision applications, which estimates several parameters such as focal length, image 
-sensor size, pixel density, and lens distortion model. When dealing with full spherical cameras, we can assume the image is taken from a unitary sphere. Therefore, we can set the focal length to 1. Further details about the camera model and the parameters can be found in Chapter~\ref{ch:state_of_the_art}.
+sensor size, pixel density, and lens distortion model. When dealing with full spherical cameras, we can assume the image is taken from a unitary sphere. Therefore, the knowledge of the internal camera parameters is not required. 
+Further details about the camera model and the parameters can be found in Chapter~\ref{ch:state_of_the_art}.
 
 \section{SfM Applications}
 SfM is a well known topic in the computer vision community; it started after 
