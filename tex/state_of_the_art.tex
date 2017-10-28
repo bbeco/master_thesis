@@ -10,9 +10,9 @@ During this description we refer, time by time, to the related state of the art 
 % Start of sections from intro
 
 \section{SfM, VO, and SLAM}
-SfM is a long studied topic in computer vision. Starting from an input of photographs taken by one or multiple cameras, SfM's main goal is to compute the cameras' poses and to reconstruct the 3D environment captured by those cameras.
+SfM is a long studied topic in computer vision. Starting from an input of photographs taken by one or multiple cameras, SfM's main goal is to compute the cameras' poses and to reconstruct the 3D environment's geometry captured by those cameras~\cite{szeliski2010computer}.
 %
-Some of the first works are the paper by Longuet-Higgins\cite{longuet1981computer}, whose equations are fundamental in epipolar geometry, and the paper by Tomasi et al.\cite{tomasi1992shape}, who used orthographic photographs to estimate the shape of a 3D object.
+Some of the first works are the paper by Longuet-Higgins~\cite{longuet1981computer}, whose equations are fundamental in epipolar geometry, and the paper by Tomasi et al.~\cite{tomasi1992shape}, who used orthographic photographs to estimate the shape of a 3D object.
 %
 SfM is a general term, and it also includes \textit{visual odometry} (VO). This is the problem of recovering the motion of an agent equipped with a camera rig in a 3D environment. Typically, VO deals with an ordered set of images such as video sequences, and it uses them to compute the egomotion in real-time. Nister et al.\cite{nister2004visual} introduced the term \textit{visual odometry} for the first time.
 
@@ -33,15 +33,15 @@ estimate the final surface according to this dense point set.
 
 Our approach consists in densify the point cloud by computing, for each pair of consecutive images, 
 a depth map. These depth maps are merged to obtain a dense set of reconstructed points. At this point the 
-surface can be reconstructed by applying a surface fitting algorithm such as the standard Poisson reconstruction??CITARE??. 
+surface can be reconstructed by applying a surface fitting algorithm such as the standard Poisson reconstruction\todo{??CITARE??}.
 A depth map consists in associating a value of depth for each pixels of the images pair.
-The depth map estimation involves the calculation of a \textit{disparity map} from the images pair. 
+The depth map estimation involves the calculation of a \emph{disparity map} from the images pair. 
 This is a map of the distance in pixels from a point in a reference image and its corresponding point in the 
 other image. Higher is the disparity of a given pixel, higher is the parallax and hence the depth of that pixel. 
 The map is usually computed based on some kind of similarity 
-metric such as \textit{sum of absolute distances} (SAD), 
-\textit{sum of squared distances} (SSD), 
-\textit{normalized cross correlation} (NCC), etc. These provides a way to 
+metric such as \emph{sum of absolute distances} (SAD), 
+\emph{sum of squared distances} (SSD), 
+\emph{normalized cross correlation} (NCC), etc. These provides a way to 
 compute the corresponding point in the second image, thus enabling the 
 computation of the disparity for every point in the reference image.
 Figure~\ref{fig:disparity_example} shows an example of disparity map.
@@ -57,7 +57,7 @@ Figure~\ref{fig:disparity_example} shows an example of disparity map.
 		\includegraphics[width=0.7\textwidth]{img/aloe_disparity}
 	\end{subfigure}
 	\caption{\label{fig:disparity_example}An example of disparity map from the
-	Middlebury dataset \cite{hirschmuller2007evaluation}}
+	Middlebury dataset~\cite{hirschmuller2007evaluation}}
 \end{figure}
 
 \section{Omnidirectional and Full Spherical Cameras}
@@ -76,7 +76,7 @@ Perspective cameras can take panoramic pictures with the aid of software stitchi
 An example for this approach is the Hugin Panorama Photo Stitcher 
 \cite{hugin_photostitcher}, an open source software for merging several 
 perspective images in a single panoramic picture.
-The SpheroCam\texttrademark by SPHERON-VR AG\texttrademark \cite{spheronvr}
+The SpheroCam\texttrademark by SPHERON-VR AG\texttrademark~\cite{spheronvr}
 is an alternative to 
 the latter approach to panoramic images; it uses a specialized hardware composed
 of a wide angle lenses equipped camera mounted on a rotating support, which rotates around the optical center of the camera. Therefore, this camera can capture high quality full spherical and it addresses the professional fields of geographical analysis, forensic investigation, cultural heritage, etc.
@@ -89,7 +89,7 @@ Apart of perspective cameras coupled with stitching software, none of the previo
 
 The last approach, an hybrid one, exploits several sensors using fisheye lenses and software stitching to capture full spherical panoramic images in a single shot. This enables full spherical video capturing as well. The camera (that is composed of several image sensors) take multiple overlapping pictures simultaneously. Then, an on camera stitching software composes the data in a single image.
 
-In all our experiments we used the Ricoh Theta S\registered camera that is a hybrid full spherical camera composed of two fisheye lenses with a FOV greater than 180\degree; see Figure~\ref{fig:ricoh_theta}.
+In all our experiments we used the Ricoh Theta S camera that is a hybrid full spherical camera composed of two fisheye lenses with a FOV greater than 180\degree; see Figure~\ref{fig:ricoh_theta}.
 %
 %
 % end of sections from intro
@@ -127,7 +127,7 @@ $\myvec{t}_k$ is a column vector (i.e., translation of the camera at time $k$).
 Therefore, the goal of VO is to estimate both $R_k$ and $t_k$ for each time 
 $k$ and to compute each $C_k$ accordingly to equation~\ref{eq:motion_composition}. Note that the initial position $C_0$ can be set arbitrarily.
 
-Equation~\ref{eq:motion_composition} is the core of VO, that allows us to compute the camera local movement. Therefore, we can estimate its location in every instant of time. However, the equation above contains also the most insidious practical challenge of VO; i.e., the error accumulation phenomenon known as \textit{drift}.
+Equation~\ref{eq:motion_composition} is the core of VO, that allows us to compute the camera local movement. Therefore, we can estimate its location in every instant of time. However, the equation above contains also the most insidious practical challenge of VO; i.e., the error accumulation phenomenon known as \emph{drift}.
 Every new position $C_k$ can introduce an error factor that affects the next 
 computations. The results is a global error that grows as the number of 
 estimations increases.
@@ -136,7 +136,7 @@ Since early works such as Harris et al.\cite{harris19883d} and Moravec\cite{mora
 This tackles the precise estimation problem either by employing more accurate
 local motion estimation and by introducing an optimization step to refine 
 camera locations.
-The set of techniques for reducing the drift (after the camera poses are computed) is typically called  \textit{bundle adjustment}.
+The set of techniques for reducing the drift (after the camera poses are computed) is typically called \emph{bundle adjustment}~\cite{triggs1999bundle}.
 
 \section{Perspective SfM}
 The SfM literature is vast, but most of the approaches present pipelines similar to the one in 
@@ -153,8 +153,7 @@ different cameras with unknown parameters and in different time instants.
 %
 \begin{figure}
 	\centering
-	\def\svgwidth{0.5\columnwidth}
-	\input{img/block_diagram.pdf_tex}
+	\includegraphics[width=\linewidth]{img/block_diagram.pdf}
 	\caption{Perspective SfM pipeline block diagram.}
 	\label{fig:block_diagram}
 \end{figure}
@@ -162,9 +161,9 @@ different cameras with unknown parameters and in different time instants.
 \textit{Visual Odometry} is based on SfM techniques, 
 in this case, the input data is usually a sequence 
 of images from a video stream. The image capturing devices can vary:
-Moravec used a sliding camera that could capture stereo images \cite{moravec1980obstacle} while Matthies et al. equipped their robot with
-an actual stereo rig \cite{matthies1987error};
-in \cite{nister2004visual} Nister et al used a single perspective camera.
+Moravec used a sliding camera that could capture stereo images~\cite{moravec1980obstacle} while Matthies et al. equipped their robot with
+an actual stereo rig~\cite{matthies1987error};
+in~\cite{nister2004visual} Nister et al used a single perspective camera.
 The computer vision literature refers to the
 single camera studies case with the term \textit{monocular VO} while it uses \textit{stereo VO} to describe the work done with stereo equipment.
 
@@ -199,7 +198,7 @@ they are simpler but also slower. Most of the
 most recent VO pipelines use feature-based methods because of
 their speed and robustness.
 A VO implementation that employs intensity based techniques is 
-\cite{nister2004visual}, while \cite{makadia2007correspondence} is an example 
+\cite{nister2004visual}, while~\cite{makadia2007correspondence} is an example 
 of featureless motion estimation method.
 
 Each of the feature points found by the motion estimation phase can be 
@@ -226,6 +225,37 @@ In fact, in order to obtain the first 3D feature set,
 we can compute the relative motion between the first two images with 
 the 2D-to-2D techniques and then obtain the rest of the camera's path,
 as we said, by solving the \textit{PnP} problem.
+%
+\begin{figure}[ht]
+	\centering
+	\begin{subfigure}{\textwidth}
+		\centering
+		\includegraphics[width=0.5\linewidth]{img/correspondence1.pdf}
+		\caption{2D-to-2D.}
+        \label{fig:approach1}
+	\end{subfigure}
+    %
+	\begin{subfigure}{\textwidth}
+		\centering
+		\includegraphics[width=0.5\linewidth]{img/correspondence3.pdf}
+		\caption{3D-to-3D.}
+        \label{fig:approach2}
+	\end{subfigure}
+    %
+	\begin{subfigure}{\textwidth}
+		\centering
+		\includegraphics[width=0.5\linewidth]{img/correspondence2.pdf}
+		\caption{3D-to-2D.}
+        \label{fig:approach3}
+	\end{subfigure}
+    %
+	\caption{Representation of the feature matching step for motion estimation.
+	Uppercase letters indicates 3D points while lowercase letters are 2D image
+	points; the new pose is $C'$. Note the stereo rigs in (b) and 
+	(c) to highlight the need for triangulated world points with these 
+	approaches.}
+    \label{fig:poseestimation_approaches}
+\end{figure}
 
 \subsubsection{Essential Matrix}
 \label{subsec:essential_matrix}
@@ -259,7 +289,7 @@ In order to extract the local motion given the two set of corresponding features
 in two consecutive images, we have to estimate the essential matrix and then 
 extract the rigid body transformation out of it.
 For the $E$ estimation part we can employ the Longuet-Higgins' 8-points 
-algorithm \cite{longuet1981computer}: the equation~\ref{eq:epipolar_equation} 
+algorithm~\cite{longuet1981computer}: the equation~\ref{eq:epipolar_equation} 
 provides a constraint we
 can exploit for computation, in fact, for each correspondence, we can rewrite 
 the equation as
@@ -373,7 +403,7 @@ precision and robustness, and, in general, make these pipelines more effective.
 In the following sections we review some of the most common improvements 
 employed in SfM software.
 
-\begin{figure}
+\begin{figure}[h]
 	\centering
 	\begin{subfigure}{\textwidth}
 		\centering
@@ -388,7 +418,7 @@ employed in SfM software.
 	\begin{subfigure}{\textwidth}
 		\centering
 		\includegraphics[width=\textwidth]{img/textureless_stereo}
-		\caption{Textureless images provide too less feature points.}\label{fig:textureless}
+		\caption{Textureless images provide few feature points.}\label{fig:textureless}
 	\end{subfigure}
 	\caption{Some examples of problems that may occur when matching correspondence search.}\label{fig:matching_problems}
 \end{figure}
@@ -403,21 +433,21 @@ A feature point is an area in an image that is likely to be unique; i.e., it is 
 Furthermore, for each feature point, we can extract some local information that describes it, this piece of information is called \textit{feature descriptor} and it is usually stored as a vector.
 %
 There are many different algorithm to extract feature points and descriptors such as the 
-\textit{Moravec detector} \cite{moravec1980obstacle}, the \textit{Harris
-corner detector} \cite{harris1988combined}, the
+\textit{Moravec detector}~\cite{moravec1980obstacle}, the \textit{Harris
+corner detector}~\cite{harris1988combined}, the
 \textit{SIFT} keypoints detector and descriptor\cite{lowe1999object}, SURF keypoints detector and descriptor\cite{bay2006surf}, etc.
 %
 Some of these feature points or descriptors can be affected by rotations and scale. Since SfM is based on many pictures taken from different views, SIFT features have always been 
 preferred over other less robust features because of their rotational and scale
 invariance. One of the main drawback is that SIFT is patented and can not be used freely as other detectors.
 %
-SURF \cite{bay2006surf} is an alternative to SIFT that is also
+SURF~\cite{bay2006surf} is an alternative to SIFT that is also
 rotational and scale invariant; SURF is patented too and 
 can not be used for commercial applications but there is an available 
 implementation in the MATLAB's Computer Vision Toolbox and it can be 
 used for research.
 For a more detailed discussion about the differences amongst point detectors, 
-see \cite{schmidt2010evaluation, govender2009evaluation}.
+see~\cite{schmidt2010evaluation, govender2009evaluation}.
 
 \subsection{Outliers Rejection}
 Since the motion estimation step is the core of SfM pipelines, its performance
@@ -481,7 +511,7 @@ euclidean:
 	\end{pmatrix}	\text{.}
 \end{equation}
 Since this model is essentially different from the 
-perspective camera's \cite{szeliski2010computer}, the traditional procedures 
+perspective camera's~\cite{szeliski2010computer}, the traditional procedures 
 for pose estimation of the computer vision frameworks can not be used.
 We show in section~\ref{sec:keypoints_conversion} how we can still exploit
 equation~\ref{eq:epipolar_equation} to estimate the essential matrix and use it
@@ -544,36 +574,36 @@ devices with single image sensor (no stitching), therefore, as we said in
 section~\ref{sec:cameraclassification}, none of this types of camera is capable
 to produce full spherical images.
 
-In \cite{li2008binocular,li2006real}, Li developed a rectification procedure for wide
+In~\cite{li2008binocular,li2006real}, Li developed a rectification procedure for wide
 FOV cameras that enables the computation of disparity maps with standard 
 block-matching algorithms; the rig he used for testing was composed of 
 fisheye cameras that could not provide full spherical views.
-Ma et al. in \cite{ma20153d} used equirectangular images produced with a 
-RICO THETA S\registered to create disparity maps. They manually selected some 
+Ma et al. in~\cite{ma20153d} used equirectangular images produced with a 
+RICO THETA S to create disparity maps. They manually selected some 
 correspondences in order to compute the essential matrix correctly and then 
 used the epipolar geometry to remove correspondences outliers after an 
 automatic feature matching step. Because of the user intervention in 
 the pipeline, they could not test their results on long sequences, moreover the
 computed disparity were noisy.
-On the contrary, Arican et al. \cite{arican2007dense} developed a new algorithm
+On the contrary, Arican et al.~\cite{arican2007dense} developed a new algorithm
 based on graph-cut to compute disparities for omnidirectional images directly.
 They obtained high quality disparity maps with thanks to their new method.
-Im et al. \cite{im2016all} focused on the creation of a framework to produce
+Im et al.~\cite{im2016all} focused on the creation of a framework to produce
 depth maps 
 with full spherical consumer devices. They focused on short video sequences 
 with small motion of the camera as input data.
-Aly et al. \cite{aly2012street} extracted the interest points' directions from the
+Aly et al.~\cite{aly2012street} extracted the interest points' directions from the
 equirectangular 
 images with Equation~\ref{eq:ll2Cartesian_second} and then used the 
 epipolar equation (\ref{eq:epipolar_equation}) to estimate the essential matrix.
 Their work focused only on pose estimation from an unordered set of images
 and they assumed the camera movements were constrained to a plane.
-In \cite{kangni2007orientation}, Kangni et al. converted the full spherical image format to 6 
+In~\cite{kangni2007orientation}, Kangni et al. converted the full spherical image format to 6 
 separate perspective projection on the faces of a cube around the viewer; 
 then they used the epipolar equation to obtain the essential matrix;
 they focused on motion estimation without dense reconstruction.
 %\todo[inline]{citare Arican e Densificazione di Pagani}
-Pagani et al. \cite{pagani2011structure} designed an SfM pipeline for full
+Pagani et al.~\cite{pagani2011structure} designed an SfM pipeline for full
 spherical cameras that exploits spherical coordinates directly (without 
 reprojecting the 3D directions on a planar image). They focused their studies on
 the effect of the different error metrics for pose estimation and provided a 

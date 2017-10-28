@@ -1,4 +1,4 @@
-%% Creator: Inkscape inkscape 0.48.4, www.inkscape.org
+%% Creator: Inkscape inkscape 0.91, www.inkscape.org
 %% PDF/EPS/PS + LaTeX output extension by Johan Engelen, 2010
 %% Accompanies image file 'block_diagram.pdf' (pdf, eps, ps)
 %%
@@ -36,7 +36,7 @@
   }%
   \providecommand\rotatebox[2]{#2}%
   \ifx\svgwidth\undefined%
-    \setlength{\unitlength}{308.02499354bp}%
+    \setlength{\unitlength}{308.0458725bp}%
     \ifx\svgscale\undefined%
       \relax%
     \else%
@@ -48,12 +48,15 @@
   \global\let\svgwidth\undefined%
   \global\let\svgscale\undefined%
   \makeatother%
-  \begin{picture}(1,2.41806672)%
-    \put(0,0){\includegraphics[width=\unitlength]{img/block_diagram.pdf}}%
-    \put(0.25178309,2.34633543){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\begin{minipage}{0.49215071\unitlength}\centering Images\end{minipage}}}%
-    \put(0.01223793,1.27514961){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\begin{minipage}{0.97488577\unitlength}\centering Feature Matching\end{minipage}}}%
-    \put(0.06449504,0.7301525){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\begin{minipage}{0.86994331\unitlength}\centering Motion Estimation\end{minipage}}}%
-    \put(0.00415228,0.19964001){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\begin{minipage}{0.99062713\unitlength}\centering Local Optimization\end{minipage}}}%
-    \put(0.03390382,1.8131792){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\begin{minipage}{0.93923437\unitlength}\raggedright Feature Detection\end{minipage}}}%
+  \begin{picture}(1,2.4178898)%
+    \put(0,0){\includegraphics[width=\unitlength,page=1]{img/block_diagram.pdf}}%
+    \put(0.25179702,2.34617096){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\begin{minipage}{0.49211736\unitlength}\centering Images\end{minipage}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=2]{img/block_diagram.pdf}}%
+    \put(0.0122681,1.27505773){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\begin{minipage}{0.97481971\unitlength}\centering Feature Matching\end{minipage}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=3]{img/block_diagram.pdf}}%
+    \put(0.06452166,0.73009754){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\begin{minipage}{0.86988436\unitlength}\centering Motion Estimation\end{minipage}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=4]{img/block_diagram.pdf}}%
+    \put(0.004183,0.199621){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\begin{minipage}{0.99056001\unitlength}\centering Local Optimization\end{minipage}}}%
+    \put(0.02978084,1.81305085){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\begin{minipage}{0.93917073\unitlength}\centering Feature Detection\end{minipage}}}%
   \end{picture}%
 \endgroup%
