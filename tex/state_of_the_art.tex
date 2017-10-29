@@ -433,9 +433,9 @@ A feature point is an area in an image that is likely to be unique; i.e., it is 
 Furthermore, for each feature point, we can extract some local information that describes it, this piece of information is called \textit{feature descriptor} and it is usually stored as a vector.
 %
 There are many different algorithm to extract feature points and descriptors such as the 
-\textit{Moravec detector}~\cite{moravec1980obstacle}, the \textit{Harris
+\emph{Moravec detector}~\cite{moravec1980obstacle}, the \emph{Harris
 corner detector}~\cite{harris1988combined}, the
-\textit{SIFT} keypoints detector and descriptor\cite{lowe1999object}, SURF keypoints detector and descriptor\cite{bay2006surf}, etc.
+\emph{SIFT} keypoints detector and descriptor\cite{lowe1999object}, \emph{SURF} keypoints detector and descriptor\cite{bay2006surf}, etc.
 %
 Some of these feature points or descriptors can be affected by rotations and scale. Since SfM is based on many pictures taken from different views, SIFT features have always been 
 preferred over other less robust features because of their rotational and scale
@@ -446,6 +446,14 @@ rotational and scale invariant; SURF is patented too and
 can not be used for commercial applications but there is an available 
 implementation in the MATLAB's Computer Vision Toolbox and it can be 
 used for research.
+
+Even though SIFT and SURF are some of the most used feature algorithms 
+because of their robustness and invarince properties, there is little they can
+do with poorly selected image pairs. Figure~\ref{fig:matching_problems} shows 
+some of the most common problems that may arise from correspondence matching.
+In general, the large variety of environments, each with its own characteristics, 
+prevents a single technique to prevail over the others and this is one of 
+the reason why a truly general-purpose SfM pipeline does not exists.
 For a more detailed discussion about the differences amongst point detectors, 
 see~\cite{schmidt2010evaluation, govender2009evaluation}.
 
@@ -623,7 +631,7 @@ characteristics:
 	typical distortions of equirectangular images;
 	\item it provides a dense point cloud as an estimation of the environment.
 \end{itemize}
-Our contributions includes:
+Our contribution includes:
 \begin{itemize}
 	\item the development of the frame selector that chooses the images to be
 	used for motion estimation among all the video's frames;

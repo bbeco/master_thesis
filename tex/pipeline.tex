@@ -7,8 +7,9 @@ pipeline; this estimates selects the frame from the input sequence and estimate
 the camera trajectory. In Section~\ref{sec:pipeline_densification} we describe 
 our densification algorithm for equirectangular images.
 Fig.~\ref{fig:pipeline_overview}
-represents a simple visualization of this two macro parts of the 
-pipeline.
+represents a coarse visualization of this two macro parts of the 
+pipeline: the two blocks, pose estimation and densification are 
+expanded further in Figures~\ref{fig:sfm_block} and \todo{aggiungere ref a immagine}.
 
 \begin{figure}
     \centering
@@ -16,16 +17,17 @@ pipeline.
     \caption{The SfM pipeline: the pose estimation phase returns the cameras' 
     poses and the sparse points cloud. Then, the densification step uses 
     the input images and the previously camera's poses to create a dense
-    point cloud.}
+    point cloud. See Figures\ref{fig:sfm_block} and ....}
 	\label{fig:pipeline_overview}
 \end{figure}
+\todo{aggiungere ref a immagine}
 
 \section{Pose Estimation}
 \label{sec:pipeline_pose_estimation}
 The cameras' poses estimation phase is similar to the classical visual 
 odometry pipeline. The main differences lies in the variables' format and in 
 the details concerning the procedures used.
-For each new frame  (in the equirectangular format), we locate the
+For each new frame (in the equirectangular format), we locate the
 SURF keypoints \cite{bay2006surf}; we consider those keypoints whose inclination angle is in the range $[-60\degree; +60\degree]$. This is because the poles are affected by great 
 distortions, thus robust matches outside this interval are rare.
 Then, we look for matches in the last two frames and a filter performs some 
@@ -35,8 +37,8 @@ discarded).
 
 If the frame is kept, its matches with the previous one are converted
 and used for the essential matrix, $E$, estimation. Once $E$ is computed, 
-it can be decomposed in the \([R|t]\) form where R is a rotation matrix 
-and t is a translation vector up to an unknown scale factor.
+it can be decomposed in the \([R|t]\) form where $R$ is a rotation matrix 
+and $\myvec{t}$ is a translation vector up to an unknown scale factor.
 
 The relative scale can be estimated thanks to the world points which have been 
 triangulated thorough the matches and frame considered in previous pipeline 
@@ -71,7 +73,7 @@ angle ($\phi$).
 	\label{fig:sfm_block}
 \end{figure}
 
-\subsection{Key Points and Features Extraction}
+\subsection{Keypoints and Features Extraction}
 In Section~\ref{sec:pipeline_pose_estimation} we introduced the need for 
 features detection in order to find correspondences among the image pairs.
 In our pipeline we use SURF features and descriptors 
@@ -79,13 +81,13 @@ In our pipeline we use SURF features and descriptors
 \cite{lowe1999object};
 It performs convolution on integral images with box filters in order to 
 compute the Hessian matrix in scale space.
-The descriptors exploits key point's neighborhood response to the Haar wavelet.
+The descriptors exploits keypoint's neighborhood response to the Haar wavelet.
 SURF, like SIFT, is patented but it can be used freely in non commercial
 applications and for academic researches.
 An implementation of the SURF detector is available in the MATLAB's Computer 
 Vision Toolbox, and we employ it in our pipeline.
 
-\subsection{Key Points Filtering}
+\subsection{Keypoints Filtering}
 The equirectangular format for spherical images introduces significant 
 distortions in the areas around the poles. Interesting points in those areas 
 are unlikely to match reliably with other points in a consecutive view, 
@@ -97,7 +99,7 @@ points near the poles does not really affect the final result.
 
 \subsection{Features Matching}
 The matching strategy we carried out for equirectangular images is the same one 
-adopted with standard images: two key points matches if the distance between 
+adopted with standard images: two keypoints matches if the distance between 
 their descriptors is less than a given threshold. Ambiguous matches 
 are discarded if the ratio between the distances to the two closest matches is 
 above a maximum.
@@ -129,9 +131,9 @@ in consecutive views are usually far. The selection of these points for motion
 estimation can be counter-productive since they can easily produce numeric 
 numerical errors. 
 
-\subsection{3D-to-2D Key Points Conversion}
+\subsection{3D-to-2D Keypoints Conversion}
 \label{sec:keypoints_conversion}
-This step converts the key point format of equirectangular images to a new one 
+This step converts the keypoint format of equirectangular images to a new one 
 suitable for the essential matrix estimation routine.
 First the latitude and longitude coordinates of each feature point are 
 extracted from the 2D mapping according to  

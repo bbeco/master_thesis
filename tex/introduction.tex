@@ -115,5 +115,21 @@ environment reconstructions can help in case of restoration of historical finds
 Finally, the game industry is yet another field that can benefit from 
 SfM: real environments can be reconstructed with SfM first and then 
 improved by artists. Some game engine, as the popular Unreal Engine,
-includes photogrammetry software that exploits SfM techniques. \todo{non ho trovato un riferimento}
+includes photogrammetry software that exploits SfM techniques. \todo{ho trovato riferimenti a photogrammetry ma niente che parli direttamente di SfM}
 \todo[inline]{chiedere per un esempio di foto fisheye}
+
+\section{Our Contribution}
+In this work we propose a novel SfM pipeline for full spherical cameras that 
+estimates the camera poses and produces a dense point cloud representing the 
+environment's geometry. We address full spherical videos with 
+equirectangular frame format. To reach our goal we developed the following 
+components:
+\begin{itemize}
+	\item a frame selector that extracts the spherical video's frames to 
+		be used for pose estimation;
+	\item an adapaptive block-matching algorithm for disparity map 
+		creation optimized for equirectangular images;
+	\item the complete pipeline implementation in MATLAB that includes 
+		all the adjustment needed for traditional SfM routines to 
+		work with full spherical images.
+\end{itemize}
