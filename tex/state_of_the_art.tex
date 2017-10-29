@@ -4,44 +4,44 @@
 %
 In this chapter, we define formally the VO problem, we describe a generic perspective SfM pipeline, 
 and then we introduce the main challenges and issues when employing full spherical cameras for VO.
-During this description we refer, time by time, to the related state of the art algorithms/methods.
+During this description, we refer, time by time, to the relative state of the art algorithms/methods.
 
 %
 % Start of sections from intro
 
 \section{SfM, VO, and SLAM}
-SfM is a long studied topic in computer vision. Starting from an input of photographs taken by one or multiple cameras, SfM's main goal is to compute the cameras' poses and to reconstruct the 3D environment's geometry captured by those cameras~\cite{szeliski2010computer}.
+SfM is a long-studied topic in computer vision. Starting from an input of photographs taken by one or multiple cameras, SfM's main goal is to compute the cameras' poses and to reconstruct the 3D environment's geometry captured by those cameras~\cite{szeliski2010computer}.
 %
 Some of the first works are the paper by Longuet-Higgins~\cite{longuet1981computer}, whose equations are fundamental in epipolar geometry, and the paper by Tomasi et al.~\cite{tomasi1992shape}, who used orthographic photographs to estimate the shape of a 3D object.
 %
-SfM is a general term, and it also includes \textit{visual odometry} (VO). This is the problem of recovering the motion of an agent equipped with a camera rig in a 3D environment. Typically, VO deals with an ordered set of images such as video sequences, and it uses them to compute the egomotion in real-time. Nister et al.\cite{nister2004visual} introduced the term \textit{visual odometry} for the first time.
+SfM is a general term, and it also includes \textit{visual odometry} (VO). This is the problem of recovering the motion of an agent equipped with a camera rig in a 3D environment. Typically, VO deals with an ordered set of images such as video sequences, and it uses them to compute the ego-motion in real-time. Nister et al.\cite{nister2004visual} introduced the term \textit{visual odometry} for the first time.
 
-Another field of robotic/computer vision research that is very close to VO is \textit{simultaneous localization and mapping} (SLAM). SLAM targets the problem of creating a map of the environment where a camera equipped agent navigates and simultaneously estimating its path. Scaramuzza\cite{scaramuzzaVisualOdometryI} pointed out that while VO is more focused on local motion estimation, SLAM's goal is to obtain a global consistent estimation of the agent movements.
+Another field of robotic/computer vision research that is very close to VO is \textit{simultaneous localization and mapping} (SLAM). SLAM targets the problem of creating a map of the environment where a camera-equipped agent navigates and simultaneously estimating its path. Scaramuzza\cite{scaramuzzaVisualOdometryI} pointed out that while VO is more focused on local motion estimation, SLAM's goal is to obtain a global consistent estimation of the agent movements.
 %
 In order to reduce error, SLAM keeps track of the visited path and can decide when the agent has come back to a previously visited location. This extra step in SLAM's pipeline is called \textit{loop closure} and provides an additional constraint used to reduce errors in both the agent's path and 
 environment reconstruction. Durrant-White et al.\cite{durrant1996localization} firstly introduced the term SLAM.
  
 \section{Densification: from Sparse to Dense Point Cloud}
-A sparse point cloud is the product of most SfM pipelines; some keypoints are tracked in each photograph and are then used by the motion estimation algorithm. These keypoints are triangulated and their corresponding world points are available during egomotion estimation.
+A sparse point cloud is the product of most SfM pipelines; some keypoints are tracked in each photograph and are then used by the motion estimation algorithm. These keypoints are triangulated and their corresponding world points are available during ego-motion estimation.
 %
 A set of triangulated keypoints is a sparse point cloud around the camera's path. This set provides a first approximation of the environment reconstruction.
 Typically, starting from this information, it is possible to obtain a complete reconstruction of the 3D environment by applying
-a so-called \emph{Multi View Stereo} algorithm. The goal of Multi View Stereo\cite{seitz2006comparison} is to reconstruct a complete
+a so-called \emph{Multi-View Stereo} algorithm. The goal of Multi-View Stereo\cite{seitz2006comparison} is to reconstruct a complete
 3D object model from a collection of images taken from known camera poses.
 Many of these algorithms obtain a dense point cloud starting from the sparse reconstruction, and then 
 estimate the final surface according to this dense point set.
 
-Our approach consists in densify the point cloud by computing, for each pair of consecutive images, 
-a depth map. These depth maps are merged to obtain a dense set of reconstructed points. At this point the 
+Our approach consists in densifying the point cloud by computing, for each pair of consecutive images, 
+a depth map. These depth maps are merged to obtain a dense set of reconstructed points. At this point, the 
 surface can be reconstructed by applying a surface fitting algorithm such as the standard Poisson reconstruction\todo{??CITARE??}.
-A depth map consists in associating a value of depth for each pixels of the images pair.
+A depth map consists in associating a value of depth for each pixel of the images pair.
 The depth map estimation involves the calculation of a \emph{disparity map} from the images pair. 
 This is a map of the distance in pixels from a point in a reference image and its corresponding point in the 
 other image. Higher is the disparity of a given pixel, higher is the parallax and hence the depth of that pixel. 
 The map is usually computed based on some kind of similarity 
 metric such as \emph{sum of absolute distances} (SAD), 
 \emph{sum of squared distances} (SSD), 
-\emph{normalized cross correlation} (NCC), etc. These provides a way to 
+\emph{normalized cross correlation} (NCC), etc. These provide a way to 
 compute the corresponding point in the second image, thus enabling the 
 computation of the disparity for every point in the reference image.
 Figure~\ref{fig:disparity_example} shows an example of disparity map.
@@ -62,7 +62,7 @@ Figure~\ref{fig:disparity_example} shows an example of disparity map.
 
 \section{Omnidirectional and Full Spherical Cameras}
 \label{sec:cameraclassification}
-Omnidirectional cameras are characterized by wide field of view. Indeed, many of this kind of devices can take pictures with a 180\degree view angle or even wider.
+Omnidirectional cameras are characterized by a wide field of view. Indeed, many of this kind of devices can take pictures with a 180\degree view angle or even wider.
 
 There are several ways to obtain panoramic images, they include:
 \begin{itemize}
@@ -72,22 +72,22 @@ There are several ways to obtain panoramic images, they include:
 	\item hybrid approaches.
 \end{itemize}
 
-Perspective cameras can take panoramic pictures with the aid of software stitching. As the first step, we take several photographs with many cameras or by simply moving the same camera in order to cover most of a scene. Then, a stitching software merges all images into a single one. To use a traditional camera and a stitching software is the cheapest way to obtain panoramic images because it does not need any kind of specialized hardware. However, this process is cumbersome (a lot of manual work is required). Note that some smart-phones provide built-in camera 360\degree acquisition modes, but the final quality may be not satisfactory due to alignment artifacts.
-An example for this approach is the Hugin Panorama Photo Stitcher 
+Perspective cameras can take panoramic pictures with the aid of software stitching. As the first step, we take several photographs with many cameras or by simply moving the same camera in order to cover most of a scene. Then, a stitching software merges all images into a single one. To use a traditional camera and a stitching software is the cheapest way to obtain panoramic images because it does not need any kind of specialized hardware. However, this process is cumbersome (a lot of manual work is required). Note that some smart-phones provide built-in camera 360\degree acquisition modes, but the final quality may be not satisfactory due to alignment artefacts.
+An example of this approach is the Hugin Panorama Photo Stitcher 
 \cite{hugin_photostitcher}, an open source software for merging several 
 perspective images in a single panoramic picture.
 The SpheroCam\texttrademark by SPHERON-VR AG\texttrademark~\cite{spheronvr}
 is an alternative to 
 the latter approach to panoramic images; it uses a specialized hardware composed
-of a wide angle lenses equipped camera mounted on a rotating support, which rotates around the optical center of the camera. Therefore, this camera can capture high quality full spherical and it addresses the professional fields of geographical analysis, forensic investigation, cultural heritage, etc.
+of wide angle lenses equipped camera mounted on a rotating support, which rotates around the optical center of the camera. Therefore, this camera can capture high quality full spherical and it addresses the professional fields of geographical analysis, forensic investigation, cultural heritage, etc.
 
-A catadioptric camera can be obtained by coupling a perspective camera and a mirror, which is mounted in front of camera. Such setup takes a picture of the mirror that reflects the surrounding. The mirror of a catadioptric system may have several shapes. The most common one is the hyperbolic profile that creates a single center of projection for every ray coming to the mirror.
+A catadioptric camera can be obtained by coupling a perspective camera and a mirror, which is mounted in front of the camera. Such setup takes a picture of the mirror that reflects the surrounding. The mirror of a catadioptric system may have several shapes. The most common one is the hyperbolic profile that creates a single centre of projection for every ray coming to the mirror.
 
-A traditional camera can also be adapted to work as a panoramic one by adding a fisheye lens capable of refracting lights from wide angle towards the image sensor. These setups are called dioptric cameras.
+A traditional camera can also be adapted to work as a panoramic one by adding a fisheye lens capable of refracting lights from wide angles towards the image sensor. These setups are called dioptric cameras.
 
 Apart of perspective cameras coupled with stitching software, none of the previous approaches can take full spherical panoramic photographs. Moreover, full spherical videos cannot be shot with perspective cameras either.
 
-The last approach, an hybrid one, exploits several sensors using fisheye lenses and software stitching to capture full spherical panoramic images in a single shot. This enables full spherical video capturing as well. The camera (that is composed of several image sensors) take multiple overlapping pictures simultaneously. Then, an on camera stitching software composes the data in a single image.
+The last approach, a hybrid one, exploits several sensors using fisheye lenses and software stitching to capture full spherical panoramic images in a single shot. This enables full spherical video capturing as well. The camera (that is composed of several image sensors) take multiple overlapping pictures simultaneously. Then, an on-camera stitching software composes the data in a single image.
 
 In all our experiments we used the Ricoh Theta S camera that is a hybrid full spherical camera composed of two fisheye lenses with a FOV greater than 180\degree; see Figure~\ref{fig:ricoh_theta}.
 %
@@ -129,7 +129,7 @@ $k$ and to compute each $C_k$ accordingly to equation~\ref{eq:motion_composition
 
 Equation~\ref{eq:motion_composition} is the core of VO, that allows us to compute the camera local movement. Therefore, we can estimate its location in every instant of time. However, the equation above contains also the most insidious practical challenge of VO; i.e., the error accumulation phenomenon known as \emph{drift}.
 Every new position $C_k$ can introduce an error factor that affects the next 
-computations. The results is a global error that grows as the number of 
+computations. The result is a global error that grows as the number of 
 estimations increases.
 %
 Since early works such as Harris et al.\cite{harris19883d} and Moravec\cite{moravec1980obstacle}, the VO research community has focused on error minimization techniques to reduce drift.
@@ -141,14 +141,14 @@ The set of techniques for reducing the drift (after the camera poses are compute
 \section{Perspective SfM}
 The SfM literature is vast, but most of the approaches present pipelines similar to the one in 
 Fig.~\ref{fig:block_diagram}.
-The main steps are: to compute the relative motion for each image
-pair, to compose these motions for obtaining the absolute camera position and 
+The main steps are: to compute the relative motion for each image pair, 
+to compose these motions for obtaining the absolute camera position and 
 orientation, and to run a drift reduction procedure.
 %
 The differences are in the type of input data, motion estimation algorithm,
 optimization procedure and additional constraints considered.
 For generic SfM researches, the input data is a set of traditional pictures of 
-the same environment from different point of view. The pictures can be taken by 
+the same environment from different points of view. The pictures can be taken by 
 different cameras with unknown parameters and in different time instants.
 %
 \begin{figure}
@@ -165,7 +165,7 @@ Moravec used a sliding camera that could capture stereo images~\cite{moravec1980
 an actual stereo rig~\cite{matthies1987error};
 in~\cite{nister2004visual} Nister et al used a single perspective camera.
 The computer vision literature refers to the
-single camera studies case with the term \textit{monocular VO} while it uses \textit{stereo VO} to describe the work done with stereo equipment.
+single-camera studies case with the term \textit{monocular VO} while it uses \textit{stereo VO} to describe the work done with stereo equipment.
 
 Even though perspective cameras have been the first choice in many studies, 
 the researchers used other devices, like the ones described in 
@@ -193,7 +193,7 @@ the actual way to estimate local motion.
 There are two main families of point matching algorithms: \textit{feature-based}
 and \textit{appearance-based} (also known as \textit{global-methods}).
 While the former ones utilize repeatable features 
-matching between the images, the latter rely on pixel's intensity information; 
+matching between the images, the latter ones rely on pixel's intensity information; 
 they are simpler but also slower. Most of the 
 most recent VO pipelines use feature-based methods because of
 their speed and robustness.
@@ -203,7 +203,7 @@ of featureless motion estimation method.
 
 Each of the feature points found by the motion estimation phase can be 
 either a 3D world-point feature or a 2D image-point one,
-therefore, there are three possible combinations that provides just as many 
+therefore, there are three possible combinations that provide just as many 
 different matching and motion-estimation procedures:
 \begin{itemize}
 	\item 2D-to-2D: both feature sets are composed of image points.
@@ -218,7 +218,7 @@ the current one's feature set contains their projections. In this case, the moti
 is estimated by solving a problem called Perspective-n-Points (\textit{PnP}).
 \end{itemize}
 Since the second and third approaches deal with 3D points, they are usually 
-best suited for stereo rig (especially the 3D-to-3D case).
+best suited for stereo rigs (especially the 3D-to-3D case).
 Obviously, we can still use the 3D-to-2D approach in the monocular VO case by simply 
 triangulating corresponding 2D image features in consecutive frames.
 In fact, in order to obtain the first 3D feature set,
@@ -275,7 +275,7 @@ feature coordinates in image $I_{k-1}$ and $I_{k}$. The normalized coordinates a
 %
 \noindent where $K$ is the intrinsic parameter matrix, and $\mathbf{m}$ is an
 image point.
-The essential matrix contains the geometric information that describe the 
+The essential matrix contains the geometric information that describes the 
 relative location of a camera respect to another one up to an unknown scale factor 
 for the translation vector. In particular, we have:
 %$
@@ -325,7 +325,7 @@ the translation magnitude from two sets of features (it is still possible
 to recover the reconstruction scale if we are given some world measure of the
 environment).
 Therefore, if we can not derive the local translation length with some other
-non visual techniques (such as wheel odometry, GPS, accelerometer, etc.).
+non-visual techniques (such as wheel odometry, GPS, accelerometer, etc.).
 We have to keep this unknown scale for the motion estimation and 
 environment reconstruction.
 
@@ -358,7 +358,7 @@ camera motion and environment reconstruction is still left unknown.
 
 \section{Bundle Adjustment}
 As shown in section~\ref{sec:vo_problem}, the error accumulation problem introduces
-unavoidable errors for each camera pose estimation. Therefore, an SfM pipeline has to incorporate a 
+unavoidable errors for each camera pose estimation. Therefore, a SfM pipeline has to incorporate a 
 refinement process for both camera poses and triangulated points.
 This step is called \textit{bundle adjustment} (BA) and its goal is to 
 minimize the \textit{reprojection error}.
@@ -390,17 +390,17 @@ the triangulated points are jointly refined. Most BA implementations keep the
 camera poses fixed, solve for the triangulated points, then they optimize for the
 poses in an alternate fashion until the desired precision is reached.
 
-BA is a delicate step that can affect an SfM pipeline in many ways
+BA is a delicate step that can affect a SfM pipeline in many ways
 \cite{lourakis2009sba,triggs1999bundle,Hartley2004} as a poorly planned use of 
 it can reduce computation speed and fail to obtain the desired accuracy.
 
 \section{Robust Estimation}
-In the previous sections, we described the core steps of an SfM pipeline.
+In the previous sections, we described the core steps of a SfM pipeline.
 Even though these are all the components needed for a working SfM software, 
 there are some improvements widely used by similar pipelines nowadays
 that can further increase the reconstruction and pose estimation 
 precision and robustness, and, in general, make these pipelines more effective.
-In the following sections we review some of the most common improvements 
+In the following sections, we review some of the most common improvements 
 employed in SfM software.
 
 \begin{figure}[h]
@@ -432,14 +432,14 @@ A feature point is an area in an image that is likely to be unique; i.e., it is 
 %
 Furthermore, for each feature point, we can extract some local information that describes it, this piece of information is called \textit{feature descriptor} and it is usually stored as a vector.
 %
-There are many different algorithm to extract feature points and descriptors such as the 
+There are many different algorithms to extract feature points and descriptors such as the 
 \emph{Moravec detector}~\cite{moravec1980obstacle}, the \emph{Harris
 corner detector}~\cite{harris1988combined}, the
 \emph{SIFT} keypoints detector and descriptor\cite{lowe1999object}, \emph{SURF} keypoints detector and descriptor\cite{bay2006surf}, etc.
 %
 Some of these feature points or descriptors can be affected by rotations and scale. Since SfM is based on many pictures taken from different views, SIFT features have always been 
 preferred over other less robust features because of their rotational and scale
-invariance. One of the main drawback is that SIFT is patented and can not be used freely as other detectors.
+invariance. One of the main drawbacks is that SIFT is patented and can not be used freely as other detectors.
 %
 SURF~\cite{bay2006surf} is an alternative to SIFT that is also
 rotational and scale invariant; SURF is patented too and 
@@ -448,7 +448,7 @@ implementation in the MATLAB's Computer Vision Toolbox and it can be
 used for research.
 
 Even though SIFT and SURF are some of the most used feature algorithms 
-because of their robustness and invarince properties, there is little they can
+because of their robustness and invariance properties, there is little they can
 do with poorly selected image pairs. Figure~\ref{fig:matching_problems} shows 
 some of the most common problems that may arise from correspondence matching.
 In general, the large variety of environments, each with its own characteristics, 
@@ -468,7 +468,7 @@ whole camera's path estimation because of the incremental nature of the SfM
 pipeline.
 In order to reduce this phenomenon, we can switch to a more robust feature points
 detector and use a RANSAC approach to remove outliers before the motion estimation step.
-RANSAC\cite{fischler1981random} is a model fitting algorithm for dataset that includes outliers.
+RANSAC\cite{fischler1981random} is a model fitting algorithm for datasets that include outliers.
 This algorithm is iterative. At each iteration, it selects a subset of input data and computes the model based on this subset only. Then, RANSAC divides the complete dataset into a consensus set and outliers. If the number of outliers, computed thanks to a problem specific loss function, is
 less than a given threshold, the estimated model is considered valid.
 
@@ -487,23 +487,23 @@ but now $E$ is not decomposed in $[R_i|\myvec{t}_i]$. The use of RANSAC before m
 estimation even if the number of outliers is high (40-50\%).
 
 \section{Full Spherical Cameras}
-In the following sections we describe the full spherical photography's camera
-model (section~\ref{subsec:spherical_camera_model}), the equirectangular image
-format used to map spherical images on 2D matrix of pixels 
+In the following sections, we describe the full spherical photography's camera
+model (section~\ref{subsec:spherical_camera_model}), the equirectangular image 
+format used to map spherical images on a 2D matrix of pixels 
 and the problems for SfM algorithms caused by this format 
 (section~\ref{subsec:image_format}).
-In section~\ref{subsec:related_work} we give an overview of the efforts of 
+In section~\ref{subsec:related_work}, we give an overview of the efforts of 
 previous studies on this topics and describe the contribution of our work to 
 this field.
 
 \subsection{Spherical camera model}
 \label{subsec:spherical_camera_model}
 In Figure~\ref{fig:camera_model} we can see the full spherical camera model.
-The axes' origin is also the center of projection. The image is formed on 
-the unitary sphere whose center coincide with the center of projection.
+The axes' origin is also the centre of projection. The image is formed on 
+the unitary sphere whose centre coincides with the centre of projection.
 $\myvec{m}$ is the projection on the sphere for the world point 
 $\myvec{M}$, thus $\myvec{m}$ is a unitary vector that lies on the ray that goes
-from the center of projection to the point $\myvec{M}$.
+from the centre of projection to the point $\myvec{M}$.
 The image point $\myvec{m}$ is defined by the spherical coordinate 
 system composed of the two angles $\lambda$ and $\phi$, that represent the 
 longitude and latitude respectively. 
@@ -540,7 +540,7 @@ images. It stores each 3D image points in a bidimensional matrix of pixels
 by mapping the two angular dimensions (latitude and longitude) to the two
 linear dimensions of the image (height and width); latitude increases from 
 top to bottom while longitude increases from left to right.
-In particular, the equirectangular mapping for a full spherical images is the
+In particular, the equirectangular mapping for full spherical images is the
 following:
 \begin{subequations}
 	\label{eq:ll2Cartesian_first}
@@ -574,16 +574,16 @@ when computing disparity maps.
 
 \subsection{Previous Work on Spherical SfM}
 \label{subsec:related_work}
-As we pointed out in the previous sections, there has been few research 
-effort to use full spherical cameras in SfM and most of the work
+As we pointed out in the previous sections, there have been few efforts to use 
+full spherical cameras in SfM and most of the work
 has targeted perspective cameras.
-Most of the work about panoramic cameras has employed catadioptric or dioptric 
-devices with single image sensor (no stitching), therefore, as we said in 
+Most of the work about panoramic cameras have employed catadioptric or dioptric 
+devices with a single image sensor (no stitching), therefore, as we said in 
 section~\ref{sec:cameraclassification}, none of this types of camera is capable
 to produce full spherical images.
 
 In~\cite{li2008binocular,li2006real}, Li developed a rectification procedure for wide
-FOV cameras that enables the computation of disparity maps with standard 
+FOV cameras that enable the computation of disparity maps with standard 
 block-matching algorithms; the rig he used for testing was composed of 
 fisheye cameras that could not provide full spherical views.
 Ma et al. in~\cite{ma20153d} used equirectangular images produced with a 
@@ -591,33 +591,33 @@ RICO THETA S to create disparity maps. They manually selected some
 correspondences in order to compute the essential matrix correctly and then 
 used the epipolar geometry to remove correspondences outliers after an 
 automatic feature matching step. Because of the user intervention in 
-the pipeline, they could not test their results on long sequences, moreover the
-computed disparity were noisy.
+the pipeline, they could not test their results on long sequences, moreover, the
+computed disparity was noisy.
 On the contrary, Arican et al.~\cite{arican2007dense} developed a new algorithm
 based on graph-cut to compute disparities for omnidirectional images directly.
-They obtained high quality disparity maps with thanks to their new method.
+They obtained high-quality disparity maps with thanks to their new method.
 Im et al.~\cite{im2016all} focused on the creation of a framework to produce
 depth maps 
 with full spherical consumer devices. They focused on short video sequences 
-with small motion of the camera as input data.
+with small motions of the camera as input data.
 Aly et al.~\cite{aly2012street} extracted the interest points' directions from the
 equirectangular 
 images with Equation~\ref{eq:ll2Cartesian_second} and then used the 
 epipolar equation (\ref{eq:epipolar_equation}) to estimate the essential matrix.
-Their work focused only on pose estimation from an unordered set of images
+Their work focused only on pose estimation from a unordered set of images
 and they assumed the camera movements were constrained to a plane.
 In~\cite{kangni2007orientation}, Kangni et al. converted the full spherical image format to 6 
 separate perspective projection on the faces of a cube around the viewer; 
 then they used the epipolar equation to obtain the essential matrix;
 they focused on motion estimation without dense reconstruction.
 %\todo[inline]{citare Arican e Densificazione di Pagani}
-Pagani et al.~\cite{pagani2011structure} designed an SfM pipeline for full
-spherical cameras that exploits spherical coordinates directly (without 
+Pagani et al.~\cite{pagani2011structure} designed a SfM pipeline for full
+spherical cameras, that exploits spherical coordinates directly (without 
 reprojecting the 3D directions on a planar image). They focused their studies on
 the effect of the different error metrics for pose estimation and provided a 
 sparse reconstruction and pose estimation algorithm.
 
-In this work we propose a complete SfM pipeline with dense point cloud 
+In this work, we propose a complete SfM pipeline with dense point cloud 
 reconstruction for 360\degree video sequences with the following 
 characteristics:
 \begin{itemize}

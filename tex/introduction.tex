@@ -1,15 +1,15 @@
 \chapter{Introduction}
 \lhead{\chaptername~\thechapter. \emph{Introduction}}
 The growing interest of the general public in spherical cameras technologies, which were 
-research-only exclusives once, has made them less expensive and more available. For example, omindirectional cameras by GoPro have been extremely popular amongst sports men who publish their activities on social networks.
+research-only exclusives once, has made them less expensive and more available. For example, omnidirectional cameras by GoPro have been extremely popular amongst sportsmen who publish their activities on social networks.
 
 These devices have been employed in robotics since their first appearance to help navigate the robot in a real-world environment, and nowadays for autonomous driving. Furthermore, they can be exploited to deliver a virtual or augmented experience for augmented and virtual reality (AR/VR).
 
 In this work, we designed a \textit{structure from motion} (SfM) pipeline for 
-full spherical cameras. SfM is a well known topic in computer vision; it addresses the problem of 
+full spherical cameras. SfM is a well-known topic in computer vision; it addresses the problem of 
 recovering the structure of 3D environments from a sequence of images taken from different viewpoints.
 
-SfM research (and computer vision in general) has targeted perspective cameras because these type of devices have always been more common. However, the increase of interest around these cameras has started a shift of interest towards employing them for research.
+SfM research (and computer vision in general) has targeted perspective cameras because these type of devices have always been more common. However, the increase of interest in these cameras has started a shift of interest towards employing them for research.
 
 \begin{figure}[htb]
 	\centering
@@ -35,7 +35,7 @@ SfM research (and computer vision in general) has targeted perspective cameras b
 \section{Omnidirection Cameras}
 Large field of view (FOV) photography employs fisheye lenses that are capable to cover 
 wider scene compared to traditional cameras' hardware.
-The applications for this kind of equipments range from architectural or 
+The applications for this types of equipment range from architectural or 
 landscape photography to academic use for studies related to astronomic, 
 meteorology, computer graphics, etc.
 Photographers can also choose fisheye lenses for the characteristic distortion
@@ -46,14 +46,14 @@ An example of wide FOV photography equipment is the GoPro's camera series.
 GoPro Inc. produces action cameras, small digital devices for recording videos 
 and taking pictures in harsh environments; their products have gained quite 
 some success among the consumer market, also thanks to their marketing campaign 
-that successfully associated their product to extreme sport events.
+that successfully associated their product to extreme sports events.
 Action cameras like GoPro's exploit wide FOV lenses that help to capture larger
 scenes and make the devices fit to be worn.
 
-Apart of wide FOV hardware there is another class of  
+Apart from wide FOV hardware, there is another class of  
 cameras that take panoramic photography to a new level: 
 the 360\degree full spherical devices, capable of capturing images
-in every directions with no blind sides. This class of devices employs 
+in all directions with no blind corner. This class of devices employs 
 several image sensors and integrated stitching software to automatically produce
 panoramic pictures. This is the case for the Ricoh Theta S\texttrademark 
 \cite{theta_website} we used in this work (Figure~\ref{fig:ricoh_theta}).
@@ -95,7 +95,7 @@ sensor size, pixel density, and lens distortion model. When dealing with full sp
 Further details about the camera model and the parameters can be found in Chapter~\ref{ch:state_of_the_art}.
 
 \section{SfM Applications}
-SfM is a well known topic in the computer vision community; it started after 
+SfM is a well-known topic in the computer vision community; it started after 
 the landmark papers by Longuet-Higgins \cite{longuet1981computer} and
 Nister et al. \cite{moravec1980obstacle}.
 The problem can be described as the reverse of image formation
@@ -104,11 +104,11 @@ and camera poses given a set of two or more images.
 Some of the first application for this technology included robotic research, 
 like navigation systems intended for rover explorations 
 \cite{moravec1980obstacle,durrant1996localization}. In fact, NASA has supported
-many researches because of the need for navigation systems not affected by wheels
+many research because of the need for navigation systems not affected by wheels
 slippage on uneven terrains.
 SfM is used in geographical data acquisition too
 \cite{fonstad2013topographic, westoby2012structure, james2012straightforward}
-as alternative to other methods that employ specialized hardware and are generally more expensive.
+as an alternative to other methods that employ specialized hardware and are generally more expensive.
 Furthermore, there are applications for cultural heritage conservation because 
 environment reconstructions can help in case of restoration of historical finds
 \cite{kraus2007photogrammetry}.
@@ -117,9 +117,10 @@ SfM: real environments can be reconstructed with SfM first and then
 improved by artists. Some game engine, as the popular Unreal Engine,
 includes photogrammetry software that exploits SfM techniques. \todo{ho trovato riferimenti a photogrammetry ma niente che parli direttamente di SfM}
 \todo[inline]{chiedere per un esempio di foto fisheye}
+\missingfigure{Aggiungere immagini applicazioni di sfm}
 
 \section{Our Contribution}
-In this work we propose a novel SfM pipeline for full spherical cameras that 
+In this work, we propose a novel SfM pipeline for full spherical cameras that 
 estimates the camera poses and produces a dense point cloud representing the 
 environment's geometry. We address full spherical videos with 
 equirectangular frame format. To reach our goal we developed the following 
@@ -127,7 +128,7 @@ components:
 \begin{itemize}
 	\item a frame selector that extracts the spherical video's frames to 
 		be used for pose estimation;
-	\item an adapaptive block-matching algorithm for disparity map 
+	\item an adaptive block-matching algorithm for disparity map 
 		creation optimized for equirectangular images;
 	\item the complete pipeline implementation in MATLAB that includes 
 		all the adjustment needed for traditional SfM routines to 

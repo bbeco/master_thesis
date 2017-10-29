@@ -14,9 +14,10 @@ expanded further in Figures~\ref{fig:sfm_block} and \todo{aggiungere ref a immag
 \begin{figure}
     \centering
     \includegraphics[width=0.8\linewidth]{img/pipeline_overview.pdf}
-    \caption{The SfM pipeline: the pose estimation phase returns the cameras' 
-    poses and the sparse points cloud. Then, the densification step uses 
-    the input images and the previously camera's poses to create a dense
+    \caption{The SfM pipeline: the frame selector decides which frames are 
+    relevant for the next steps; the pose estimation phase returns the cameras' 
+    poses and the sparse points cloud; the densification step uses 
+    the input images and the previous camera's poses to create a dense
     point cloud. See Figures\ref{fig:sfm_block} and ....}
 	\label{fig:pipeline_overview}
 \end{figure}
@@ -25,7 +26,7 @@ expanded further in Figures~\ref{fig:sfm_block} and \todo{aggiungere ref a immag
 \section{Pose Estimation}
 \label{sec:pipeline_pose_estimation}
 The cameras' poses estimation phase is similar to the classical visual 
-odometry pipeline. The main differences lies in the variables' format and in 
+odometry pipeline. The main differences lie in the variables' format and in 
 the details concerning the procedures used.
 For each new frame (in the equirectangular format), we locate the
 SURF keypoints \cite{bay2006surf}; we consider those keypoints whose inclination angle is in the range $[-60\degree; +60\degree]$. This is because the poles are affected by great 
@@ -41,7 +42,7 @@ it can be decomposed in the \([R|t]\) form where $R$ is a rotation matrix
 and $\myvec{t}$ is a translation vector up to an unknown scale factor.
 
 The relative scale can be estimated thanks to the world points which have been 
-triangulated thorough the matches and frame considered in previous pipeline 
+triangulated through the matches and the frame considered in the previous pipeline 
 iteration.
 
 The pose for each camera can then be described as the composition of the 
@@ -49,20 +50,20 @@ motions between each view pair. We perform a bundle adjustment for the last 5
 poses in order to reduce the effect of drift.
 Once every image has been processed by our pipeline, a final 
 bundle adjustment is performed: it optimizes every camera pose estimated in order to 
-further reduce drift error.
+reduce drift error further.
 
 The coordinate system used in our pipeline is the one shown in 
-Figure~\ref{fig:camera_model}, with the x-axis pointing right, the y-axis 
-pointing down and the z-axis pointing forward.
-We consider the spherical image divided in two hemispheres: front and back.
+Figure~\ref{fig:camera_model}, with the X-axis pointing right, the Y-axis 
+pointing down and the Z-axis pointing forward.
+We consider the spherical image divided into two hemispheres: front and back.
 We call the image points 
 whose 3rd component is positive, frontal points while we use the term rear 
 points otherwise.
 When we need to express spherical coordinates we use the same angles shown in 
 Figure~\ref{fig:camera_model}:
-the angle between the z-axis and the projection of $m$ on the xz-plane in 
-the clock-wise direction is the longitude angle ($\lambda$) while the one 
-between the negative y-axes and the same projection of $m$ is the latitude 
+the angle between the Z-axis and the projection of $m$ on the XZ-plane in 
+the clockwise direction is the longitude angle ($\lambda$) while the one 
+between the negative Y-axis and the same projection of $m$ is the latitude 
 angle ($\phi$).
 
 \begin{figure}
@@ -76,14 +77,14 @@ angle ($\phi$).
 \subsection{Keypoints and Features Extraction}
 In Section~\ref{sec:pipeline_pose_estimation} we introduced the need for 
 features detection in order to find correspondences among the image pairs.
-In our pipeline we use SURF features and descriptors 
+In our pipeline, we use SURF features and descriptors 
 \cite{bay2006surf}. SURF is a blob detector partly inspired by SIFT
 \cite{lowe1999object};
 It performs convolution on integral images with box filters in order to 
 compute the Hessian matrix in scale space.
-The descriptors exploits keypoint's neighborhood response to the Haar wavelet.
-SURF, like SIFT, is patented but it can be used freely in non commercial
-applications and for academic researches.
+The descriptors exploit keypoint's neighbourhood response to the Haar wavelet.
+SURF, like SIFT, is patented but it can be used freely in non-commercial
+applications and for academic research.
 An implementation of the SURF detector is available in the MATLAB's Computer 
 Vision Toolbox, and we employ it in our pipeline.
 
@@ -107,17 +108,17 @@ We enforce matching robustness by forcing unique correspondences, that is:
 only one feature in the first image can match with another one in the second
 image. This is achieved with two passes of the matching procedure. During the 
 first pass, each feature in the first images is checked for correspondences in
-the second image; in the second pass, each features of the second image that 
+the second image; in the second pass, each feature of the second image that 
 has at least one correspondence in the first image is checked to see what 
-interesting point of the first image it correspond to and the match with the
+interesting point of the first image it corresponds to and the match with the
 highest confidence is kept.
 
 \subsection{Matches Filter}
-In this step of the pipeline the matches are analyzed in order to decide 
+In this step of the pipeline, the matches are analyzed in order to decide 
 whether a frame has to be kept because it is useful for motion estimation or
 not.
 We assume the environment considered for our studies is static: no people, 
-cars or any kind of moving object is present in our scenes. In this case the 
+cars or any kind of moving object is present in our scenes. In this case, the 
 apparent movement of corresponding objects in different views is caused by 
 the camera motion only.
 The filter computes the disparity between every correspondence found in the 
@@ -126,16 +127,16 @@ disparity value with a threshold. If such a median is above
 the threshold, the frame is kept for further processing in the pipeline, 
 otherwise it is discarded.
 The reason why we consider the correspondences with the greatest disparity is 
-because, when the camera rotation is limited, the points that moves very little 
+because, when the camera rotation is limited, the points that move very little 
 in consecutive views are usually far. The selection of these points for motion 
-estimation can be counter-productive since they can easily produce numeric 
-numerical errors. 
+estimation can be counter-productive since they can easily produce numerical 
+errors. 
 
 \subsection{3D-to-2D Keypoints Conversion}
 \label{sec:keypoints_conversion}
 This step converts the keypoint format of equirectangular images to a new one 
 suitable for the essential matrix estimation routine.
-First the latitude and longitude coordinates of each feature point are 
+First, the latitude and longitude coordinates of each feature point are 
 extracted from the 2D mapping according to  
 Equation~\ref{eq:ll2Cartesian_first}.
 This equation returns the spherical coordinates for each feature point. 
@@ -150,7 +151,7 @@ is no intrinsic parameter for the full spherical camera model.
 In order to exploit the routines to estimate the essential matrix available 
 in the MATLAB's Computer Vision Toolbox, we need to perform an additional simple 
 step.
-Indeed this toolbox's routines deals with 2D images, thus they expect 
+Indeed this toolbox's routines deal with 2D images, thus they expect 
 2D vectors when the input arguments are image points, however our camera
 provides 3D image points.
 We noticed that we can multiply the points $\myvec{p}$
@@ -163,7 +164,7 @@ ${\lambda}'$ and the equation is still valid. Thus, we obtain
 \end{equation*}
 
 Therefore, we divide the 3D points obtained from the spherical images by their 
-3rd component, discard it, and use the resulted 2D points as input for the 
+3rd component, discard it and use the resulted 2D points as input for the 
 MATLAB's essential matrix estimation routine, {\tt estimateEssentialMatrix}.
 
 \begin{figure}
@@ -202,9 +203,9 @@ This is not a problem, on the contrary, this helps the essential matrix
 estimation since it adds more redundant data to the input. We would obtain the
 same estimation for $E$ if we used frontal (rear) points only.
 
-The only thing we have to take care of is numerical error: if we divide by a 
+The only thing we have to take care of is the numerical error: if we divide by a 
 small number, the result is affected by a large error. Therefore we
-set a minimal value for the 3rd component magnitude a feature point must 
+set a minimum value for the 3rd component magnitude a feature point must 
 have in order for it to be used in motion estimation. 
 We called this threshold parameter $z_{min}$.
 The red part of the sphere in Figure~\ref{fig:sphere_division} are the ones
@@ -228,9 +229,9 @@ a more accurate result.
 Once $E$ has been estimated, we need to decompose it in the 
 \( [R|\myvec{t} ] \) form. This is again performed by a Computer Vision 
 Toolbox's function: {\tt relativeCameraPose}.
-The input for this function are the essential matrix computed before, the 
+The input for this function is the essential matrix computed before, the 
 camera parameters and the matches found in the last two images.
-The reason why this function needs the matches is because there are 4 possible 
+The reason why this function needs the matches is that there are 4 possible 
 SVD decomposition for the essential matrix. Each of this represents a 
 different physical configuration for the cameras and world points.
 In order to decide which decomposition is correct, the {\tt relativeCameraPose}
@@ -238,9 +239,9 @@ reprojects the matches in their corresponding world points according to each
 decomposition and selects the one that reprojects most of the correspondences in 
 front of both cameras.
 Since our cameras are full spherical and the image points belong to the 
-rear hemisphere too, we need to provide as input to this function only 
-those points that belongs to the frontal hemisphere. In this way, the routine 
-can correctly estimate the camera's positions relatively to the set of frontal
+rear hemisphere too, we need to provide only those points that belong to the 
+frontal hemisphere as input to this function. In this way, the routine 
+can correctly estimate the camera's positions relative to the set of frontal
 points just like it would do for perspective cameras.
 The reduced number of matching points for the input of the 
 {\tt relativeCameraPose} function does not compromise the accuracy of the pose 
@@ -249,7 +250,7 @@ correct SVD.
 
 \subsection{Relative Scale Estimation}
 Every relative motion between two views can only be estimated up to an unknown 
-scale factor. Indeed the scale affects just the translation but still it has to 
+scale factor. Indeed the scale affects just the translation but still, it has to 
 be computed in order to create a coherent set of camera poses.
 We obtain the relative scale with the formula from 
 Equation~\ref{eq:relative_scale} \cite{scaramuzzaVisualOdometryI}.
@@ -278,11 +279,11 @@ The bundle adjustment tries to reduce the sum of reprojection errors by changing
 world points, and camera positions. 
 We keep the camera poses associated with the two oldest frames of the window 
 fixed in order to prevent the adjustment from modifying the reconstruction's 
-scale. This constraint also help by reducing the number of variables for the 
+scale. This constraint also helps by reducing the number of variables for the 
 adjustment.
 
 \subsection{Global Bundle Adjustment}
-When all the views has been processed, we perform a final bundle adjustment 
+When all the views have been processed, we perform a final bundle adjustment 
 step, in order to further reduce drift. Again, the first two poses are fixed in 
 order to keep the relative scale.
 
