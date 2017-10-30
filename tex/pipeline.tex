@@ -47,7 +47,7 @@ iteration.
 Then, the pose of each camera can be described as the composition of the 
 motions between each view pair. We perform a bundle adjustment for the last five 
 poses in order to reduce the effect of drift.
-\textbf{Francesco's note: metti un puntatore al drift definito nel capitolo precedente
+\textbf{Francesco's note: metti un puntatore al drift definito nel capitolo precedente}
 
 After the processing of all images, a final bundle adjustment step is performed. 
 This optimizes every camera pose (previously estimated) in order to reduce drift error further.
@@ -92,7 +92,7 @@ estimation comes from the sides of the camera. Therefore, the removal of interes
 points near the poles does not affect the final result.
 
 \subsection{Features Matching}
-\textbf{Francesco's note: aggiungere un \ref alla sezione nello stato dell'arte dove questa strategia
+\textbf{Francesco's note: aggiungere un \\ref alla sezione nello stato dell'arte dove questa strategia
 viene descritta.}
 The matching strategy, which we carried out for equirectangular images, is the same one 
 adopted with standard images: two keypoints matches if the distance between 
@@ -152,7 +152,7 @@ We noticed that we can multiply the points $\myvec{p}$ and $\myvec{p}'$ by two
 scalars ${\lambda}$ and ${\lambda}'$ and the equation is still valid. Thus, we obtain
 
 \begin{equation*}
-\lambda^\prime\mathbf{p}^\prime^\top E\lambda\mathbf{p} = 0 \text{.}
+\lambda^\prime{\mathbf{p}^\prime}^\top E\lambda\mathbf{p} = 0 \text{.}
 \end{equation*}
 
 Therefore, we divide the 3D points obtained from the spherical images by their 
