@@ -18,51 +18,51 @@ SfM is a general term, and it also includes \textit{visual odometry} (VO). This 
 
 Another field of robotic/computer vision research that is very close to VO is \textit{simultaneous localization and mapping} (SLAM). SLAM targets the problem of creating a map of the environment where a camera-equipped agent navigates and simultaneously estimating its path. Scaramuzza\cite{scaramuzzaVisualOdometryI} pointed out that while VO is more focused on local motion estimation, SLAM's goal is to obtain a global consistent estimation of the agent movements.
 %
-In order to reduce error, SLAM keeps track of the visited path and can decide when the agent has come back to a previously visited location. This extra step in SLAM's pipeline is called \textit{loop closure} and provides an additional constraint used to reduce errors in both the agent's path and 
-environment reconstruction. Durrant-White et al.\cite{durrant1996localization} firstly introduced the term SLAM.
+In order to reduce errors, SLAM keeps track of a visited path and can decide when the agent has come back to a previously visited location. This extra step in SLAM's pipeline is called \textit{loop closure} and provides an additional constraint used to reduce errors in both the agent's path and 
+environment reconstruction. Durrant-Whyte et al.\cite{durrant1996localization} firstly introduced the term SLAM.
  
 \section{Densification: from Sparse to Dense Point Cloud}
-A sparse point cloud is the product of most SfM pipelines; some keypoints are tracked in each photograph and are then used by the motion estimation algorithm. These keypoints are triangulated and their corresponding world points are available during ego-motion estimation.
+A sparse point cloud is the product of most SfM pipelines; some keypoints are tracked in each photograph and are then used by a motion estimation algorithm. These keypoints are triangulated and their corresponding world points are available during ego-motion estimation.
 %
-A set of triangulated keypoints is a sparse point cloud around the camera's path. This set provides a first approximation of the environment reconstruction.
-Typically, starting from this information, it is possible to obtain a complete reconstruction of the 3D environment by applying
+A set of triangulated keypoints is a sparse point cloud around the camera's path. This set provides a first approximation of the environment that we want to reconstruct.
+Typically, starting from this information, it is possible to obtain a complete reconstruction of a real-world environment by applying
 a so-called \emph{Multi-View Stereo} algorithm. The goal of Multi-View Stereo\cite{seitz2006comparison} is to reconstruct a complete
 3D object model from a collection of images taken from known camera poses.
-Many of these algorithms obtain a dense point cloud starting from the sparse reconstruction, and then 
-estimate the final surface according to this dense point set.
+Many of these algorithms obtain a dense point cloud starting from an initial sparse reconstruction, and then estimate the final surface according to this dense point set.
 
 Our approach consists in densifying the point cloud by computing, for each pair of consecutive images, 
 a depth map. These depth maps are merged to obtain a dense set of reconstructed points. At this point, the 
 surface can be reconstructed by applying a surface fitting algorithm such as the standard Poisson reconstruction\todo{??CITARE??}.
-A depth map consists in associating a value of depth for each pixel of the images pair.
-The depth map estimation involves the calculation of a \emph{disparity map} from the images pair. 
-This is a map of the distance in pixels from a point in a reference image and its corresponding point in the 
-other image. Higher is the disparity of a given pixel, higher is the parallax and hence the depth of that pixel. 
-The map is usually computed based on some kind of similarity 
-metric such as \emph{sum of absolute distances} (SAD), 
-\emph{sum of squared distances} (SSD), 
-\emph{normalized cross correlation} (NCC), etc. These provide a way to 
-compute the corresponding point in the second image, thus enabling the 
+A depth map is an image in which each pixel stores a depth value; i.e., the distance from the optical centre of the camera to an object in the scene.
+The depth map estimation involves the calculation of a \emph{disparity map} from an images pair. 
+This is an image of the distance in pixels from a point in a reference image and its corresponding
+point in the other one. Higher is the disparity of a given pixel, higher is the parallax and hence the depth of that pixel. 
+%
+The computation of a disparity map is usually based on a similarity metric such as 
+\emph{sum of absolute distances} (SAD), \emph{sum of squared distances} (SSD), 
+\emph{normalized cross correlation} (NCC), etc. 
+These provide a way to compute the corresponding point in the second image, thus enabling the 
 computation of the disparity for every point in the reference image.
-Figure~\ref{fig:disparity_example} shows an example of disparity map.
+Figure~\ref{fig:disparity_example} shows an example of a disparity map.
 
 \begin{figure}[h]
 	\centering
 	\begin{subfigure}{0.4\textwidth}
 		\centering
-		\includegraphics[width=0.7\textwidth]{img/aloe_view1}
+		\includegraphics[width=0.7\textwidth]{img/aloe_view1}        
 	\end{subfigure}
 	\begin{subfigure}{0.4\textwidth}
 		\centering
 		\includegraphics[width=0.7\textwidth]{img/aloe_disparity}
 	\end{subfigure}
-	\caption{\label{fig:disparity_example}An example of disparity map from the
-	Middlebury dataset~\cite{hirschmuller2007evaluation}}
+	\caption{\label{fig:disparity_example}An example of a disparity map from the
+	Middlebury dataset~\cite{hirschmuller2007evaluation}: On the left, the input
+    photograph. On the right, the corresponding depth map of the photograph on the left.}
 \end{figure}
 
 \section{Omnidirectional and Full Spherical Cameras}
 \label{sec:cameraclassification}
-Omnidirectional cameras are characterized by a wide field of view. Indeed, many of this kind of devices can take pictures with a 180\degree view angle or even wider.
+Omnidirectional cameras are characterized by a wide field of view. Indeed, many of these cameras can take pictures with a 180\degree view angle or even wider.
 
 There are several ways to obtain panoramic images, they include:
 \begin{itemize}
@@ -395,8 +395,8 @@ BA is a delicate step that can affect a SfM pipeline in many ways
 it can reduce computation speed and fail to obtain the desired accuracy.
 
 \section{Robust Estimation}
-In the previous sections, we described the core steps of a SfM pipeline.
-Even though these are all the components needed for a working SfM software, 
+In the previous sections, we have described the core steps of a SfM pipeline.
+Even though these are all components needed for a working SfM software, 
 there are some improvements widely used by similar pipelines nowadays
 that can further increase the reconstruction and pose estimation 
 precision and robustness, and, in general, make these pipelines more effective.
@@ -424,13 +424,13 @@ employed in SfM software.
 \end{figure}
 
 \subsection{Feature Detectors}
-As we discussed in section~\ref{subsec:motion_estimation}, in order to estimate
+As we have discussed in section~\ref{subsec:motion_estimation}, in order to estimate
 the essential matrix, we need to find corresponding points in image pairs.
 Typically, these points are called \textit{feature points} or \textit{keypoints}.
 %
 A feature point is an area in an image that is likely to be unique; i.e., it is a point of interest such as a corner.
 %
-Furthermore, for each feature point, we can extract some local information that describes it, this piece of information is called \textit{feature descriptor} and it is usually stored as a vector.
+Furthermore, for each feature point, we can extract some local information that describes it, this piece of information is called \textit{feature descriptor}, and it is usually stored as a vector.
 %
 There are many different algorithms to extract feature points and descriptors such as the 
 \emph{Moravec detector}~\cite{moravec1980obstacle}, the \emph{Harris
@@ -496,17 +496,17 @@ In section~\ref{subsec:related_work}, we give an overview of the efforts of
 previous studies on this topics and describe the contribution of our work to 
 this field.
 
-\subsection{Spherical camera model}
+\subsection{Spherical Camera Model}
 \label{subsec:spherical_camera_model}
-In Figure~\ref{fig:camera_model} we can see the full spherical camera model.
+In Figure~\ref{fig:camera_model}, we can see the full spherical camera model.
 The axes' origin is also the centre of projection. The image is formed on 
 the unitary sphere whose centre coincides with the centre of projection.
 $\myvec{m}$ is the projection on the sphere for the world point 
 $\myvec{M}$, thus $\myvec{m}$ is a unitary vector that lies on the ray that goes
 from the centre of projection to the point $\myvec{M}$.
 The image point $\myvec{m}$ is defined by the spherical coordinate 
-system composed of the two angles $\lambda$ and $\phi$, that represent the 
-longitude and latitude respectively. 
+system composed of the two angles $\lambda$ and $\phi$, which represent, respectively, the 
+longitude and latitude. 
 We can use the following formula to convert the spherical coordinates to 
 euclidean:
 \begin{equation}
@@ -518,17 +518,19 @@ euclidean:
 		\cos\phi\cos\lambda
 	\end{pmatrix}	\text{.}
 \end{equation}
+
 Since this model is essentially different from the 
 perspective camera's~\cite{szeliski2010computer}, the traditional procedures 
 for pose estimation of the computer vision frameworks can not be used.
-We show in section~\ref{sec:keypoints_conversion} how we can still exploit
+In section~\ref{sec:keypoints_conversion}, we show how we can still exploit
 equation~\ref{eq:epipolar_equation} to estimate the essential matrix and use it
 to compute the camera motion.
+
 \begin{figure}[h]
     \centering
     \def\svgwidth{0.7\columnwidth}
     \input{img/coordinate_system.pdf_tex}
-    \caption{Full spherical camera model.}
+    \caption{The full spherical camera model.}
 	\label{fig:camera_model}
 \end{figure}
 
@@ -542,6 +544,7 @@ linear dimensions of the image (height and width); latitude increases from
 top to bottom while longitude increases from left to right.
 In particular, the equirectangular mapping for full spherical images is the
 following:
+%
 \begin{subequations}
 	\label{eq:ll2Cartesian_first}
 	\begin{align}
@@ -549,6 +552,7 @@ following:
 	\phi &= \frac{\pi}{2} - \frac{v}{H \pi}\text{,}
 	\end{align}
 \end{subequations}
+%
 \noindent where \textit{W} and \textit{H} are, respectively, 
 the image's width and height while $u$ and $v$ are the pixel coordinate 
 in the equirectangular image, like in figure~\ref{fig:equirectangular}.
@@ -564,6 +568,7 @@ with the block-matching algorithms for disparity map computation.
 In Section~\ref{sec:pipeline_densification} we describe the modified 
 block-matching procedure we designed to reduce the effect of distortions 
 when computing disparity maps.
+
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=0.8\textwidth]{img/equirectangular}
@@ -582,60 +587,65 @@ devices with a single image sensor (no stitching), therefore, as we said in
 section~\ref{sec:cameraclassification}, none of this types of camera is capable
 to produce full spherical images.
 
-In~\cite{li2008binocular,li2006real}, Li developed a rectification procedure for wide
-FOV cameras that enable the computation of disparity maps with standard 
+Li\cite{li2008binocular,li2006real} developed a rectification procedure for wide
+FOV cameras that enables the computation of disparity maps with standard 
 block-matching algorithms; the rig he used for testing was composed of 
 fisheye cameras that could not provide full spherical views.
-Ma et al. in~\cite{ma20153d} used equirectangular images produced with a 
-RICO THETA S to create disparity maps. They manually selected some 
-correspondences in order to compute the essential matrix correctly and then 
+%
+Ma et al.\cite{ma20153d} used equirectangular images produced with a 
+Ricoh Theta S to create disparity maps. They manually selected some 
+correspondences in order to compute the essential matrix correctly. Then, they 
 used the epipolar geometry to remove correspondences outliers after an 
-automatic feature matching step. Because of the user intervention in 
-the pipeline, they could not test their results on long sequences, moreover, the
+automatic feature matching step. Due to the user intervention in 
+the pipeline, they could not test their results on long sequences. Moreover, the
 computed disparity was noisy.
+%
 On the contrary, Arican et al.~\cite{arican2007dense} developed a new algorithm
-based on graph-cut to compute disparities for omnidirectional images directly.
-They obtained high-quality disparity maps with thanks to their new method.
-Im et al.~\cite{im2016all} focused on the creation of a framework to produce
-depth maps 
-with full spherical consumer devices. They focused on short video sequences 
-with small motions of the camera as input data.
-Aly et al.~\cite{aly2012street} extracted the interest points' directions from the
-equirectangular 
-images with Equation~\ref{eq:ll2Cartesian_second} and then used the 
+based on graph-cut to compute high-quality disparities of omnidirectional images directly.
+%
+Im et al.~\cite{im2016all} created a framework focused on the production of depth maps using full spherical consumer cameras in which the input was a short video sequence with small camera motion.
+%
+Aly et al.~\cite{aly2012street} extracted interest points' directions from the
+equirectangular images using Equation~\ref{eq:ll2Cartesian_second}, then they used the 
 epipolar equation (\ref{eq:epipolar_equation}) to estimate the essential matrix.
 Their work focused only on pose estimation from a unordered set of images
 and they assumed the camera movements were constrained to a plane.
-In~\cite{kangni2007orientation}, Kangni et al. converted the full spherical image format to 6 
-separate perspective projection on the faces of a cube around the viewer; 
-then they used the epipolar equation to obtain the essential matrix;
-they focused on motion estimation without dense reconstruction.
+%
+Kangni et al.~\cite{kangni2007orientation} converted the full spherical image format to six 
+separate perspective projections onto the faces of a cube around the viewer. 
+Then, they used the epipolar equation to obtain the essential matrix focusing on motion estimation without dense reconstruction.
 %\todo[inline]{citare Arican e Densificazione di Pagani}
 Pagani et al.~\cite{pagani2011structure} designed a SfM pipeline for full
-spherical cameras, that exploits spherical coordinates directly (without 
-reprojecting the 3D directions on a planar image). They focused their studies on
-the effect of the different error metrics for pose estimation and provided a 
-sparse reconstruction and pose estimation algorithm.
+spherical cameras, which exploits spherical coordinates directly (without 
+reprojecting the 3D directions on a planar image). Their work has the main
+goal to study the effect of the different error metrics for pose estimation.
+Furhtermore, they introduced a novel sparse reconstruction and pose estimation algorithm.
 
 In this work, we propose a complete SfM pipeline with dense point cloud 
 reconstruction for 360\degree video sequences with the following 
 characteristics:
 \begin{itemize}
-	\item no view selection is needed, i.e. it works with every frame of the 
+	\item no view selection is needed; i.e., it works with every frame of the 
 	input video sequence by automatically discarding the unnecessary images;
-	\item the pose estimation is based on the 2D-to-2D approach
-	(see section~\ref{subsec:motion_estimation}) and it uses both frontal and
+    %
+	\item the pose estimation is based on a 2D-to-2D approach
+	(see section~\ref{subsec:motion_estimation}), and it uses both frontal and
 	backward hemisphere's correspondences;
+    %
 	\item it employs a novel block-based disparity estimation algorithm that 
-	reduces the matching problems caused by the
-	typical distortions of equirectangular images;
+	reduces matching issues caused by the typical distortions of equirectangular images;
+    %
 	\item it provides a dense point cloud as an estimation of the environment.
 \end{itemize}
-Our contribution includes:
+%
+Our contributions include:
+%
 \begin{itemize}
-	\item the development of the frame selector that chooses the images to be
-	used for motion estimation among all the video's frames;
-	\item the adaptive block-matching algorithm for disparity maps with 
+	\item a novel method for selecting frames to be employed for motion estimation 
+    among all frames in a video;
+    %
+	\item a novel adaptive block-matching algorithm for disparity maps for 
 	equirectangular images;
-	\item the entire implementation of our SfM pipeline in MATLAB.
+    %
+	\item a functioning MATLAB implementation of our SfM pipeline.
 \end{itemize}.
