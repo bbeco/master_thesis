@@ -22,6 +22,7 @@ In order to reduce errors, SLAM keeps track of a visited path and can decide whe
 environment reconstruction. Durrant-Whyte et al.\cite{durrant1996localization} firstly introduced the term SLAM.
  
 \section{Densification: from Sparse to Dense Point Cloud}
+\label{sec:mvs}
 A sparse point cloud is the product of most SfM pipelines; some keypoints are tracked in each photograph and are then used by a motion estimation algorithm. These keypoints are triangulated and their corresponding world points are available during ego-motion estimation.
 %
 A set of triangulated keypoints is a sparse point cloud around the camera's path. This set provides a first approximation of the environment that we want to reconstruct.

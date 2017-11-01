@@ -91,7 +91,7 @@ upward and downward respectively, while most of the matches useful for pose
 estimation comes from the sides of the camera. Therefore, the removal of interesting 
 points near the poles does not affect the final result.
 
-\subsection{Features Matching}
+\subsection{Features Matching}\label{subsec:feature_matching}
 \textbf{Francesco's note: aggiungere un \\ref alla sezione nello stato dell'arte dove questa strategia
 viene descritta.}
 The matching strategy, which we carried out for equirectangular images, is the same one 
@@ -278,4 +278,142 @@ order to keep the relative scale.
 
 \section{Point Cloud Densification}
 \label{sec:pipeline_densification}
-\todo[inline]{ancora da scrivere}
+In this chapter, we describe our pipeline's multi-view reconstruction step.
+Its goal is to create a dense point cloud from the sparse one that we obtain
+from the previous pose estimation step.
+As we said in Section~\ref{sec:mvs}, the approach we followed for the
+reconstruction is based on merging several depth maps that have been computed
+from a set of consecutive image pairs.
+In order to compute the disparity maps, we have to transform each image pair
+through the \emph{rectification} transformation, i.e. the images have to be
+transformed as they were taken from cameras whose X-axes were aligned along the
+baseline and whose Z-axes lay on the same plane.
+The purpose of the rectification is to speed up the computation and reduce the 
+complexity of the disparity estimation step; it also helps by
+reducing the wrong correspondences we would find with
+non-rectified image pairs. Section~\ref{subsec:rectification} describes the
+rectification for spherical cameras.
+Once we have rectified image pairs, we use a block-matching algorithm to create
+the disparity map. In Section~\ref{subsec:disparityMap}, we describe
+the specific correspondence metric we use and the details about our own
+solution to reduce the effect of the equirectangular image format distortions
+(Section~\ref{subsubsec:patch_creation}).
+Sections~\ref{subsec:triangulation} and \ref{subsec:merging_worldPoints}
+describe how we compute the 3D points' coordinates and express these points in
+a unique coordinate system.
+Figure~\todo{aggiungere riferimento immagine} shows all the steps needed to
+create a dense point cloud from the previously estimated camera poses and
+corresponding views.
+In this thesis, we use the naming convention shown in Figure~\todo{aggiungere ref}.
+
+\missingfigure{Immagine per la densificazione come flow chart di SfM}.
+
+
+\missingfigure{Aggiungere immagine per mostrare le convenzioni sui nomi utilizzate in questa tesi}
+
+\subsection{Image Pairs Rectification}
+\label{subsec:rectification}
+The goal of the rectification is to transform the two images in a pair such that
+corresponding points share the same value for a certain component of their
+image coordinates. If we can achieve this property in image pairs, then the
+correspondence search problem's complexity is drastically reduced, since,
+after rectification, the search domain is shrunk from a
+2D-space to a 1D-space.
+It is important to notice that, given a point in the reference image $L$,
+the possible positions that the corresponding point in the other image can
+assume are always constrained to a line, even if the pair is not
+rectified; these lines are called
+\emph{epipolar lines}~\cite{Hartley2004,szeliski2010computer}.
+
+The problem is that, without rectification, the points that lie on a specific
+epipolar line, have different coordinates depending on where they are on the
+image sphere and, in general, they do not share the same value for any of their 
+latitude or longitude angles. Thus the epipolar lines do not map to a line in
+the equirectangular image format, i.e. they are not represented by vertical or 
+horizontal lines in this bidimensional mapping of the spherical image.
+On the other hand, if the two images are rectified, all the points that lie
+on an epipolar line have the same value for their longitude component, thus
+they have the same horizontal coordinate in the equirectangular image format.
+
+We use the same rectification used by Ma et al. in~\cite{ma20153d} and obtain
+epipolar lines that map to columns in the equirectangular image format.
+In particular, given an image pair, the rectification consists in a specific
+rotation for each of the two cameras. Let's call $R_L$ and $R_R$ the rotation
+applied to the left and right camera respectively; each rotation is obtained
+by the composition of other transformations. Figure~\todo{aggiungere ref} shows
+the sequence of rotations we combine to obtain $R_L$ and $R_R$.
+
+\missingfigure{prendere immagini delle rotationi dal paper. Ricordare che il sistema di riferimento e' diverso}
+
+First the two rotations $R_{L, 1}$ and $R_{R, 1}$ align the two cameras' Y-axes
+such that they are lie on the baseline, both pointing in the same
+direction. Then $R_{R, 2}$ rotates camera $R$ around its Y-axes so that
+the orientation of $R$
+is the same as $L$'s. We apply one last rotation, $R_3$ to both
+cameras to make them lie on a side, thus aligning the epipolar lines to the
+image spheres' meridians.
+Hence the overall rotations $R_L$ and $R_R$ that we must apply to cameras $L$ and $R$
+respectively are:
+\begin{align}
+	R_L &= R_{L, 1}R_3 \\
+	R_R &= R_{R, 1}R_{R, 2}R_3	\text{.}
+\end{align}
+
+\subsection{Disparity Map Computation}
+\label{subsec:disparityMap}
+Given an image pair, the disparity map stores the distance in pixel between 
+a point found in the reference image $L$ and its correspondence in the
+other image $R$.
+In case of rectified equirectangular images the disparity for a specific pixel
+refers to the difference between the $v$-coordinate of the point in $L$ and the
+same coordinate in $R$.
+Contrary to feature matching (Section~\ref{subsec:feature_matching}), we do not
+want to find the distance for few keypoints; in fact the aim of this step is to
+find the correspondence for each point that appears in the reference image.
+The block-matching family of algorithms compute disparities by extracting the 
+pixels surrounding a point that they want to match and computing a similarity
+or error metric with the neighbourhood pixels of each of the candidate points
+in the other image. The small squared area extracted from each points is called
+\emph{patch} or \emph{block}, thus the name block-matching.
+There are several parameters in block-matching algorithms that affect the
+resulting disparity maps. Among them, there are:
+\begin{itemize}
+	\item \emph{patch size}: the number of pixels for each patch's side;
+	\item \emph{maximum disparity}: how far, in pixels, the algorithm moves
+	above and below the corresponding pixel in the other image (this is the
+	horizontal distance for block-matching algorithms for perspective
+	photographies);
+	\item similarity/error metric employed.
+\end{itemize}
+
+In our pipeline we use a block-matching algorithm with SSD error metric.
+Given the two images $I_L$ and $I_R$, the SSD metric is computed as follows:
+\begin{equation*}
+SSD(u, v, d) = \sum_{(k, l)}(I_L(u + k, v + l) - I_R(u + k, v + l + d))^2	\textit{,}
+\end{equation*}
+\noindent where $k, l \in [-N, N]$ and $I_X(i, j)$ is the intensity level
+of pixel $(i,j)$ in the $X$ grey image.
+In order to increase the matching robustness, we minimize the result of the
+interpolation between the SSD response to both the original and differential 
+images according to a parameter $\alpha$. \todo{chiedere per riferimento a paper}
+Then our SSD result is given by
+\begin{equation*}
+\begin{split}
+SSD(u, v, d) = (1 - \alpha) \left[ \sum_{(k, l)}(I_L(u + k, v + l) - I_R(u + k, v + l + d))^2\right] + \\
+	 + \alpha\left[ \sum_{(k, l)}(I_{x,L}(u + k, v + l) - I_{x,R}(u + k, v + l + d))^2 + \right. \\
+	 + \left. \sum_{(k, l)}(I_{y,L}(u + k, v + l) - I_{y,R}(u + k, v + l + d))^2 \vphantom{\sum_{(k, l)}} \right]
+\end{split}
+\end{equation*}
+
+The patch size is chosen experimentally and varies with the particular scene
+we use; it is usually set to 9 or 11 pixels.
+
+The 
+
+\subsubsection{Patch Creation}
+\label{subsubsec:patch_creation}
+
+\subsection{World Points Triangulation}\label{subsec:triangulation}
+
+\subsection{Merging World Points}\label{subsec:merging_worldPoints}
+
