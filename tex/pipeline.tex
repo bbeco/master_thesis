@@ -340,11 +340,21 @@ epipolar lines that map to columns in the equirectangular image format.
 In particular, given an image pair, the rectification consists in a specific
 rotation for each of the two cameras. Let's call $R_L$ and $R_R$ the rotation
 applied to the left and right camera respectively; each rotation is obtained
-by the composition of other transformations. Figure~\todo{aggiungere ref} shows
+by the composition of other transformations. Figure~\ref{fig:rectification} shows
 the sequence of rotations we combine to obtain $R_L$ and $R_R$.
-
-\missingfigure{prendere immagini delle rotationi dal paper. Ricordare che il sistema di riferimento e' diverso}
-
+%
+\begin{figure}
+\centering
+\includegraphics[width=\linewidth]{img/rectification.png}
+\caption{This figure shows the transformation performed with each rotation.
+First the two cameras are rotated such that their X-axes become aligned and 
+their Z-axes are parallel, then a 90\degree rotation about the Z-axes aligns
+the cameras' meridians to the epipolar lines. The resulting equirectangular
+images have corresponding points that lie on the same column.
+This picture is taken from the work of Ma et al.~\cite{ma20153d}.}
+\label{fig:rectification}
+\end{figure}
+%
 First the two rotations $R_{L, 1}$ and $R_{R, 1}$ align the two cameras' Y-axes
 such that they are lie on the baseline, both pointing in the same
 direction. Then $R_{R, 2}$ rotates camera $R$ around its Y-axes so that
@@ -465,7 +475,7 @@ disparity map routine we described in the previous section.
 This especially useful when the points are close to highly distorted areas,
 like the ones around the poles.
 
-In Figure~\todo{aggiungere ref} we show the geometry involved in the
+In Figure~\ref{fig:patch} we show the geometry involved in the
 patch creation step. In order to create a patch, we need the actual patch size
 with respect to the image sphere radius. To obtain the patch size we set the
 \emph{patch resolution}, $N$, that is the length in pixels of each side of the
@@ -496,9 +506,16 @@ When we have to compute the patch that surrounds an equirectangular image point
 whose coordinates are $(\lambda,\phi)$, we position the patch's plane such that
 it is tangent to the image sphere in $(\lambda, \phi)$, then we project
 the point neighbourhood on the patch.
+%
+\begin{figure}
+\centering
+\includegraphics[width=0.7\linewidth]{img/patch_creation.pdf}
+\caption{Patch creation: the neighbourhood pixels of the image point $m$
+are projected on the patch. This approach prevents the patch from containing
+the same distortions that are present in the equirectanguar image format.}
+	\label{fig:patch}
+\end{figure}
 
-\missingfigure{aggiungere schemi per spiegare la creazione della patch}
- 
 \subsection{World Points Triangulation}\label{subsec:triangulation}
 Once we have the disparity map for a given image pair, we analyse each
 disparity and compute a 3D point, the so-called \emph{world point}, for each
