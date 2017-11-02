@@ -353,7 +353,7 @@ is the same as $L$'s. We apply one last rotation, $R_3$ to both
 cameras to make them lie on a side, thus aligning the epipolar lines to the
 image spheres' meridians.
 Hence the overall rotations $R_L$ and $R_R$ that we must apply to cameras $L$ and $R$
-respectively are:
+respectively are:\todo{questa e' sicuramente da rivedere...}
 \begin{align}
 	R_L &= R_{L, 1}R_3 \\
 	R_R &= R_{R, 1}R_{R, 2}R_3	\text{.}
@@ -368,31 +368,33 @@ In case of rectified equirectangular images the disparity for a specific pixel
 refers to the difference between the $v$-coordinate of the point in $L$ and the
 same coordinate in $R$.
 Contrary to feature matching (Section~\ref{subsec:feature_matching}), we do not
-want to find the distance for few keypoints; in fact the aim of this step is to
+want to find the distance for few keypoints; in fact, the aim of this step is to
 find the correspondence for each point that appears in the reference image.
-The block-matching family of algorithms compute disparities by extracting the 
+The block-matching family of algorithms computes disparities by extracting the 
 pixels surrounding a point that they want to match and computing a similarity
 or error metric with the neighbourhood pixels of each of the candidate points
-in the other image. The small squared area extracted from each points is called
+in the other image. The small squared area extracted from each point is called
 \emph{patch} or \emph{block}, thus the name block-matching.
 There are several parameters in block-matching algorithms that affect the
 resulting disparity maps. Among them, there are:
 \begin{itemize}
-	\item \emph{patch size}: the number of pixels for each patch's side;
-	\item \emph{maximum disparity}: how far, in pixels, the algorithm moves
+	\item \emph{patch size}: the number of pixels for each patch's side ($N$);
+	\item \emph{maximum disparity}: this defines the boundaries for the search,
+	i.e. how far, in pixels, the algorithm moves
 	above and below the corresponding pixel in the other image (this is the
-	horizontal distance for block-matching algorithms for perspective
-	photographies);
-	\item similarity/error metric employed.
+	horizontal distance for block-matching algorithms for rectified
+	perspective pictures);
+	\item similarity/error metric employed: how the error or similarity metric
+	is calculated.
 \end{itemize}
 
-In our pipeline we use a block-matching algorithm with SSD error metric.
+In our pipeline, we use a block-matching algorithm with SSD error metric.
 Given the two images $I_L$ and $I_R$, the SSD metric is computed as follows:
 \begin{equation*}
 SSD(u, v, d) = \sum_{(k, l)}(I_L(u + k, v + l) - I_R(u + k, v + l + d))^2	\textit{,}
 \end{equation*}
 \noindent where $k, l \in [-N, N]$ and $I_X(i, j)$ is the intensity level
-of pixel $(i,j)$ in the $X$ grey image.
+of pixel $(i,j)$ in the grey image $X$.
 In order to increase the matching robustness, we minimize the result of the
 interpolation between the SSD response to both the original and differential 
 images according to a parameter $\alpha$. \todo{chiedere per riferimento a paper}
@@ -401,15 +403,49 @@ Then our SSD result is given by
 \begin{split}
 SSD(u, v, d) = (1 - \alpha) \left[ \sum_{(k, l)}(I_L(u + k, v + l) - I_R(u + k, v + l + d))^2\right] + \\
 	 + \alpha\left[ \sum_{(k, l)}(I_{x,L}(u + k, v + l) - I_{x,R}(u + k, v + l + d))^2 + \right. \\
-	 + \left. \sum_{(k, l)}(I_{y,L}(u + k, v + l) - I_{y,R}(u + k, v + l + d))^2 \vphantom{\sum_{(k, l)}} \right]
+	 + \left. \sum_{(k, l)}(I_{y,L}(u + k, v + l) - I_{y,R}(u + k, v + l + d))^2 \vphantom{\sum_{(k, l)}} \right] \text{,}
 \end{split}
 \end{equation*}
+%
+\noindent where $I_{X, J}$ and $I_{Y, J}$ are the differential images $J$
+computed along the $X$ and $Y$ direction respectively.
 
 The patch size is chosen experimentally and varies with the particular scene
 we use; it is usually set to 9 or 11 pixels.
+The maximum disparity is computed automatically for each pair; in particular,
+we look for feature matches in the two images and compute the maximum vertical
+distance between matches, then we use such a value as maximum disparity.
 
-The 
+Since the disparity map is based on the rectification procedure, its quality
+is deeply affected by the previous step's result, and rectification, in turn,
+depends on the accuracy of the estimated poses. In order to compensate for
+rectification errors, we try to match each point in the reference image with points that
+lie on a vertical stripe instead of a single-pixel column in the other image
+when we look for correspondences during the disparity map
+computation. With this simple modification, we can compute disparity maps
+even in presence of small rectification errors. We set the stripes' width to 3
+pixels.
 
+Yet another problem that arises when computing disparity maps is
+\emph{occlusion}: objects that are far from the viewer may be covered by a
+foreground object in one of the two views.
+Computing the disparity of a point in the reference image that is occluded in
+the other image would produce an inevitably wrong result.
+To remove occluded points from the disparity map, we perform the additional
+\emph{cross-checking} test.\todo{Forse qui serve una citazione per il CC}
+Our cross-checking step computes two disparity maps, $M_{L,R}$ and $M_{R,L}$,
+for each image pair. Each map considers a different image as reference;
+in particular, $M_{X,Y}$ considers image $I_X$ as the reference and $I_Y$ as the
+other image. Let's assume $M_{L,R}(i, j) = d$, then we keep only those points
+that satisfy the condition:
+%
+\begin{equation*}
+	i + M_{R, L}(i + d, j) + d< t \text{,}
+\end{equation*}
+%
+\noindent where $t$ is a threshold in pixels that we set to 2.
+Occluded points are not likely to verify the constraint above, hence they are
+discarded.
 \subsubsection{Patch Creation}
 \label{subsubsec:patch_creation}
 
