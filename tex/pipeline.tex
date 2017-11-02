@@ -448,8 +448,87 @@ Occluded points are not likely to verify the constraint above, hence they are
 discarded.
 \subsubsection{Patch Creation}
 \label{subsubsec:patch_creation}
+The disparity map computing procedure that we have described so far is not
+different from an equivalent procedure for the perspective case,
+with the only exception of the orientation of the epipolar lines in the
+rectified pairs (that are vertical instead of horizontal).
+The main difference of our reconstruction phase from the traditional ones is
+in the patch creation step.
+The patch is usually obtained by the neighbourhood pixels of the point we want
+to match, but, if we apply this method to equirectangular images, we keep all
+the distortions introduced by this image format, and these can prevent
+correct matching results.
+Instead, we introduce a novel patch creation algorithm that removes such
+distortions by projecting the pixels around the points on a plane.
+In this way, we obtain a less distorted patch that we can then use in the
+disparity map routine we described in the previous section.
+This especially useful when the points are close to highly distorted areas,
+like the ones around the poles.
 
+In Figure~\todo{aggiungere ref} we show the geometry involved in the
+patch creation step. In order to create a patch, we need the actual patch size
+with respect to the image sphere radius. To obtain the patch size we set the
+\emph{patch resolution}, $N$, that is the length in pixels of each side of the
+square patch. Then we compute the two angular
+resolutions of the equirectangular image with the formulas:
+%
+\begin{subequations}
+	\label{eq:angular_resolution}
+	\begin{align}
+	\sigma_u &= \frac{2\pi}{W} \\
+	\sigma_v &= \frac{\pi}{H}	\text{,}
+	\end{align}
+\end{subequations}
+%
+\noindent where $W$ and $H$ are the with and height of the equirectangular
+image, then we set $\sigma_{max} = max(\sigma_u, \sigma_v)$.
+Given the patch resolution and the image's angular density, $\sigma$, we can
+compute the FOV, $\theta$, for the patch projection and use it to compute
+the actual patch size, $s$, accordingly to the formula
+%
+\begin{equation*}
+s = 2\tan\left(\frac{N\sigma_{max}}{2}\right)
+\end{equation*}
+%
+Once we have the patch size and its resolution, we project the point of the
+spherical image on the patch itself.
+When we have to compute the patch that surrounds an equirectangular image point
+whose coordinates are $(\lambda,\phi)$, we position the patch's plane such that
+it is tangent to the image sphere in $(\lambda, \phi)$, then we project
+the point neighbourhood on the patch.
+
+\missingfigure{aggiungere schemi per spiegare la creazione della patch}
+ 
 \subsection{World Points Triangulation}\label{subsec:triangulation}
+Once we have the disparity map for a given image pair, we analyse each
+disparity and compute a 3D point, the so-called \emph{world point}, for each
+non-occluded point in the disparity map.
+In fact, we use the disparity to obtain the image coordinates (latitude and
+longitude) of the same world point as it appears in the two camera views,
+thus we have the two directions where this point lies; the world point is
+the intersection of these directions.
+In practice, the lines defined by these two directions do not intersect
+because of the errors that are introduced by several factors (lens
+distortions, image resolution, etc.). The solution is to find mean point of the
+distance between the directions and that represent the best estimation
+of the real world point's position.
+Our triangulating function exploit the MATLAB's {\textit triangulateMidPoint}
+that implements the solution proposed by Hartley and Sturm in
+\cite{hartley1997triangulation}. Since our matches are located on the two
+image spheres, they are 3D points, thus we have to divide each of them by their
+3rd component and discard it before passing them as parameters to the
+MATLAB's function. This step is exactly the same that we used to prepare
+the input parameters for the essential matrix estimation function that we
+call in the camera pose estimation phase. The same considerations we made in
+Section~\ref{sec:keypoints_conversion}
+hold and, in particular, we do not consider those points whose
+3rd component magnitude is less than a given threshold, $z_{min} = 0.01$.
+
+The triangulated points are expressed in a reference system that has the same
+orientation and position of the reference camera of the view pair.
+Since the image coordinates of the matches are given for the rectified pairs,
+we have to apply the inverse rotation, $R_L^\top$, in order to obtain the true
+world point positions (see Section~\ref{subsec:rectification}).
 
 \subsection{Merging World Points}\label{subsec:merging_worldPoints}
 
