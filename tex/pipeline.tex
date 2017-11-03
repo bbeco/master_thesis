@@ -533,7 +533,7 @@ that implements the solution proposed by Hartley and Sturm in
 \cite{hartley1997triangulation}. Since our matches are located on the two
 image spheres, they are 3D points, thus we have to divide each of them by their
 3rd component and discard it before passing them as parameters to the
-MATLAB's function. This step is exactly the same that we used to prepare
+MATLAB's function. This step is exactly the same that we used in order to prepare
 the input parameters for the essential matrix estimation function that we
 call in the camera pose estimation phase. The same considerations we made in
 Section~\ref{sec:keypoints_conversion}
@@ -547,4 +547,21 @@ we have to apply the inverse rotation, $R_L^\top$, in order to obtain the true
 world point positions (see Section~\ref{subsec:rectification}).
 
 \subsection{Merging World Points}\label{subsec:merging_worldPoints}
-
+As we pointed out in the previous section, the world points are always
+expressed in a reference system whose centre coincides with the reference
+camera's centre of projection and that is oriented as the reference camera
+itself.
+Thus, in order to obtain a coherent point cloud, we have to express every world
+point in a global coordinate system.
+We want to merge all the point clouds obtained by the image pairs
+according to the coordinate system defined
+by the first view analysed. Hence, for each world point $\myvec{M}$ obtained by
+an image pair whose reference camera is located at $\myvec{t}$ with orientation
+$R$, we have to compute the translated point $\myvec{M}^\prime$ as
+%
+\begin{equation*}
+\myvec{M}^\prime = R^\top \myvec{M} + \myvec{t} \text{.}
+\end{equation*}
+%
+\noindent Once every point has been translated, the overall point cloud is
+simply the union of every set of image pairs' world points.
