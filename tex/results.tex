@@ -7,7 +7,8 @@ while we only give a qualitative evaluation for the multi-view stereo
 reconstruction step for both the syntetic and real video sequences.
 We obtained all the results with MATLAB R2017a on a \todo{aggiungere caratteristiche macchina laboratorio}
 
-\section{Synthetic Scenes}
+\section{Data Sets Description}
+\subsection{Synthetic Scenes}
 The first synthetic environment is a simple one we created in Blender 2.78c;
 it is composed of a room with 5 polyhedrons. We added some image textures to both
 the room's walls and the shapes' faces to reduce matching outliers.
@@ -84,7 +85,7 @@ for this second environment.
     \label{fig:test_square}
 \end{figure}
 
-\section{Real environment}
+\subsection{Real environment}
 We test our pipeline with a real video footage too. We do have the ground truth
 for the camera poses in the real environment but the quality of the
 reconstruction is an indicator of the pipeline performance.
@@ -99,3 +100,78 @@ We present some pictures of the real environment toghether with some examples
 of the equirectangular images of the town square in Figure~\todo{REF}.
 %
 \missingfigure{aggiungere foto piazza leoni}
+
+\section{Experiment Results}
+\subsection{Window Size Test}
+We perform some an experiment to chose the optimal window size for the windowed
+bundle adjustment (Section~\ref{subsec:windowed_ba}). In this experiment we 
+use the synthetic town square and compute the sum of absolute pose error, in
+particular we find the location and angular errors for the estimated poses.
+Figure~\ref{fig:sumAbsLocError} shows the comparison of the resulted location error for 20
+estimated poses with respect to several windowed and non-windowed adjustment
+techniques.
+In particular we can see that the pose error is minimal when we employ the
+windowed bundle adjustment with a window that contains 5 poses at a time.
+Windows smaller than 5 do not bring substantial improvements (remember that,
+as we pointed out in Section~\ref{subsec:windowed_ba}, to maintain the proper scale, we keep the two poses
+in a window fixed), while the error also increases
+for larger windows. The performance deterioration when using larger windows
+is due to the fact that the windowed adjustment may suffer of the high number
+of views to be optimized: if a series of views with wrong estimated poses are
+already inside the window and a new pose enters it, the prevalent number of
+bad estimation may result in the last pose to be aligned to the wrong trajectory
+of the previous estimation. Because of this phenomenon, all the next views
+may be incorrectly optimized, thus reducing the performance of the overall
+pose estimation.
+%
+\begin{figure}[h]
+\centering
+\includegraphics[width=\linewidth]{img/sumAbsLocError.png}
+\caption{How the location error varies with respect to the adjustment technique
+used. Angular errors present a similar behaviour with a minimum with in case
+of windowed bundle adjustment with window length set to 5 views.}
+\label{fig:sumAbsLocError}
+\end{figure}
+
+\subsection{Essential Matrix Estimation Test}\label{subsec:essential_test}
+In Section~\ref{subsec:essential_estimation} we said that our pipeline
+calls the essential matrix estimation routine until the fraction of inliers
+drops below a threshold. In Figure~\ref{fig:essential_test} we show the
+results of an experiment where we compare three different essential matrix
+evaluation approaches. The input data for this experiment is composed of
+a set of manually selected frames from the first synthetic environment.
+The reason why we select the frames is that we do not want this results to be
+influenced by the frame filter.
+%
+\begin{figure}[h]
+\centering
+\includegraphics[width=\linewidth]{img/essentialEstimation.png}
+\caption{How the location error changes with respect to different essential
+matrix estimation function approaches: the purple and light blue columns
+represent the average location error results for each frame when the
+essential estimation is performed with a single call to the routine, while the
+yellow column represent the location error when we perform the estimation
+again when the fraction of inliers is too low.}
+\label{fig:sumAbsLocError}
+\end{figure}
+
+\subsection{SfM Phase Result}
+In this test we analysed the overall results of the initial step of our
+pipeline, the motion estimation phase. We use the 365 rendered frame of our
+synthetic town square environment. Figure~\ref{fig:trajectory} shows the actual
+and estimated trajectory of the camera in the synthetic environment.
+%
+\begin{figure}[h]
+\centering
+\includegraphics[width=\linewidth]{img/trajectory.png}
+\caption{The comparison between the estimated trajectory (blue line) and
+actual trajectory (green line). as we can see the pose estimation is very close
+to the actual path.}
+\label{fig:trajectory}
+\end{figure}
+%
+\subsection{Disparity Maps}
+
+\subsection{Synthetic Environment Reconstruction}
+
+\subsection{Real Environment Reconstruction}

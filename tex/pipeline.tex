@@ -211,7 +211,7 @@ Selecting points whose last component is above a certain threshold is
 equivalent to discarding those points that do not fit in the image plane
 when projecting them. More details on this theory can be found in the Szeliski's book\cite{szeliski2010computer} and Hartley and Zisserman's books\cite{Hartley2004}.
 
-\subsection{Essential Matrix Estimation and Decomposition}
+\subsection{Essential Matrix Estimation and Decomposition}\label{subsec:essential_estimation}
 As we have described in the previous section, $E$ is estimated 
 by the function {\tt estimateEssentialMatrix} of the MATLAB's 
 Computer Vision Toolbox.
@@ -237,6 +237,14 @@ The reduced number of matching points for the input of the
 estimated, since those matches are used only to choose the 
 correct SVD.
 
+As we demonstrate with the experiments in Section~\ref{subsec:essential_test}, we obtain better
+results if we call the essential matrix estimation routine until it satisfies
+a minimum threshold of valid points ratio. This ratio is returned by the
+estimation routine itself and represent the fraction of points whose
+reprojection error, according to the estimated essential matrix,
+is below a given threshold and thus are
+considered inliers by the RANSAC algorithm.
+
 \subsection{Relative Scale Estimation}
 Every relative motion between two views can only be estimated up to an unknown 
 scale factor. Indeed the scale affects just the translation, but it has to 
@@ -255,7 +263,7 @@ from the decomposition of $E$.
 We set the first orientation, $R_0$, to $I$ and the magnitude of the first 
 translation, $t_0$, to 1.
 
-\subsection{Windowed Bundle Adjustment}
+\subsection{Windowed Bundle Adjustment}\label{subsec:windowed_ba}
 Since every local motion is inevitably affected by error, the overall 
 camera's path estimation tends to deviate from the real trajectory.
 In order to reduce the drift and to get closer to a better starting point 
