@@ -20,7 +20,6 @@ expanded further in Figures~\ref{fig:sfm_block} and \todo{aggiungere ref a immag
     point cloud. See Figures\ref{fig:sfm_block} and ....}
 	\label{fig:pipeline_overview}
 \end{figure}
-\todo{aggiungere ref a immagine}
 
 \section{Pose Estimation}
 \label{sec:pipeline_pose_estimation}
@@ -46,8 +45,8 @@ iteration.
 
 Then, the pose of each camera can be described as the composition of the 
 motions between each view pair. We perform a bundle adjustment for the last five 
-poses in order to reduce the effect of drift.
-\textbf{Francesco's note: metti un puntatore al drift definito nel capitolo precedente}
+poses in order to reduce the effect of drift (see Section~\ref{sec:vo_problem}
+for details about drift).
 
 After the processing of all images, a final bundle adjustment step is performed. 
 This optimizes every camera pose (previously estimated) in order to reduce drift error further.
@@ -61,6 +60,7 @@ between the negative Y-axis and the same projection of $m$ is the latitude
 angle ($\phi$).
 
 \textbf{Francesco's note: il flow chart non ha un begin vero, martedi' ti spiego come cambiare il flow chart}
+\todo[inline]{Non voleva essere un vero e proprio flow chart ma solo una rappresentazione informale. Se preferite il flow chart corretto, lo correggo.}
 \begin{figure}
 	\centering
 	\includegraphics[width=0.5\linewidth]{img/sfm_block.pdf}
@@ -92,11 +92,11 @@ estimation comes from the sides of the camera. Therefore, the removal of interes
 points near the poles does not affect the final result.
 
 \subsection{Features Matching}\label{subsec:feature_matching}
-\textbf{Francesco's note: aggiungere un \\ref alla sezione nello stato dell'arte dove questa strategia
-viene descritta.}
 The matching strategy, which we carried out for equirectangular images, is the same one 
 adopted with standard images: two keypoints matches if the distance between 
-their descriptors is less than a given threshold. Ambiguous matches 
+their descriptors is less than a given threshold
+(see Section~\ref{subsec:motion_estimation} for the 2D-to-2D features matching
+approach). Ambiguous matches 
 are discarded if the ratio between the distances to the two closest matches is 
 above a maximum.
 We enforce matching robustness by forcing unique correspondences; i.e.,
@@ -181,7 +181,10 @@ feature points extracted from spherical images to their projected images on a
 planar surface and used traditional techniques to estimate the camera poses.
 %
 Even though our method is very similar to Kangni et al., there are some differences.
-\textbf{Francesco's note: CHE DIFFERENZE???}
+\textbf{Francesco's note: CHE DIFFERENZE???}\todo[inline]{le differenze sono quelle che
+descrivo di seguito: maggior numero di parameteri in gioco e l'impossibilita'
+di usare front e rear con un'unica proiezione. Meglio se qui metto una lista delle 
+differenze e poi lascio il resto di questa sezione come descrizione dettagliata?}
 Projecting a point means that we have to deal with perspective geometry and its
 parameters (e.g., pixel size or density), the principal point coordinates, 
 focal length, image size, etc.
@@ -199,8 +202,9 @@ same $E$ estimation, if we used frontal/rear points only.
 
 Note that we need to take care of numerical errors only: if we divide by a 
 small number, the result is affected by a large error. Therefore, we
-set a minimum value for the 3rd component magnitude a feature point must 
-have in order for it to be used in motion estimation. \textbf{<---Francesco's note: non e' chiara questa ultima frase.}
+set a minimum value for the absolute value of the 3rd component a feature point must 
+have in order to be used in motion estimation. If the $z$-component of a
+feature point is below the threshold, we discard the point.
 %
 We called this threshold parameter $z_{min}$.
 In Figure~\ref{fig:sphere_division}, the red area is not taken into account 
@@ -312,13 +316,24 @@ a unique coordinate system.
 Figure~\todo{aggiungere riferimento immagine} shows all the steps needed to
 create a dense point cloud from the previously estimated camera poses and
 corresponding views.
-In this thesis, we use the naming convention shown in Figure~\todo{aggiungere ref}.
+In this thesis, we use the naming convention shown in
+Figure~\ref{fig:naming_convention}.
 
-\missingfigure{Immagine per la densificazione come flow chart di SfM}.
+\missingfigure{Immagine per la densificazione come figura 3.2 di SfM. Se va bene
+un equivalente di 3.2 lo faccio subito, altrimenti se e' meglio inserire un
+vero e proprio flow chart, correggo il 3.2 e faccio anche questo.}.
 
-
-\missingfigure{Aggiungere immagine per mostrare le convenzioni sui nomi utilizzate in questa tesi}
-
+\begin{figure}
+	\centering
+	\includegraphics[width=\linewidth]{img/naming_convention.pdf}
+	\caption{The naming convention used in this thesis: left camera, $C_L$,
+	is the reference camera in an image pair; point $M$ is the
+	\emph{world point} (see Section~\ref{subsec:triangulation}),
+	and $m$ and $m^\prime$ are the two image points with respect to
+	the reference and other camera respectively.}
+	\label{fig:naming_convention}
+\end{figure}
+%
 \subsection{Image Pairs Rectification}
 \label{subsec:rectification}
 The goal of the rectification is to transform the two images in a pair such that
@@ -371,11 +386,12 @@ is the same as $L$'s. We apply one last rotation, $R_3$ to both
 cameras to make them lie on a side, thus aligning the epipolar lines to the
 image spheres' meridians.
 Hence the overall rotations $R_L$ and $R_R$ that we must apply to cameras $L$ and $R$
-respectively are:\todo{questa e' sicuramente da rivedere...}
+respectively are:
 \begin{align}
 	R_L &= R_{L, 1}R_3 \\
-	R_R &= R_{R, 1}R_{R, 2}R_3	\text{.}
+	R_R &= R_{R, 1}R_{R, 2}R_3	\text{,}
 \end{align}
+\noindent where all the rotations are expressed in the post-multiplication form.
 
 \subsection{Disparity Map Computation}
 \label{subsec:disparityMap}
