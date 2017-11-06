@@ -26,8 +26,8 @@ expanded further in Figures~\ref{fig:sfm_block} and \todo{aggiungere ref a immag
 The cameras' poses estimation phase is similar to the classical visual 
 odometry pipeline. The main differences lie in the variables' format and in 
 the details concerning the procedures used.
-For each new frame (in the equirectangular format), we locate the
-SURF keypoints \cite{bay2006surf}; we consider those keypoints whose inclination angle is in the range $[-60\degree; +60\degree]$. This is because the poles may be affected by large 
+For each new frame (in the equirectangular representation), we locate the
+SURF keypoints~\cite{bay2006surf}; we consider those keypoints whose inclination angle is in the range $[-60\degree; +60\degree]$. This is because the poles may be affected by large 
 distortions, thus robust matches outside this interval are rare.
 Then, we look for matches in the last two frames. A filter performs a 
 statistical analysis on the correspondences found and decides whether the frame 
@@ -72,9 +72,9 @@ angle ($\phi$).
 \subsection{Keypoints and Features Extraction}
 In Section~\ref{sec:pipeline_pose_estimation}, we have introduced the need for 
 features detection in order to find correspondences among the image pairs.
-In our pipeline, we use SURF features and descriptors 
-\cite{bay2006surf}, which is a blob detector partly inspired by SIFT
-\cite{lowe1999object}. SURF performs convolution on integral images with box filters in order to 
+In our pipeline, we use SURF features and descriptors~\cite{bay2006surf},
+which is a blob detector partly inspired by SIFT~\cite{lowe1999object}.
+SURF performs convolution on integral images with box filters in order to 
 compute the Hessian matrix in scale space.
 This descriptor exploit keypoint's neighbourhood response to the Haar wavelet.
 SURF, as SIFT, is patented. However, it can be used freely in non-commercial
@@ -83,7 +83,7 @@ An implementation of the SURF detector is available in the MATLAB's Computer
 Vision Toolbox, and we employed it in our pipeline.
 
 \subsection{Keypoints Filtering}
-The equirectangular format for spherical images introduces significant 
+The equirectangular representation for spherical images introduces significant 
 distortions around poles. Keypoints in those areas 
 are unlikely to match reliably with other points in a consecutive view, therefore they are discarded.
 Besides, in our experiments setup, the North and South poles typically point 
@@ -125,7 +125,7 @@ in consecutive views are typically far. The selection of these points for motion
 estimation can be counter-productive because they can easily produce numerical 
 errors. 
 
-\subsection{3D-to-2D Keypoints Conversion}
+\subsection{Keypoints Conversion}
 \label{sec:keypoints_conversion}
 %
 This step converts the keypoint format of equirectangular images to a new one, which is
@@ -171,7 +171,7 @@ MATLAB's function {\tt estimateEssentialMatrix}, which estimates $E$.
 \subsubsection{Division by 3rd component vs. Projection}
 %Our method (division by the 3rd component of the vectors) and the perspective projection on a plane for feature points conversion have some important differences.
 %
-Kangni et al.\cite{kangni2007orientation} converted the 
+Kangni et al.~\cite{kangni2007orientation} converted the 
 feature points extracted from spherical images to their projected images on a 
 planar surface and used traditional techniques to estimate the camera poses.
 %
@@ -187,28 +187,30 @@ focal length, image size, etc.
 We can think to our method as a simplified perspective projection in which
 $f_x$ and $f_y$ are both set to 1, and $u_0$ and $v_0$ are 0.
 The main difference between our method and a standard projection is that, if we
-just divide each feature point by its 3rd component, we do not need to 
+just divide each feature point by its z-coordinate, we do not need to 
 differentiate between frontal and rear points.
 Figure~\ref{fig:sphere_division} shows how both the frontal point, $p$, and the 
 rear one, $q$, are projected to the same point $m$ on the image plane.
 This is not an issue, on the contrary, this helps the estimation of $E$ because 
-it adds more redundant data to the input. We would obtain the
-same $E$ estimation, if we used frontal/rear points only.
+it adds more redundant data to the input.
 
 Note that we need to take care of numerical errors only: if we divide by a 
 small number, the result is affected by a large error. Therefore, we
-set a minimum value for the absolute value of the 3rd component a feature point must 
-have in order to be used in motion estimation. If the $z$-component of a
+set a minimum value for the absolute value of the $z$-coordinate a feature point must 
+have in order to be used in motion estimation. If the $z$ of a
 feature point is below the threshold, we discard the point.
 %
 We called this threshold parameter $z_{min}$.
 In Figure~\ref{fig:sphere_division}, the red area is not taken into account 
-during motion estimation because the value of the 3rd component magnitude of points there 
+during motion estimation because the value of the magnitude of the 
+$z$-coordinate of points there 
 is below $z_{min}$.
 %
 Selecting points whose last component is above a certain threshold is 
 equivalent to discarding those points that do not fit in the image plane
-when projecting them. More details on this theory can be found in the Szeliski's book\cite{szeliski2010computer} and Hartley and Zisserman's books\cite{Hartley2004}.
+when projecting them. More details on this theory can be found in the
+Szeliski's book~\cite{szeliski2010computer} and Hartley and Zisserman's
+books~\cite{Hartley2004}.
 
 \subsection{Essential Matrix Estimation and Decomposition}\label{subsec:essential_estimation}
 As we have described in the previous section, $E$ is estimated 
@@ -222,7 +224,7 @@ Once $E$ is estimated, we need to decompose it in the
 Toolbox's function; i.e., {\tt relativeCameraPose}.
 The inputs for this function are $E$, the camera parameters, and matches found in the last two images.
 We need these matches because there are four possible decompositions for $E$. Each of these represents a different physical configuration for the cameras and world points.
-In order to decide which decomposition is correct. In general, it is necessary to reproject the matches in their corresponding world points according to each 
+In order to decide which decomposition is correct, in general, it is necessary to reproject the matches in their corresponding world points according to each 
 decomposition and selects the one that reprojects most of the correspondences in 
 front of both cameras.
 Since our cameras are full spherical and the image points belong to the 
@@ -245,7 +247,7 @@ Every relative motion between two views can only be estimated up to an unknown
 scale factor. Indeed the scale affects just the translation, but it has to 
 be computed in order to create a coherent set of camera poses.
 We obtain the relative scale using 
-Equation~\ref{eq:relative_scale} \cite{scaramuzzaVisualOdometryI}.
+Equation~\ref{eq:relative_scale}~\cite{scaramuzzaVisualOdometryI}.
 This equation provides as many results as 3D points present in the last three
 frames. In order to compensate for the effects of outliers, we take the 
 median.
@@ -298,7 +300,7 @@ rectification for spherical cameras.
 Once we have rectified image pairs, we use a block-matching algorithm to create
 the disparity map. In Section~\ref{subsec:disparityMap}, we describe
 the specific correspondence metric we use and the details about our own
-solution to reduce the effect of the equirectangular image format distortions
+solution to reduce the effect of the equirectangular image representation distortions
 (Section~\ref{subsubsec:patch_creation}).
 Sections~\ref{subsec:triangulation} and \ref{subsec:merging_worldPoints}
 describe how we compute the 3D points' coordinates and express these points in
@@ -342,14 +344,14 @@ The problem is that, without rectification, the points that lie on a specific
 epipolar line, have different coordinates depending on where they are on the
 image sphere and, in general, they do not share the same value for any of their 
 latitude or longitude angles. Thus the epipolar lines do not map to a line in
-the equirectangular image format, i.e. they are not represented by vertical or 
+the equirectangular image, i.e. they are not represented by vertical or 
 horizontal lines in this bidimensional mapping of the spherical image.
 On the other hand, if the two images are rectified, all the points that lie
 on an epipolar line have the same value for their longitude component, thus
-they have the same horizontal coordinate in the equirectangular image format.
+they have the same horizontal coordinate in the equirectangular image.
 
 We use the same rectification used by Ma et al. in~\cite{ma20153d} and obtain
-epipolar lines that map to columns in the equirectangular image format.
+epipolar lines that map to columns in the equirectangular image.
 In particular, given an image pair, the rectification consists in a specific
 rotation for each of the two cameras. Let's call $R_L$ and $R_R$ the rotation
 applied to the left and right camera respectively; each rotation is obtained
@@ -543,8 +545,8 @@ distortions, image resolution, etc.). The solution is to find the mean point of 
 distance between the directions and consider it as the best estimation
 of the real world point's position.
 Our triangulating function exploit the MATLAB's {\tt triangulateMidPoint}
-that implements the solution proposed by Hartley and Sturm in
-\cite{hartley1997triangulation}. Since our matches are located on the two
+that implements the solution proposed by Hartley and Sturm
+in~\cite{hartley1997triangulation}. Since our matches are located on the two
 image spheres, they are 3D points, thus we have to divide each of them by their
 3rd component and discard it before passing them as parameters to the
 MATLAB's function. This step is exactly the same that we used in order to prepare
