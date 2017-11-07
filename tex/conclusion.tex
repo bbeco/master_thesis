@@ -1,0 +1,39 @@
+\chapter{Conclusion}
+\lhead{\chaptername~\thechapter. \emph{Conclusion}}
+%
+\section{Future Work}
+Our SfM pipeline employs existing correspondences between adjacent frames only.
+This is because we use video sequences as input data, thus the presence of
+the same features of the current frame in the next one is a natural consequence
+of the particular nature of our input data.
+The inclusion of a more powerful \emph{scene-graph} is a possible improvement
+whose potential benefits can be investigated in the future.
+A scene graph can improve the pose estimation
+performance by introducing additional redundant data derived by 
+correspondences matching in between pairs of non consecutive images.
+A more robust features detection and matching for highly distorted images
+can improve the quality of local motion estimation by increasing the number
+of both detected and correctly matched features in image pairs.
+Some of the possible alternative algorithms are ASIFT~\cite{morel2009asift}
+that can perform better in case of views with very tilted cameras,
+or BRISK~\cite{guan2017brisks}, a feature detector inspired by
+BRISK~\cite{leutenegger2011brisk} and designed specifically for full spherical
+images.
+Another line of work to increase image pairs local motion
+\section{Conclusion}
+In this work we have proposed a SfM pipeline for full spherical cameras.
+As we pointed out in Section~\ref{sec:contribution} and
+\ref{subsec:related_work}, our contribution includes:
+\begin{itemize}
+	\item a novel frame filter that choses the frames based on visual
+	information only;
+	\item a new approach to pose estimation that exploits both frontal and rear
+	points;
+	\item a novel block-matching algorithm for disparity map creation from
+	equirectangular images.
+\end{itemize}
+We have demonstrated the effectiveness of our pipeline thanks to the
+experiments with both computer-generated and real environments.
+Even though our approach is extremely simple compared to more advanced pipeline,
+like~\cite{schonberger2016structure}, it still offers good results in terms of
+poses estimation precision and environment reconstruction.

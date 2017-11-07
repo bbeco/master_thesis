@@ -55,8 +55,8 @@ cameras that take panoramic photography to a new level:
 the 360\degree full spherical devices, capable of capturing images
 in all directions with no blind corner. This class of devices employs 
 several image sensors and integrated stitching software to automatically produce
-panoramic pictures. This is the case for the Ricoh Theta S\texttrademark 
-\cite{theta_website} we used in this work (Figure~\ref{fig:ricoh_theta}).
+panoramic pictures. This is the case for the Ricoh Theta S~\cite{theta_website}
+we used in this work (Figure~\ref{fig:ricoh_theta}).
 
 \begin{figure}[htb]
 	\centering
@@ -96,22 +96,23 @@ Further details about the camera model and the parameters can be found in Chapte
 
 \section{SfM Applications}
 SfM is a well-known topic in the computer vision community; it started after 
-the landmark papers by Longuet-Higgins \cite{longuet1981computer} and
-Nister et al. \cite{moravec1980obstacle}.
-The problem can be described as the reverse of image formation
-\cite{Wei2013}, as it targets the reconstruction of the environment 
+the landmark papers by Longuet-Higgins~\cite{longuet1981computer} and
+Nister et al.~\cite{moravec1980obstacle}.
+The problem can be described as the reverse of image formation~\cite{Wei2013},
+as it targets the reconstruction of the environment 
 and camera poses given a set of two or more images.
 Some of the first application for this technology included robotic research, 
-like navigation systems intended for rover explorations 
-\cite{moravec1980obstacle,durrant1996localization}. In fact, NASA has supported
+like navigation systems intended for rover
+explorations~\cite{moravec1980obstacle,durrant1996localization}.
+In fact, NASA has supported
 many research because of the need for navigation systems not affected by wheels
 slippage on uneven terrains.
-SfM is used in geographical data acquisition too
-\cite{fonstad2013topographic, westoby2012structure, james2012straightforward}
+SfM is used in geographical data acquisition too~\cite{fonstad2013topographic,
+westoby2012structure, james2012straightforward}
 as an alternative to other methods that employ specialized hardware and are generally more expensive.
 Furthermore, there are applications for cultural heritage conservation because 
-environment reconstructions can help in case of restoration of historical finds
-\cite{kraus2007photogrammetry}.
+environment reconstructions can help in case of restoration of historical
+finds~\cite{kraus2007photogrammetry}.
 Finally, the game industry is yet another field that can benefit from 
 SfM: real environments can be reconstructed with SfM first and then 
 improved by artists. Some game engine, as the popular Unreal Engine,
@@ -119,7 +120,7 @@ includes photogrammetry software that exploits SfM techniques. \todo{ho trovato 
 \todo[inline]{chiedere per un esempio di foto fisheye}
 \missingfigure{Aggiungere immagini applicazioni di sfm}
 
-\section{Our Contribution}
+\section{Our Contribution}\label{sec:contribution}
 In this work, we propose a novel SfM pipeline for full spherical cameras that 
 estimates the camera poses and produces a dense point cloud representing the 
 environment's geometry. We address full spherical videos with 
