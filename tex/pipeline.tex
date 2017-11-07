@@ -60,7 +60,7 @@ between the negative Y-axis and the same projection of $m$ is the latitude
 angle ($\phi$).
 
 \textbf{Francesco's note: il flow chart non ha un begin vero, martedi' ti spiego come cambiare il flow chart}
-\todo[inline]{Non voleva essere un vero e proprio flow chart ma solo una rappresentazione informale. Se preferite il flow chart corretto, lo correggo.}
+\todo[inline]{Ancora da correggere.}
 \begin{figure}
 	\centering
 	\includegraphics[width=0.5\linewidth]{img/sfm_block.pdf}
@@ -305,15 +305,18 @@ solution to reduce the effect of the equirectangular image representation distor
 Sections~\ref{subsec:triangulation} and \ref{subsec:merging_worldPoints}
 describe how we compute the 3D points' coordinates and express these points in
 a unique coordinate system.
-Figure~\todo{aggiungere riferimento immagine} shows all the steps needed to
+Figure~\ref{fig:densification_fc} shows all the steps needed to
 create a dense point cloud from the previously estimated camera poses and
 corresponding views.
 In this thesis, we use the naming convention shown in
 Figure~\ref{fig:naming_convention}.
 
-\missingfigure{Immagine per la densificazione come figura 3.2 di SfM. Se va bene
-un equivalente di 3.2 lo faccio subito, altrimenti se e' meglio inserire un
-vero e proprio flow chart, correggo il 3.2 e faccio anche questo.}.
+\begin{figure}
+	\centering
+	\includegraphics[width=\linewidth]{img/densification_fc.pdf}
+	\caption{The flow chart representing the whole reconstruction phase.}
+	\label{fig:densification_fc}
+\end{figure}
 
 \begin{figure}
 	\centering
@@ -328,17 +331,37 @@ vero e proprio flow chart, correggo il 3.2 e faccio anche questo.}.
 %
 \subsection{Image Pairs Rectification}
 \label{subsec:rectification}
-The goal of the rectification is to transform the two images in a pair such that
-corresponding points share the same value for a certain component of their
-image coordinates. If we can achieve this property in image pairs, then the
-correspondence search problem's complexity is drastically reduced, since,
-after rectification, the search domain is shrunk from a
-2D-space to a 1D-space.
+The goal of the rectification is to transform the two images of a pair
+as they were taken
+with cameras whose $x$-axes were aligned along the same line and both pointing
+toward the same direction, and whose $z$-axes were parallel.
+With this peculiar cameras' arrangement and in case of perspective cameras,
+corresponding points appears on the same row in the two rectified
+images, thus the correspondences search domain is shrunk from a
+2D-space to a 1D-space. In case of spherical cameras the rectification aligns
+corresponding points on the same meridian, hence the same column in the two
+equirectangular images.
 It is important to notice that, given a point in the reference image $L$,
 the possible positions that the corresponding point in the other image can
 assume are always constrained to a line, even if the pair is not
 rectified; these lines are called
 \emph{epipolar lines}~\cite{Hartley2004,szeliski2010computer}.
+Figure~\ref{fig:rectified_pair} shows the same image pair
+before and after rectification.
+%
+\begin{figure}
+	\centering
+	\begin{subfigure}{0.4\linewidth}
+		\includegraphics[width=\linewidth]{img/nonrectified_pair.jpg}
+	\end{subfigure}
+	\begin{subfigure}{0.4\linewidth}
+		\includegraphics[width=\linewidth]{img/rectified_pair.jpg}
+	\end{subfigure}
+	\caption{An example of the same image pair before (left) and after
+	rectification (right). Notice how, on the left of all the images,
+	the corner of the letter "e" is aligned
+	in the right hand pair while it is not in the left one.}\label{fig:rectified_pair}
+\end{figure}
 
 The problem is that, without rectification, the points that lie on a specific
 epipolar line, have different coordinates depending on where they are on the

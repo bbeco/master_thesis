@@ -44,7 +44,9 @@ Figure~\ref{fig:test6} shows some rendered images for this environment.
 	\end{subfigure}
 	%
 	\caption{The first computer-generated environment we use in our test and
-	an example equirectangular image from this scene.}
+	an example equirectangular image from this scene: two views of the scene (top row),
+	wireframe visualizations of the same scene (middle row), and an example
+	equirectangular image produced with this set up (bottom row).}
     \label{fig:test6}
 \end{figure}
 %
@@ -80,12 +82,13 @@ for this second environment.
 		\includegraphics[width=\textwidth]{img/square4}
 	\end{subfigure}
 	%
-	\caption{The computer-generated town square and a couple of example
-	equirectangular images from this environment.}
+	\caption{The computer-generated town square environment: two views of the
+	model (top row) and a two example equirectangular images produced from this
+	scene (middle and bottom row).}
     \label{fig:test_square}
 \end{figure}
 
-\subsection{Real environment}
+\subsection{Real environment}\label{subsec:real_environment}
 We test our pipeline with a real video footage too. We do not have the ground truth
 for the camera poses in the real environment but the quality of the
 reconstruction is an indicator of the pipeline performance.
@@ -177,6 +180,8 @@ pipeline, the motion estimation phase. We use the 365 rendered frame of our
 synthetic town square environment. Figure~\ref{fig:trajectory} shows the actual
 and estimated trajectory of the camera in the synthetic environment.
 %
+\todo[inline]{Devo ancora cambiare l'immagine\ref{fig:llDisparity} aggiungendo i punti sparsi 
+ottenuti da sfm e eventualmente scegliere un tratto piu' interessante in cui la camera fa una curva.}
 \begin{figure}[h]
 \centering
 \includegraphics[width=\linewidth]{img/trajectory.png}
@@ -213,6 +218,22 @@ not triangulated.}
 \end{figure}
 
 \subsection{Environments Reconstruction}
-\todo[inline]{aggiungere immagini di ricostruzione per sintetici e reale.
-Per inserire queste, aspetto di venire lunedi' a fare le ricostruzioni al
-pc del laboratorio.}
+Figure~\ref{fig:real_reconstruction} shows the resulting reconstruction of the
+real town square's loggia described in Section~\ref{subsec:real_environment}.
+%
+\todo[inline]{Questa ricostruzione e' solo una prova limitata a 4 coppie di view.}
+\begin{figure}[h]
+\centering
+	\begin{subfigure}{0.45\linewidth}
+		\centering
+		\includegraphics[width=\linewidth]{img/reconstruction1.png}
+	\end{subfigure}
+	%
+	\begin{subfigure}{0.45\linewidth}
+		\centering
+		\includegraphics[width=\linewidth]{img/reconstruction2.png}
+	\end{subfigure}
+	\caption{Two views of the dense point cloud of the real town square
+	(Section~\ref{subsec:real_environment}) obtained with our SfM pipeline.}
+	\label{fig:real_reconstruction}
+\end{figure}
