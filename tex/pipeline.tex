@@ -180,6 +180,7 @@ Even though our method is very similar to Kangni et al., there are some differen
 descrivo di seguito: maggior numero di parameteri in gioco e l'impossibilita'
 di usare front e rear con un'unica proiezione. Meglio se qui metto una lista delle 
 differenze e poi lascio il resto di questa sezione come descrizione dettagliata?}
+\todo{si metti una lista!}
 Projecting a point means that we have to deal with perspective geometry and its
 parameters (e.g., pixel size or density), the principal point coordinates, 
 focal length, image size, etc.
@@ -438,16 +439,21 @@ resulting disparity maps; among them, there are:
 \end{itemize}
 
 In our pipeline, we use a block-matching algorithm with SSD error metric.
-Given the two images $I_L$ and $I_R$, the SSD metric is computed as follows:
+Given the two images $I_L$ and $I_R$, the SSD metric is computed as:
+%
 \begin{equation*}
 SSD(u, v, d) = \sum_{(k, l)}(I_L(u + k, v + l) - I_R(u + k, v + l + d))^2	\textit{,}
 \end{equation*}
+%
 \noindent where $k, l \in [-N, N]$ and $I_X(i, j)$ is the intensity level
-of pixel $(i,j)$ in the grey image $X$.
+of pixel $(i,j)$ in the gray image $X$.
+%
 In order to increase the matching robustness, we minimize the result of the
 interpolation between the SSD response to both the original and differential 
-images according to a parameter $\alpha$. \todo{chiedere per riferimento a paper}
-Then our SSD result is given by
+images according to a parameter $\alpha$~\cite{BMVC.25.14:abbreviated}.
+%
+Then, our SSD result is given by
+%
 \begin{equation*}
 \begin{split}
 SSD(u, v, d) = (1 - \alpha) \left[ \sum_{(k, l)}(I_L(u + k, v + l) - I_R(u + k, v + l + d))^2\right] + \\
@@ -481,7 +487,7 @@ foreground object in one of the two views.
 Computing the disparity of a point in the reference image that is occluded in
 the other image would produce an inevitably wrong result.
 To remove occluded points from the disparity map, we perform the additional
-\emph{cross-checking} test.\todo{Forse qui serve una citazione per il CC}
+\emph{cross-checking} test~\cite{BMVC.25.14:abbreviated}.
 Our cross-checking step computes two disparity maps, $M_{L,R}$ and $M_{R,L}$,
 for each image pair. Each map considers a different image as reference;
 in particular, $M_{X,Y}$ considers image $I_X$ as the reference and $I_Y$ as the

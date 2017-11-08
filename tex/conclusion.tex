@@ -13,36 +13,37 @@ performance by introducing additional redundant data derived by
 correspondences matching between pairs of non-consecutive images.
 A more robust features detection and matching for highly distorted images
 can improve the quality of local motion estimation by increasing the number
-of both detected and correctly matched features in image pairs.
-Some of the possible alternative algorithms are ASIFT~\cite{morel2009asift}
-that can perform better in case of views with very tilted cameras,
-or BRISK~\cite{guan2017brisks}, a feature detector inspired by
+of both detected and correctly matched features of image pairs.
+Some of the possible alternative algorithms are ASIFT~\cite{morel2009asift}, which
+ can perform better in case of views with very tilted cameras, and
+BRISKS~\cite{guan2017brisks}, a feature detector inspired by
 BRISK~\cite{leutenegger2011brisk} and designed specifically for full spherical
 images.
 Another approach to improve local motion estimation is to
 introduce a procedure to extract
-features that are evenly distributed across the image. In fact, the more the
-keypoints are spread in the image, the more accurate is the local motion
+features that are evenly distributed across an image. The more
+keypoints are spread over an image, the more accurate is the local motion
 estimation~\cite{irschara2009structure,schonberger2016structure}.
 
 A future implementation of our pipeline is already planned; it will contribute
 to possible improvement with a procedure to extract features uniformly
-distributed across the image sphere. \todo{Chiedere se c'e' un paper da citare}
+distributed across an image sphere. \todo{Chiedere se c'e' un paper da citare}
 
 \section{Conclusion}
 In this work, we have proposed a SfM pipeline for full spherical cameras.
 As we pointed out in Section~\ref{sec:contribution} and
-\ref{subsec:related_work}, our contribution includes:
+Section~\ref{subsec:related_work}, our contribution includes:
+%
 \begin{itemize}
-	\item a novel frame filter that chooses the frames based on visual
+	\item a novel frame filter that selects frames based on visual
 	information only;
-	\item a new approach to pose estimation that exploits both frontal and rear
+	\item a new approach to estimate poses that exploits both frontal and rear
 	points;
-	\item a novel block-matching algorithm for disparity map creation from
+	\item a novel block-matching algorithm for disparity map estimation from
 	equirectangular images.
 \end{itemize}
-We have demonstrated the effectiveness of our pipeline thanks to the
-experiments with both computer-generated and real environments.
-Even though our approach is extremely simple compared to more advanced pipeline,
-like~\cite{schonberger2016structure}, it still offers good results in terms of
+%
+We have showed the effectiveness of our pipeline by testing it on 
+both computer-generated and real-world environments.
+Even though our approach is extremely straightfroward, especially when compared to more advanced pipeline (e.g.,~\cite{schonberger2016structure}, it still offers high-quality results in terms of
 poses estimation precision and environment reconstruction.
