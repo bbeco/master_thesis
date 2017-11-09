@@ -7,8 +7,8 @@ pipeline: the selection of the frames from the input sequence and the estimatati
 the camera trajectory. In Section~\ref{sec:pipeline_densification}, we describe 
 our densification algorithm for equirectangular images.
 Fig.~\ref{fig:pipeline_overview} shows a coarse visualization of these two macro parts of the 
-pipeline. Pose estimation and densification are 
-expanded further in Figures~\ref{fig:sfm_block} and \todo{aggiungere ref a immagine}.
+pipeline. Pose estimation and multiple view stereo reconstruction are 
+expanded further in Figures~\ref{fig:sfm_block} and \ref{fig:densification_fc}.
 
 \begin{figure}
     \centering
@@ -58,12 +58,10 @@ the angle between the Z-axis and the projection of $m$ on the XZ-plane in
 the clockwise direction is the longitude angle ($\lambda$), and the angle 
 between the negative Y-axis and the same projection of $m$ is the latitude 
 angle ($\phi$).
-
-\textbf{Francesco's note: il flow chart non ha un begin vero, martedi' ti spiego come cambiare il flow chart}
-\todo[inline]{Ancora da correggere.}
+%
 \begin{figure}
 	\centering
-	\includegraphics[width=0.5\linewidth]{img/sfm_block.pdf}
+	\includegraphics[width=0.5\linewidth]{img/sfm_fc.pdf}
 	\caption{The flow chart of steps performed in the pose estimation 
 	phase of our SfM pipeline.}
 	\label{fig:sfm_block}
@@ -175,12 +173,14 @@ Kangni et al.~\cite{kangni2007orientation} converted the
 feature points extracted from spherical images to their projected images on a 
 planar surface and used traditional techniques to estimate the camera poses.
 %
-Even though our method is very similar to Kangni et al., there are some differences.
-\textbf{Francesco's note: CHE DIFFERENZE???}\todo[inline]{le differenze sono quelle che
-descrivo di seguito: maggior numero di parameteri in gioco e l'impossibilita'
-di usare front e rear con un'unica proiezione. Meglio se qui metto una lista delle 
-differenze e poi lascio il resto di questa sezione come descrizione dettagliata?}
-\todo{si metti una lista!}
+Even though our method is very similar to Kangni et al., there are the following
+differences:
+\begin{itemize}
+	\item Projection has to take into account all the parameters of the
+	perspective camera model~\cite{szeliski2010computer};
+	\item two separate projections are needed if we want to use both
+	frontal and rear points.
+\end{itemize}
 Projecting a point means that we have to deal with perspective geometry and its
 parameters (e.g., pixel size or density), the principal point coordinates, 
 focal length, image size, etc.
