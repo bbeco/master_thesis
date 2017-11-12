@@ -185,10 +185,23 @@ ottenuti da sfm e eventualmente scegliere un tratto piu' interessante in cui la 
 %
 \begin{figure}[h]
 \centering
-\includegraphics[width=\linewidth]{img/trajectory.png}
-\caption{The comparison between the estimated trajectory (blue line) and
-actual trajectory (green line). as we can see the pose estimation is very close
-to the actual path.}
+\begin{subfigure}{0.45\linewidth}
+\includegraphics[width=\linewidth]{img/snapshot00.png}
+\label{fig:trajectory1}
+\end{subfigure}
+\begin{subfigure}{0.45\linewidth}
+\includegraphics[width=\linewidth]{img/snapshot01.png}
+\label{fig:trajectory2}
+\end{subfigure}
+\begin{subfigure}{\linewidth}
+\includegraphics[width=\linewidth]{img/snapshot02.png}
+\label{fig:trajectory3}
+\end{subfigure}
+\caption{The results of the pose estimation phase: estimated poses (green
+points) compard with ground truth (red points) (a); the sparse point cloud
+composed of the triangulated features points (b); another view of the sparse
+point cloud where we can distinguish the columns of the inner side of the
+walkway (c).}
 \label{fig:trajectory}
 \end{figure}
 %
