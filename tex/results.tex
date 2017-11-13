@@ -227,7 +227,32 @@ zero or that are occluded in the other image; in both cases, these points are
 not triangulated.}
 \label{fig:llDisparity}
 \end{figure}
-
+%
+\begin{figure}[h]
+\centering
+	\begin{subfigure}{0.7\linewidth}
+		\centering
+		\includegraphics[width=\linewidth]{img/original.png}
+		\caption{Original rectified pair.}
+	\end{subfigure}
+	%
+	\begin{subfigure}{0.7\linewidth}
+		\centering
+		\includegraphics[width=\linewidth]{img/our_disparity.png}
+		\caption{Computed disparity map.}
+	\end{subfigure}
+    \begin{subfigure}{0.7\linewidth}
+		\centering
+		\includegraphics[width=\linewidth]{img/legacy_disparity.png}
+		\caption{Computed disparity map.}
+	\end{subfigure}
+\caption{An example of disparity map computed with our adaptive block-matching
+algorithm. The black point in the map are points whose disparity is equal to
+zero or that are occluded in the other image; in both cases, these points are
+not triangulated.}
+\label{fig:disparity}
+\end{figure}
+%
 \subsection{Environments Reconstruction}
 Figure~\ref{fig:real_reconstruction} shows the resulting reconstruction of the
 real town square's loggia described in Section~\ref{subsec:real_environment}.
