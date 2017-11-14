@@ -185,14 +185,17 @@ and estimated trajectory of the camera in the synthetic environment.
 \centering
 \begin{subfigure}{0.45\linewidth}
 \includegraphics[width=\linewidth]{img/snapshot00.png}
+\caption{Camera's trajectory (green) with ground truth (red).}
 \label{fig:trajectory1}
 \end{subfigure}
 \begin{subfigure}{0.45\linewidth}
 \includegraphics[width=\linewidth]{img/snapshot01.png}
+\caption{Camera's trajectory and sparse point cloud.}
 \label{fig:trajectory2}
 \end{subfigure}
 \begin{subfigure}{\linewidth}
 \includegraphics[width=\linewidth]{img/snapshot02.png}
+\caption{Another view of the sparse point cloud.}
 \label{fig:trajectory3}
 \end{subfigure}
 \caption{The results of the pose estimation phase: estimated poses (green
@@ -204,8 +207,10 @@ walkway (c).}
 \end{figure}
 %
 \subsection{Disparity Maps}
-Figure~\ref{fig:llDisparity} shows an example of disparity map computed
-with our adaptive block-matching algorithm. Darker colours refer to the points
+Figures~\ref{fig:llDisparity} and \ref{fig:disparity_comparison}
+shows an example of disparity map computed
+with our adaptive block-matching algorithm and the comparison with
+traditional block-matching algorithm. Darker colours refer to the points
 with less disparity thus, farther from the camera. On the other hand, the closer
 objects have brighter colours.
 %
@@ -223,12 +228,41 @@ objects have brighter colours.
 		\caption{Computed disparity map.}
 	\end{subfigure}
 \caption{An example of disparity map computed with our adaptive block-matching
-algorithm. The black point in the map are points whose disparity is equal to
+algorithm. The black points in the map are points whose disparity is equal to
 zero or that are occluded in the other image; in both cases, these points are
 not triangulated.}
 \label{fig:llDisparity}
 \end{figure}
-
+%
+\begin{figure}[h]
+\centering
+	\begin{subfigure}{0.7\linewidth}
+		\centering
+		\includegraphics[width=\linewidth]{img/original.png}
+		\caption{Original reference image.}
+	\end{subfigure}
+	%
+	\begin{subfigure}{0.7\linewidth}
+		\centering
+		\includegraphics[width=\linewidth]{img/our_disparity.png}
+		\caption{The disparity map computed with our adaptive block-matching
+		algorithm.}
+	\end{subfigure}
+	%
+	\begin{subfigure}{0.7\linewidth}
+		\centering
+		\includegraphics[width=\linewidth]{img/legacy_disparity.png}
+		\caption{The disparity map computed with the standard block-matching
+		algorithm.}
+	\end{subfigure}
+\caption{Comparison of our adaptive block-matching algorithm's result (b) with
+standard block-matching algorithm (c). The parameters are the same for
+both algorithms. We did not perform the cross-check for the last map (c).
+The cross-check completely invalidated the maps when adaptive block-matching is
+not used.}
+\label{fig:disparity_comparison}
+\end{figure}
+%
 \subsection{Environments Reconstruction}
 Figure~\ref{fig:real_reconstruction} shows the resulting reconstruction of the
 real town square's loggia described in Section~\ref{subsec:real_environment}.
