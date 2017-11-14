@@ -5,7 +5,8 @@ We tested our approach with both some computer-generated and real-world environm
 We compare the pose estimation results with ground truth in the synthetic cases
 while we only give a qualitative evaluation for the multi-view stereo
 reconstruction step for both the synthetic and real video sequences.
-We implemented our pipeline in MATLAB R2017a, and we collected our results using a... \todo{aggiungere caratteristiche macchina laboratorio}
+We implemented our pipeline in MATLAB R2017a, and we collected our results using
+a computer equipped with an Intel i5-2400 at 3.10 GHz and 12 GB of RAM.
 
 \section{Data Sets Description}
 \subsection{Synthetic Scenes}
@@ -210,13 +211,13 @@ objects have brighter colours.
 %
 \begin{figure}[h]
 \centering
-	\begin{subfigure}{0.7\linewidth}
+	\begin{subfigure}{\linewidth}
 		\centering
 		\includegraphics[width=\linewidth]{img/rectified_pair.png}
 		\caption{Original rectified pair.}
 	\end{subfigure}
 	%
-	\begin{subfigure}{0.7\linewidth}
+	\begin{subfigure}{\linewidth}
 		\centering
 		\includegraphics[width=\linewidth]{img/lldisparity2.png}
 		\caption{Computed disparity map.}
@@ -231,20 +232,28 @@ not triangulated.}
 \subsection{Environments Reconstruction}
 Figure~\ref{fig:real_reconstruction} shows the resulting reconstruction of the
 real town square's loggia described in Section~\ref{subsec:real_environment}.
+This reconstruction is the result of a video sequence composed of 400 frames;
+the frame filter selected 48 frames then used as input data for our pipeline.
 %
-\todo[inline]{Questa ricostruzione e' solo una prova limitata a 4 coppie di view.}
 \begin{figure}[h]
 \centering
-	\begin{subfigure}{0.45\linewidth}
+	\begin{subfigure}{\linewidth}
 		\centering
-		\includegraphics[width=\linewidth]{img/reconstruction1.png}
+		\includegraphics[width=\linewidth]{img/reconstruction00.png}
 	\end{subfigure}
 	%
-	\begin{subfigure}{0.45\linewidth}
+	\begin{subfigure}{\linewidth}
 		\centering
-		\includegraphics[width=\linewidth]{img/reconstruction2.png}
+		\includegraphics[width=\linewidth]{img/reconstruction01.png}
 	\end{subfigure}
 	\caption{Two views of the dense point cloud of the real town square
 	(Section~\ref{subsec:real_environment}) obtained with our SfM pipeline.}
 	\label{fig:real_reconstruction}
 \end{figure}
+
+\subsection{Limitations}\label{subsec:limitations}
+As we expected, our pipeline fails when there are not enough feature points
+that can be tracked in all the views of the window.
+In the current implementation, there is no recovery procedure that deals with
+this problem and we suggest some possible solutions in
+Section~\ref{sec:future_work}.

@@ -438,7 +438,7 @@ resulting disparity maps; among them, there are:
 	is calculated.
 \end{itemize}
 
-In our pipeline, we use a block-matching algorithm with SSD error metric.
+We implemented both SSD and NCC metric for our block-matching algorithm.
 Given the two images $I_L$ and $I_R$, the SSD metric is computed as:
 %
 \begin{equation*}
@@ -464,9 +464,19 @@ SSD(u, v, d) = (1 - \alpha) \left[ \sum_{(k, l)}(I_L(u + k, v + l) - I_R(u + k, 
 %
 \noindent where $I_{x, J}$ and $I_{y, J}$ are the differential results of image $J$
 computed along the $X$ and $Y$ direction respectively.
-
+%
+Our adaptive block-matching algorithm can also employ the similarity metric
+NCC that is computed as:
+%
+\begin{equation*}
+NCC(v_0, v_1) = \frac{\sum_{j = 1}^{N^2}v_0(j) \cdot v_1(j)^2}{\sqrt{\sum_{j = 1}^{N^2}v_0(j)\sum_{j = 1}^{N^2}v_1(j)}}	\textit{,}
+\end{equation*}
+\noindent where $v1(i)$ and $v1(i)$ are the $i$-th pixel of the reference and
+test patch respectively.
 The patch size is chosen experimentally and varies with the particular scene
-we use; it is usually set to 9 or 11 pixels.
+we use; it is usually set to 5, 7 or 9 pixels for our 480x270 images
+(we resize the images after the rectification step in order to reduce the 
+time needed to compute the disparity maps).
 The maximum disparity is computed automatically for each pair; in particular,
 we look for feature matches in the two images and compute the maximum vertical
 distance between matches, then we use such a value as maximum disparity.

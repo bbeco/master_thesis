@@ -116,9 +116,44 @@ finds~\cite{kraus2007photogrammetry}.
 Finally, the game industry is yet another field that can benefit from 
 SfM: real environments can be reconstructed with SfM first and then 
 improved by artists. Some game engine, as the popular Unreal Engine,
-includes photogrammetry software that exploits SfM techniques. \todo{ho trovato riferimenti a photogrammetry ma niente che parli direttamente di SfM}
+includes photogrammetry software that exploits SfM techniques.
+\todo{ho trovato riferimenti a photogrammetry ma niente che parli direttamente di SfM}
 \todo[inline]{chiedere per un esempio di foto fisheye}
-\missingfigure{Aggiungere immagini applicazioni di sfm}
+
+\begin{figure}[h]
+\centering
+\begin{subfigure}{0.4\linewidth}
+\includegraphics[width=\linewidth]{img/application_geoscience.png}
+\caption{}
+\end{subfigure}
+%
+\begin{subfigure}{0.4\linewidth}
+\centering
+\includegraphics[width=\linewidth]{img/application_autonomousdriving.png}
+\caption{}
+\end{subfigure}
+%
+\begin{subfigure}{0.4\linewidth}
+\centering
+\includegraphics[width=\linewidth]{img/application_heritage.png}
+\caption{}
+\end{subfigure}
+%
+\begin{subfigure}{0.4\linewidth}
+\centering
+\includegraphics[width=\linewidth]{img/application_games.png}
+\caption{}
+\end{subfigure}
+\caption{Some examples of SfM applications: geoscience can benefit of SfM, and computer vision in general, as
+an alternative to specialized and more expensive measuring
+tools~\cite{james2012straightforward} (a).
+Real-time applications of SfM are employed as part of the control
+software in autonomous driving vehicles~\cite{nister2004visual} (b).
+SfM and dense stereo matching are used for cultural heritage
+conservation~\cite{scopigno20113d} (c).
+with the aim of photogrammetry, game developers can create realistic
+environments; SfM is one of the cornerstones of photogrammetry (d).}
+\end{figure}
 
 \section{Our Contribution}\label{sec:contribution}
 In this work, we propose a novel SfM pipeline for full spherical cameras that 

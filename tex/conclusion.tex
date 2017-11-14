@@ -1,11 +1,23 @@
 \chapter{Conclusion}
 \lhead{\chaptername~\thechapter. \emph{Conclusion}}
 %
-\section{Future Work}
+\section{Future Work}\label{sec:future_work}
 Our SfM pipeline employs existing correspondences between adjacent frames only.
 This is because we use video sequences as input data, thus the presence of
 the same features of the current frame in the next one is a natural consequence
 of the particular nature of our input.
+As we pointed out in Section~\ref{subsec:limitations}, this particular choice
+for feature matching can be a problem when not enough feature points can be
+tracked in all the views of the window.
+The current implementation of our pipeline does not deal with this problem,
+hence, it is up to the user to remove the responsible frames and produce two
+separate reconstruction instead that can later be merged.
+This split-reconstruct-merge workaround can be automatized by using SLAM's
+loop-closure detection (Section~\ref{sec:sfm_vo_slam}).
+Loop closure is the process of detecting the camera crossing a previously
+visited place, thus it can detect when separate trajectories intercept
+and automatically merge the camera's paths and create single reconstruction.
+
 The inclusion of a more powerful \emph{scene-graph} is a possible improvement
 whose potential benefits can be investigated in the future.
 A scene graph can improve the pose estimation
@@ -45,5 +57,5 @@ Section~\ref{subsec:related_work}, our contribution includes:
 %
 We have showed the effectiveness of our pipeline by testing it on 
 both computer-generated and real-world environments.
-Even though our approach is extremely straightfroward, especially when compared to more advanced pipeline (e.g.,~\cite{schonberger2016structure}, it still offers high-quality results in terms of
+Even though our approach is extremely straightforward, especially when compared to more advanced pipeline (e.g.,~\cite{schonberger2016structure}, it still offers high-quality results in terms of
 poses estimation precision and environment reconstruction.

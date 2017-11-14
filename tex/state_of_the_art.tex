@@ -9,7 +9,7 @@ During this description, we refer, time by time, to the relative state of the ar
 %
 % Start of sections from intro
 
-\section{SfM, VO, and SLAM}
+\section{SfM, VO, and SLAM}\label{sec:sfm_vo_slam}
 SfM is a long-studied topic in computer vision. Starting from an input of photographs taken by one or multiple cameras, SfM's main goal is to compute the cameras' poses and to reconstruct the 3D environment's geometry captured by those cameras~\cite{szeliski2010computer}.
 %
 Some of the first works are the paper by Longuet-Higgins~\cite{longuet1981computer}, whose equations are fundamental in epipolar geometry, and the paper by Tomasi et al.~\cite{tomasi1992shape}, who used orthographic photographs to estimate the shape of a 3D object.
@@ -33,7 +33,8 @@ Many of these algorithms obtain a dense point cloud starting from an initial spa
 
 Our approach consists in densifying the point cloud by computing, for each pair of consecutive images, 
 a depth map. These depth maps are merged to obtain a dense set of reconstructed points. At this point, the 
-surface can be reconstructed by applying a surface fitting algorithm such as the standard Poisson reconstruction\todo{??CITARE??}.
+surface can be reconstructed by applying a surface fitting algorithm such as
+the standard Poisson reconstruction~\cite{Kazhdan:2006:PSR:1281957.1281965}.
 A depth map is an image in which each pixel stores a depth value; i.e., the distance from the optical centre of the camera to an object in the scene.
 The depth map estimation involves the calculation of a \emph{disparity map} from an images pair. 
 This is an image of the distance in pixels from a point in a reference image and its corresponding
@@ -305,8 +306,7 @@ the equation as
         p^\prime_2 & 
         p_1 & p_2 & 
         1
-	\end{bmatrix} 
-    \cdot
+	\end{bmatrix}
 	E = 0	\text{.}
 \end{equation*}
 %
@@ -355,7 +355,6 @@ outliers).
 %
 Note that the exact \textit{absolute scale} for the whole 
 camera motion and environment reconstruction is still left unknown.
-\todo{aggiungere citazioni}
 
 \section{Bundle Adjustment}
 As shown in section~\ref{sec:vo_problem}, the error accumulation problem introduces
