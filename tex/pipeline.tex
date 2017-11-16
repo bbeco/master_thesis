@@ -141,16 +141,14 @@ The point coordinates, which we obtain from Equation~\ref{eq:ll2Cartesian_first}
 Equation~\ref{eq:ll2Cartesian_second}, do not need normalisation because there
 is no intrinsic parameter for the full spherical camera model.
 
-In order to exploit functions to estimate $E$ available in the MATLAB's Computer Vision Toolbox, we need to perform an additional step, because this toolbox's routines deal with standard 2D perspective images. Therefore, they expect 
+In order to exploit the functions to estimate $E$ available in the MATLAB's Computer Vision Toolbox, we need to perform an additional step, because this toolbox's routines deal with standard 2D perspective images. Therefore, they expect 
 2D points since the input arguments are image points. However, our camera provides image points on a sphere, and so are 3D points. To account for this problem we point out that we can multiply the points $\myvec{p}$ and $\myvec{p}'$ by two 
 scalars ${\lambda}$ and ${\lambda}'$ and the equation is still valid. Thus, we obtain
-
 \begin{equation*}
 \lambda^\prime{\mathbf{p}^\prime}^\top E\lambda\mathbf{p} = 0 \text{.}
 \end{equation*}
-
 Therefore, we divide the 3D points obtained from the spherical images by their 
-3rd component, discard it, and use the resulted 2D points as input for the 
+3rd component, discard it, and use the resulting 2D points as input for the 
 MATLAB's function {\tt estimateEssentialMatrix}, which estimates $E$.
 
 \begin{figure}
