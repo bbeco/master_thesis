@@ -1,14 +1,14 @@
 \chapter{Results}
 \lhead{\chaptername~\thechapter. \emph{Spherical SfM}}
 In this chapter, we comment the results obtained with our SfM pipeline.
-We tested our approach with both some computer-generated and real-world environments.
+We tested our approach with both computer-generated and real-world environments.
 We compare the pose estimation results with ground truth in the synthetic cases
 while we only give a qualitative evaluation for the multi-view stereo
 reconstruction step for both the synthetic and real video sequences.
 We implemented our pipeline in MATLAB R2017a, and we collected our results using
 a computer equipped with an Intel i5-2400 at 3.10 GHz and 12 GB of RAM.
 
-\section{Data Sets Description}
+\section{Datasets Description}
 \subsection{Synthetic Scenes}
 The first computer-generated environment is a 3D simple scene that we created in Blender 2.78c.
 This scene is composed of a room with 5 polyhedrons. We added some image textures to both
@@ -47,7 +47,7 @@ Figure~\ref{fig:test6} shows some rendered images for this environment.
 	\caption{The first computer-generated environment that we used in our tests and
 	an example equirectangular image from this scene: two views of the scene (top row),
 	wireframe visualizations of the same scene (middle row), and an example
-	equirectangular image produced with this set up (bottom row).}
+	equirectangular image produced with this setup (bottom).}
     \label{fig:test6}
 \end{figure}
 %
@@ -84,16 +84,17 @@ for this second environment.
 	\end{subfigure}
 	%
 	\caption{The computer-generated town square environment: two views of the
-	model (top row) and a two example equirectangular images produced from this
-	scene (middle and bottom row).}
+	model (top row) and two examples of equirectangular images produced from this
+	scene (middle and bottom).}
     \label{fig:test_square}
 \end{figure}
 
 \subsection{Real environment}\label{subsec:real_environment}
-We tested our pipeline with a real video footage too. We do not have the ground truth
-for the camera poses in the real environment. However, the quality of the
-reconstruction is an indicator of the pipeline performance.
-We captured the real-world sequence with the Ricoh Theta S camera in a town square
+We tested our pipeline with a real video footage too. In this case, 
+we do not have the ground truth
+for the camera poses. However, the quality of the
+reconstruction is a good indicator of the pipeline performance.
+We captured the real-world sequence with a Ricoh Theta S camera in a town square
 surrounded by a \emph{loggia}. As before, we walked around the square, along the covered
 walks, keeping the camera above the user's head using a stick.
 The user does not influence the camera poses estimation because it appears in the
@@ -123,10 +124,10 @@ Figure~\ref{fig:piazzaLeoni}.
 
 \section{Experiment Results}
 \subsection{Window Size Test}
-We performed an experiment to choose the optimal window size for the windowed
+We performed an experiment to choose the optimal window size for the proposed windowed
 bundle adjustment (Section~\ref{subsec:windowed_ba}). In this experiment, we
 used the synthetic town square and computed the sum of absolute pose error. In
-particular, we found the location and orientation errors for the estimated poses.
+particular, we consider the location and orientation errors for the estimated poses.
 Figure~\ref{fig:sumAbsLocError} shows the comparison of the resulted location error for 20
 estimated poses with respect to several windowed and non-windowed adjustment
 techniques.
@@ -147,9 +148,8 @@ pose estimation.
 \begin{figure}[h]
 \centering
 \includegraphics[width=\linewidth]{img/sumAbsLocError.png}
-\caption{How the location error varies with respect to the adjustment technique
-used. Angular errors present a similar behaviour with a minimum in case
-of windowed bundle adjustment whose window length set to five views.}
+\caption{Location error with respect to different global refinement techniques. The proposed windowed bundle adjustment with a window of size 5 gives the best performance. This choice is optimal also for the orientation
+error.}
 \label{fig:sumAbsLocError}
 \end{figure}
 
