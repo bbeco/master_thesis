@@ -95,13 +95,13 @@ we do not have the ground truth
 for the camera poses. However, the quality of the
 reconstruction is a good indicator of the pipeline performance.
 We captured the real-world sequence with a Ricoh Theta S camera in a town square
-surrounded by a \emph{loggia}. As before, we walked around the square, along the covered
-walks, keeping the camera above the user's head using a stick.
+surrounded by a \emph{loggia}. As before, we walked along the covered
+walks around the square, keeping the camera above the user's head using a stick.
 The user does not influence the camera poses estimation because it appears in the
 pole region of the image sphere and, as we said in
 Section~\ref{sec:pipeline_pose_estimation}, we discard potential matches in
 these areas.
-We present some pictures of the real-wolrd environment together with some examples
+We present some pictures of the real-world environment together with some examples
 of the equirectangular images of the town square in
 Figure~\ref{fig:piazzaLeoni}.
 %
@@ -147,32 +147,10 @@ pose estimation.
 %
 \begin{figure}[h]
 \centering
-\includegraphics[width=\linewidth]{img/sumAbsLocError.png}
+\includegraphics[width=0.7\linewidth]{img/sumAbsLocError.png}
 \caption{Location error with respect to different global refinement techniques. The proposed windowed bundle adjustment with a window of size 5 gives the best performance. This choice is optimal also for the orientation
 error.}
 \label{fig:sumAbsLocError}
-\end{figure}
-
-\subsection{Essential Matrix Estimation Test}\label{subsec:essential_test}
-In Section~\ref{subsec:essential_estimation}, we said that our pipeline
-calls the essential matrix estimation routine until the fraction of inliers
-drops below a threshold. In Figure~\ref{fig:essential_test}, we show the
-results of an experiment where we compare three different essential matrix
-evaluation approaches. The input data for this experiment is composed of
-a set of manually selected frames from the first synthetic environment.
-The reason why we select the frames is that we do not want this results to be
-influenced by the frame filter.
-%
-\begin{figure}[h]
-\centering
-\includegraphics[width=\linewidth]{img/essentialEstimation.png}
-\caption{How the location error changes with respect to different essential
-matrix estimation function approaches: the purple and light blue columns
-represent the average location error results for each frame when the
-essential estimation is performed with a single call to the routine, while the
-yellow column represent the location error when we perform the estimation
-again when the fraction of inliers is too low.}
-\label{fig:essential_test}
 \end{figure}
 
 \subsection{SfM Phase Result}
@@ -198,7 +176,7 @@ frames were discarded by the frame filter.
 \label{fig:trajectory2}
 \end{subfigure}
 \begin{subfigure}{\linewidth}
-\includegraphics[width=\linewidth]{img/snapshot02.png}
+\includegraphics[width=0.8\linewidth]{img/snapshot02.png}
 \caption{Another view of the sparse point cloud.}
 \label{fig:trajectory3}
 \end{subfigure}
@@ -212,21 +190,21 @@ walkway (c).}
 %
 \subsection{Disparity Maps}
 Figures~\ref{fig:llDisparity} and \ref{fig:disparity_comparison}
-shows an example of disparity map computed
-with our adaptive block-matching algorithm and the comparison with
+show some examples of disparity maps computed
+with our adaptive block-matching algorithm and the comparison with a
 traditional block-matching algorithm. Darker colours refer to the points
 with less disparity thus, farther from the camera. On the other hand, the closer
 objects have brighter colours.
 %
 \begin{figure}[h]
 \centering
-	\begin{subfigure}{0.7\linewidth}
+	\begin{subfigure}{0.6\linewidth}
 		\centering
 		\includegraphics[width=\linewidth]{img/rectified_pair.png}
 		\caption{Original rectified pair.}
 	\end{subfigure}
 	%
-	\begin{subfigure}{0.7\linewidth}
+	\begin{subfigure}{0.6\linewidth}
 		\centering
 		\includegraphics[width=\linewidth]{img/lldisparity2.png}
 		\caption{Computed disparity map.}
@@ -265,7 +243,7 @@ both algorithms.}
 Figure~\ref{fig:reconstruction_steps} shows the resulting reconstruction of the
 real town square's loggia described in Section~\ref{subsec:real_environment}.
 This reconstruction is the result of a video sequence composed of 200 frames;
-the frame filter selected 48 frames that areused as input data for our
+the frame filter selected 48 frames that are used as input data for our
 pipeline.
 In This case we do not have the camera positions ground truth; anyway, we
 would never be able to reproduce the
@@ -275,35 +253,34 @@ cloud is a proof of the correctness of the previous phase.
 %
 \begin{figure}[h]
 \centering
-	\begin{subfigure}{0.3\linewidth}
-		\centering
-		\includegraphics[width=\linewidth]{img/real1.png}
-	\end{subfigure}
+	%\begin{subfigure}{0.3\linewidth}
+	%	\centering
+	%	\includegraphics[width=\linewidth]{img/real1.png}
+	%\end{subfigure}
 	%
-	\begin{subfigure}{0.3\linewidth}
+	\begin{subfigure}{0.45\linewidth}
 		\centering
 		\includegraphics[width=\linewidth]{img/real2.png}
 	\end{subfigure}
 	%
-	\begin{subfigure}{0.3\linewidth}
+	\begin{subfigure}{0.45\linewidth}
 		\centering
 		\includegraphics[width=\linewidth]{img/real3.png}
 	\end{subfigure}
 	\caption{The steps of the reconstruction: the camera poses
-	(red dots in the left image), the sparse point clouds
-	(blued dots in the middle image),
-	and the blended view of both the spase and dense point cloud (right).}
+	(red dots) and the sparse point clouds (blued dots, middle image),
+	and the blended view of both the sparse and dense point cloud (right).}
 	\label{fig:reconstruction_steps}
 \end{figure}
 %
 \begin{figure}[h]
 \centering
-	\begin{subfigure}{\linewidth}
+	\begin{subfigure}{0.8\linewidth}
 		\centering
 		\includegraphics[width=\linewidth]{img/reconstruction00.png}
 	\end{subfigure}
 	%
-	\begin{subfigure}{\linewidth}
+	\begin{subfigure}{0.8\linewidth}
 		\centering
 		\includegraphics[width=\linewidth]{img/reconstruction01.png}
 	\end{subfigure}

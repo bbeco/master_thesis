@@ -242,14 +242,14 @@ The reduced number of matching points for the input of the
 {\tt relativeCameraPose} function does not compromise the accuracy of the pose 
 estimated, since those matches are used only to choose the 
 correct decomposition.
-
-As we demonstrate with the experiments in Section~\ref{subsec:essential_test}, we obtain better
-results if we call the essential matrix estimation routine until it satisfies
-a minimum threshold of valid points ratio. This ratio is returned by the
-estimation routine itself and represent the fraction of points whose
-reprojection error, according to the estimated essential matrix,
-is below a given threshold and thus are
-considered inliers by the RANSAC algorithm.
+%
+%As we demonstrate with the experiments in Section~\ref{subsec:essential_test}, we obtain better
+%results if we call the essential matrix estimation routine until it satisfies
+%a minimum threshold of valid points ratio. This ratio is returned by the
+%estimation routine itself and represent the fraction of points whose
+%reprojection error, according to the estimated essential matrix,
+%is below a given threshold and thus are
+%considered inliers by the RANSAC algorithm.
 
 \subsection{Relative Scale Estimation}
 Every relative motion between two views can only be estimated up to an unknown 
@@ -620,10 +620,10 @@ We want to merge all the point clouds obtained by the image pairs
 according to the coordinate system defined
 by the first view analysed. Hence, for each world point $\myvec{M}$ obtained by
 an image pair whose reference camera is located at $\myvec{t}$ with orientation
-$R$, we have to compute the translated point $\myvec{M}^\prime$ as
+$R$ (in the post-multiplication form), we have to compute the translated point $\myvec{M}^\prime$ as
 %
 \begin{equation*}
-\myvec{M}^\prime = R^\top \myvec{M} + \myvec{t} \text{.}
+\myvec{M}^\prime = \myvec{M} R^\top + \myvec{t} \text{.}
 \end{equation*}
 %
 \noindent Once every point has been translated, the overall point cloud is

@@ -1,7 +1,7 @@
 \chapter{Conclusion}
 \lhead{\chaptername~\thechapter. \emph{Conclusion}}
 
-In this work, we have proposed a SfM pipeline for full spherical cameras that works directly on 360\degree video.
+In this work, we have proposed a SfM pipeline for full spherical cameras that works directly with 360\degree videos.
 As we pointed out in Section~\ref{sec:contribution} and
 Section~\ref{subsec:related_work}, our contribution includes:
 %
@@ -14,9 +14,9 @@ Section~\ref{subsec:related_work}, our contribution includes:
 	equirectangular images.
 \end{itemize}
 %
-We have showed the effectiveness of our pipeline by testing it on 
+We have shown the effectiveness of our pipeline by testing it on 
 both computer-generated and real-world environments.
-Even though our approach is extremely straightforward, especially when compared to more advanced pipeline (e.g.,~\cite{schonberger2016structure}, it still offers high-quality results in terms of
+Even though our approach is extremely straightforward, especially when compared to more advanced pipelines (e.g.,~\cite{schonberger2016structure}, it still offers high-quality results in terms of
 poses estimation precision and environment reconstruction.
 
 \section{Future Work}\label{sec:future_work}
@@ -30,7 +30,7 @@ tracked in a part of the video sequence. In this case, the camera pose
 estimation is invalid from that point, and it will continue to remain invalid.
 The current implementation of our pipeline does not deal with this problem,
 hence, it is up to the user to remove the critical frames and produce two
-separate reconstruction that can merged together.
+separate reconstructions that can merge together.
 
 Another solution to make the camera pose estimation more robust is to 
 exploit the loop-closure detection as the SLAM algorithms done (Section~\ref{sec:sfm_vo_slam}).
