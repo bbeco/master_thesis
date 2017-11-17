@@ -1,4 +1,4 @@
-\chapter{Results}
+\chapter{Results}\label{ch:results}
 \lhead{\chaptername~\thechapter. \emph{Spherical SfM}}
 In this chapter, we comment the results obtained with our SfM pipeline.
 We tested our approach with both computer-generated and real-world environments.
@@ -177,9 +177,13 @@ again when the fraction of inliers is too low.}
 
 \subsection{SfM Phase Result}
 In this test, we analyzed the overall results of the initial step of our
-pipeline, the motion estimation phase. We used the 365 rendered frames of our
-synthetic town square environment. Figure~\ref{fig:trajectory} shows the actual
+pipeline, the motion estimation phase. We used the 140 rendered frames of our
+synthetic town square environment. With the threshold set to 10 radians,
+the frame filter selected 48 frames to be used for motion estimation.
+Figure~\ref{fig:trajectory} shows the actual
 and estimated trajectory of the camera in the synthetic environment.
+As we can see in the figure, the estimated motion is accurate even if many
+frames were discarded by the frame filter.
 %
 \begin{figure}[h]
 \centering
@@ -216,13 +220,13 @@ objects have brighter colours.
 %
 \begin{figure}[h]
 \centering
-	\begin{subfigure}{\linewidth}
+	\begin{subfigure}{0.7\linewidth}
 		\centering
 		\includegraphics[width=\linewidth]{img/rectified_pair.png}
 		\caption{Original rectified pair.}
 	\end{subfigure}
 	%
-	\begin{subfigure}{\linewidth}
+	\begin{subfigure}{0.7\linewidth}
 		\centering
 		\includegraphics[width=\linewidth]{img/lldisparity2.png}
 		\caption{Computed disparity map.}
@@ -236,38 +240,61 @@ not triangulated.}
 %
 \begin{figure}[h]
 \centering
-	\begin{subfigure}{0.7\linewidth}
+	\begin{subfigure}{0.6\linewidth}
 		\centering
 		\includegraphics[width=\linewidth]{img/original.png}
-		\caption{Original reference image.}
 	\end{subfigure}
 	%
-	\begin{subfigure}{0.7\linewidth}
+	\begin{subfigure}{0.6\linewidth}
 		\centering
 		\includegraphics[width=\linewidth]{img/our_disparity.png}
-		\caption{The disparity map computed with our adaptive block-matching
-		algorithm.}
 	\end{subfigure}
 	%
-	\begin{subfigure}{0.7\linewidth}
+	\begin{subfigure}{0.6\linewidth}
 		\centering
 		\includegraphics[width=\linewidth]{img/legacy_disparity.png}
-		\caption{The disparity map computed with the standard block-matching
-		algorithm.}
 	\end{subfigure}
-\caption{Comparison of our adaptive block-matching algorithm's result (b) with
-standard block-matching algorithm (c). The parameters are the same for
-both algorithms. We did not perform the cross-check for the last map (c).
-The cross-check completely invalidated the maps when adaptive block-matching is
-not used.}
+\caption{Comparison of our adaptive block-matching algorithm's result (middle) with
+standard block-matching algorithm (bottom) for the same input pair (one of the
+images of the pair is shown at top). The parameters are the same for
+both algorithms.}
 \label{fig:disparity_comparison}
 \end{figure}
 %
 \subsection{Environments Reconstruction}
-Figure~\ref{fig:real_reconstruction} shows the resulting reconstruction of the
+Figure~\ref{fig:reconstruction_steps} shows the resulting reconstruction of the
 real town square's loggia described in Section~\ref{subsec:real_environment}.
-This reconstruction is the result of a video sequence composed of 400 frames;
-the frame filter selected 48 frames then used as input data for our pipeline.
+This reconstruction is the result of a video sequence composed of 200 frames;
+the frame filter selected 48 frames that areused as input data for our
+pipeline.
+In This case we do not have the camera positions ground truth; anyway, we
+would never be able to reproduce the
+quality of the overall reconstruction of Figure~\ref{fig:real_reconstruction}
+if the SfM result was not accurate enough. For the real case, the dense point
+cloud is a proof of the correctness of the previous phase.
+%
+\begin{figure}[h]
+\centering
+	\begin{subfigure}{0.3\linewidth}
+		\centering
+		\includegraphics[width=\linewidth]{img/real1.png}
+	\end{subfigure}
+	%
+	\begin{subfigure}{0.3\linewidth}
+		\centering
+		\includegraphics[width=\linewidth]{img/real2.png}
+	\end{subfigure}
+	%
+	\begin{subfigure}{0.3\linewidth}
+		\centering
+		\includegraphics[width=\linewidth]{img/real3.png}
+	\end{subfigure}
+	\caption{The steps of the reconstruction: the camera poses
+	(red dots in the left image), the sparse point clouds
+	(blued dots in the middle image),
+	and the blended view of both the spase and dense point cloud (right).}
+	\label{fig:reconstruction_steps}
+\end{figure}
 %
 \begin{figure}[h]
 \centering

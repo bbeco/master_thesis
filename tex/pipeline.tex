@@ -105,7 +105,7 @@ has at least one correspondence in the first image is checked to see what
 interesting point of the first image it corresponds to and the match with the
 highest confidence is kept.
 
-\subsection{Matches Filter}
+\subsection{Frame Filter}
 In this step of the pipeline, matches are analyzed in order to decide 
 whether a frame has to be kept because it is useful for motion estimation or
 not.
@@ -113,16 +113,25 @@ not.
 We assume that the scene to capture is static; i.e., no moving objects such as cars or people. In this case, the apparent movement of corresponding objects in different views is caused by the camera motion only.
 %
 The filter computes the disparity between every match found in two views; i.e., 
-it compares the median of the 20\% of matches with the highest 
-disparity value with a threshold. If such median is above 
+it compares the median of the 20\% of matches with the largest angular 
+displacements with a threshold. If such median is above 
 the threshold, the frame is kept for further processing in the pipeline, 
 otherwise it is discarded.
 %
-The reason because we consider the correspondences with the greatest disparity is 
+The reason because we consider the correspondences with the greatest
+apparent movement is 
 because, when the camera rotation is limited, the points that move very little 
 in consecutive views are typically far. The selection of these points for motion 
 estimation can be counter-productive because they can easily produce numerical 
-errors. 
+errors.
+%
+The threshold value depends on the specific
+environment: if the scene is large and most of the surfaces are far from the
+camera, a slightly reduced value may improve the estimation quality, while,
+if the environment is smaller, we may benefit from an increased threshold
+value. We experimentally choose threshold value of 5 radians for real
+environments while we increase it up to 10 radians for computer-generated
+scenes ( see Chapter~\ref{ch:results} for details about the experiments).
 
 \subsection{Keypoints Conversion}
 \label{sec:keypoints_conversion}
@@ -562,7 +571,7 @@ the point's neighbourhood pixels on the patch.
 %
 \begin{figure}
 \centering
-\includegraphics[width=0.7\linewidth]{img/patch_creation.pdf}
+\includegraphics[width=0.6\linewidth]{img/patch_creation.pdf}
 \caption{Patch creation: the neighbourhood pixels of the image point $m$
 are projected on the patch. This approach prevents the patch from containing
 the same distortions that are present in the equirectanguar image format.}
