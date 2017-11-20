@@ -78,7 +78,7 @@ Perspective cameras can take panoramic pictures with the aid of software stitchi
 An example of this approach is the Hugin Panorama Photo Stitcher 
 \cite{hugin_photostitcher}, an open source software for merging several 
 perspective images in a single panoramic picture.
-The SpheroCam\texttrademark by SPHERON-VR AG\texttrademark~\cite{spheronvr}
+The SpheroCam by SPHERON-VR AG~\cite{spheronvr}
 is an alternative to 
 the latter approach to panoramic images; it uses a specialized hardware composed
 of wide angle lenses equipped camera mounted on a rotating support, which rotates around the optical center of the camera. Therefore, this camera can capture high quality full spherical and it addresses the professional fields of geographical analysis, forensic investigation, cultural heritage, etc.
@@ -126,7 +126,7 @@ consecutive time instants (i.e., $k-1$ and $k$), then we have the following rela
 %
 \noindent where $R_k$ is a 3-by-3 rotation matrix (i.e., the rotation of the camera at time $k$),
 $\myvec{t}_k$ is a column vector (i.e., translation of the camera at time $k$).
-Therefore, the goal of VO is to estimate both $R_k$ and $t_k$ for each time 
+Therefore, the goal of VO is to estimate both $R_k$ and $\myvec{t}_k$ for each time 
 $k$ and to compute each $C_k$ accordingly to equation~\ref{eq:motion_composition}. Note that the initial position $C_0$ can be set arbitrarily.
 
 Equation~\ref{eq:motion_composition} is the core of VO, that allows us to compute the camera local movement. Therefore, we can estimate its location in every instant of time. However, the equation above contains also the most insidious practical challenge of VO; i.e., the error accumulation phenomenon known as \emph{drift}.
@@ -134,7 +134,7 @@ Every new position $C_k$ can introduce an error factor that affects the next
 computations. The result is a global error that grows as the number of 
 estimations increases.
 %
-Since early works such as Harris et al.\cite{harris19883d} and Moravec\cite{moravec1980obstacle}, the VO research community has focused on error minimization techniques to reduce drift.
+Since early works such as Harris et al.~\cite{harris19883d} and Moravec~\cite{moravec1980obstacle}, the VO research community has focused on error minimization techniques to reduce drift.
 This tackles the precise estimation problem either by employing more accurate
 local motion estimation and by introducing an optimization step to refine 
 camera locations.
@@ -286,7 +286,7 @@ for the translation vector. In particular, we have:
 \end{equation*}
 %$
 \noindent where $\lambda$ is an unknown scale factor, and $\hat{t}_k$ is 
-the skew-symmetric form for the cross product of vector $t_k$.
+the skew-symmetric form for the cross product of vector $\myvec{t}_k$.
 In order to extract the local motion given the two set of corresponding features
 in two consecutive images, we have to estimate the essential matrix and then 
 extract the rigid body transformation out of it.
@@ -336,7 +336,7 @@ arbitrarily and express all the other movements relative to this first one.
 This means that we need to compute the \textit{relative scale}
 for every translation other than the first one.
 
-Scaramuzza and Fraundorfer\cite{scaramuzzaVisualOdometryI} proposed a possible approach for relative scale estimation. If we want to estimate the relative scale for 
+Scaramuzza and Fraundorfer~\cite{scaramuzzaVisualOdometryI} proposed a possible approach for relative scale estimation. If we want to estimate the relative scale for 
 the motion $t_k$, between instants $k-1$ and $k$, we need to compute 
 two sets of triangulated world points $X_{k-1}$ and $X_{k}$ by using 
 the two image pairs $I_{k-2}$ and $I_{k-1}$, and $I_{k-1}$ and $I_{k}$ first. 
@@ -383,15 +383,13 @@ problem
 \noindent where $\myvec{m}_i^j$ is the image point of the $i$-th camera
 corresponding to $\myvec{M}^j$.
 This non linear least squares minimization is usually solved using the 
-Levenberg–Marquardt method 
-\cite{triggs1999bundle,Hartley2004,levenberg1944method}.
+Levenberg–Marquardt method~\cite{triggs1999bundle,Hartley2004,levenberg1944method}.
 The term \textit{bundle} refers to the fact that both the camera position and
 the triangulated points are jointly refined. Most BA implementations keep the 
 camera poses fixed, solve for the triangulated points, then they optimize for the
 poses in an alternate fashion until the desired precision is reached.
 
-BA is a delicate step that can affect a SfM pipeline in many ways
-\cite{lourakis2009sba,triggs1999bundle,Hartley2004} as a poorly planned use of 
+BA is a delicate step that can affect a SfM pipeline in many ways~\cite{lourakis2009sba,triggs1999bundle,Hartley2004} as a poorly planned use of 
 it can reduce computation speed and fail to obtain the desired accuracy.
 
 \section{Robust Estimation}
@@ -435,7 +433,7 @@ Furthermore, for each feature point, we can extract some local information that 
 There are many different algorithms to extract feature points and descriptors such as the 
 \emph{Moravec detector}~\cite{moravec1980obstacle}, the \emph{Harris
 corner detector}~\cite{harris1988combined}, the
-\emph{SIFT} keypoints detector and descriptor\cite{lowe1999object}, \emph{SURF} keypoints detector and descriptor\cite{bay2006surf}, etc.
+\emph{SIFT} keypoints detector and descriptor~\cite{lowe1999object}, \emph{SURF} keypoints detector and descriptor~\cite{bay2006surf}, etc.
 %
 Some of these feature points or descriptors can be affected by rotations and scale. Since SfM is based on many pictures taken from different views, SIFT features have always been 
 preferred over other less robust features because of their rotational and scale
@@ -468,7 +466,7 @@ whole camera's path estimation because of the incremental nature of the SfM
 pipeline.
 In order to reduce this phenomenon, we can switch to a more robust feature points
 detector and use a RANSAC approach to remove outliers before the motion estimation step.
-RANSAC\cite{fischler1981random} is a model fitting algorithm for datasets that include outliers.
+RANSAC~\cite{fischler1981random} is a model fitting algorithm for datasets that include outliers.
 This algorithm is iterative. At each iteration, it selects a subset of input data and computes the model based on this subset only. Then, RANSAC divides the complete dataset into a consensus set and outliers. If the number of outliers, computed thanks to a problem specific loss function, is
 less than a given threshold, the estimated model is considered valid.
 
@@ -488,11 +486,11 @@ estimation even if the number of outliers is high (40-50\%).
 
 \section{Full Spherical Cameras}
 In the following sections, we describe the full spherical photography's camera
-model (section~\ref{subsec:spherical_camera_model}), the equirectangular image 
+model (Section~\ref{subsec:spherical_camera_model}), the equirectangular image 
 representation used to map spherical images on a 2D matrix of pixels 
 and the problems for SfM algorithms caused by this format 
-(section~\ref{subsec:image_format}).
-In section~\ref{subsec:related_work}, we give an overview of the efforts of 
+(Section~\ref{subsec:image_format}).
+In Section~\ref{subsec:related_work}, we give an overview of the efforts of 
 previous studies on this topics and describe the contribution of our work to 
 this field.
 
@@ -587,12 +585,12 @@ devices with a single image sensor (no stitching), therefore, as we said in
 section~\ref{sec:cameraclassification}, none of this types of camera is capable
 to produce full spherical images.
 
-Li\cite{li2008binocular,li2006real} developed a rectification procedure for wide
+Li~\cite{li2008binocular,li2006real} developed a rectification procedure for wide
 FOV cameras that enables the computation of disparity maps with standard 
 block-matching algorithms; the rig he used for testing was composed of 
 fisheye cameras that could not provide full spherical views.
 %
-Ma et al.\cite{ma20153d} used equirectangular images produced with a 
+Ma et al.~\cite{ma20153d} used equirectangular images produced with a 
 Ricoh Theta S to create disparity maps. They manually selected some 
 correspondences in order to compute the essential matrix correctly. Then, they 
 used the epipolar geometry to remove correspondences outliers after an 
